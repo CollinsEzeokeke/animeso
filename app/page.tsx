@@ -2,7 +2,7 @@ import Hero from "@/components/hero";
 
 export default function Page() {
   return (
-    <div>
+    <div className="w-full bg-[#BFBFBF]">
       <Hero />
     </div>
   );
