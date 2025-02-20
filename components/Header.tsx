@@ -53,12 +53,12 @@ const DirectionAwareScrollComponent = () => {
   
     return (
       <>
-      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-[20]">
+      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-[10]">
         <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden">
           <a
             href="https://amie.so/changelog"
             target="_blank"
-            className="rounded-3xl h-11 w-[12%] bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed"
+            className="rounded-3xl h-11 w-[12%] bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-50"
           >
             <Flame className="text-white -mt-1 size-4 font-black stroke-[4px] rotate-[15deg]" />
             <button className="p-1 font-sans">Last Update: Feb 12</button>

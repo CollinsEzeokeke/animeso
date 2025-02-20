@@ -34,7 +34,7 @@ export const VideoLoader = () => {
 //     // setScrollAble(canScroll)
 // }
   return (
-    <div className="absolute inset-0 z-0 h-full top-[5%] w-full">
+    <div className="absolute inset-0 z-0 h-full top-[5%] w-full scale-95">
       <video
         ref={videoRef}
         autoPlay
