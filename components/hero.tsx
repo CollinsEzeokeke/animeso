@@ -16,11 +16,6 @@ export default function Hero() {
     <>
       <div>
         <DirectionAwareScrollComponent />
-        {/* bg-[#BCBCBC] */}
-        {/* <motion.div
-          className="h-[110vh] w-full bg-blue-500 overflow-x-hidden flex justify-center"
-          style={{ zIndex: 10 }}
-        > */}
         <motion.div
           className="h-[110vh] w-full overflow-x-hidden flex justify-center"
           style={{
@@ -28,29 +23,9 @@ export default function Hero() {
             marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          {/* bg-[#BFBFBF] */}
           <div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
-            {/* bg-[#333333]/40 */}
-            {/* <div className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 sticky top-0">
-              <motion.div
-                style={{ y: yIndex }}
-                className="flex flex-col h-[25%] -mt-[28%] w-4/5 items-center justify-center z-50"
-              >
-                <h1 className="text-white font-sans text-6xl font-[650] mb-2">
-                  Todos, email, calendar.
-                </h1>
-                <p className="font-sans font-semibold text-gray-50 text-6xl">
-                  All-in-done.
-                </p>
-              </motion.div>
-              <VideoLoader />
-              <div className="bg-white relative z-50 top-[50vh] right w-1/2">settings etc</div>
-            </div> */}
-
             <div className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative">
               {" "}
-              {/* Added relative positioning */}
-              {/* Existing content */}
               <motion.div
                 style={{ y: yIndex }}
                 className="flex flex-col h-[25%] -mt-[28%] w-4/5 items-center justify-center z-50"
@@ -69,10 +44,6 @@ export default function Hero() {
                 {/* Full container overlay */}
                 <div className="relative w-full h-full flex items-end justify-center bg-red-500">
                   {" "}
-                  {/* Centered bottom container */}
-                  {/* <div className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2">
-                    <Search /> <Plus />
-                  </div> */}
                   <div className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2">
                     {/* Search Icon */}
                     <Search className="w-5 h-5 mx-1 text-gray-700" />
@@ -82,10 +53,6 @@ export default function Hero() {
 
                     {/* Folder Replacement */}
                     <div className="w-5 h-5 mx-1 bg-blue-400 rounded"></div>
-
-                    {/* Line Separator */}
-                    {/* <div className="w-px h-6 bg-gray-300 mx-2"></div> */}
-
                     {/* Plus Icon */}
                     <Plus className="w-5 h-5 mx-1 text-gray-700" />
 
