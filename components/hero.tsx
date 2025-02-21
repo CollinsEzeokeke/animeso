@@ -88,20 +88,3 @@ export default function Hero() {
     </>
   );
 }
-
-{
-  /* <div className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between p-2">
-                    <Search className="w-5 h-5 mx-1 text-gray-700" />
-                    <div className="flex items-center gap-0.5">
-                      {/* Small Nudge Div */
-}
-// <div className="w-1.5 h-3 bg-gray-300 rounded-sm" />
-{
-  /* Black Bigger Div */
-}
-// <div className="w-4 h-4 bg-black rounded" />
-//   </div>
-//   <Plus className="w-5 h-5 mx-1 text-gray-700" />
-//   <Folder className="w-5 h-5 mx-1 text-blue-500" />
-//   <Settings className="w-5 h-5 mx-1 text-gray-700 font-black stroke-[3px]" />
-// </div>
