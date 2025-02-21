@@ -2,52 +2,59 @@
 import { motion } from "framer-motion";
 import DirectionAwareScrollComponent from "@/components/Header";
 import { VideoLoader } from "./videoLoader";
-import { useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform, useSpring } from "framer-motion";
 
 export default function Hero() {
   const { scrollYProgress } = useScroll();
 
-  const scale = useTransform(scrollYProgress, [0, 0.25], [1, 0.28]);
+  const rawScale = useTransform(scrollYProgress, [0, 0.25], [1.1, 0.3]);
   const y = useTransform(scrollYProgress, [0, 0.25], ["0%", "-70%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.25], ["0%", "-40%"]);
+  const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
   return (
     <>
-      <motion.div className="h-[150vh] w-full bg-[#BCBCBC] overflow-x-hidden relative z-[10] flex justify-center">
+      <div>
         <DirectionAwareScrollComponent />
-        {/* bg-[#BFBFBF] */}
-        <div className="flex justify-center relative pt-0 top-[4.5vh] w-full h-screen">
-        {/* bg-[#333333]/40 */}
-          <div className="bg-transparent absolute h-[100vh] w-[65vw] flex items-center justify-center rounded-sm z-10">
-            <div className="flex flex-col h-[15%] -mt-[25%] bg-none w-4/5 items-center justify-center mb-20 z-10">
-              <h1 className="text-white font-sans text-6xl font-[650] mb-2">
-                Todos, email, calendar.
-              </h1>
-              <p className="font-sans font-semibold text-gray-50 text-6xl">
-                All-in-done.
-              </p>
-            </div>
-            <VideoLoader />
-          </div>
-        </div>
-      </motion.div>
-
-
-{/* jgfhfmhjf */}
-
-      <div className="flex justify-center w-full z-[50] fixed top-0 h-[9.5vh]">
+        {/* bg-[#BCBCBC] */}
         <motion.div
-          className="bg-cover h-[20vh] bg-center fixed top-[8.5vh] w-[12vw] bg-no-repeat transition-all"
-          style={{
-            backgroundImage: "url('/logo-shaded.png')",
-            scale,
-            y,
-          }}
-        />
-        {/* inward Coating */}
-        <div className="bg-none fixed top-[9.5vh] left-0 w-full h-screen z-[20] flex flex-col items-center justify-center" />
-        {/* Outward Coating */}
+          className="h-[110vh] w-full bg-blue-500 overflow-x-hidden flex justify-center"
+          style={{ zIndex: 10 }}
+        >
+          {/* bg-[#BFBFBF] */}
+          <div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+            {/* bg-[#333333]/40 */}
+            <div className="bg-transparent bg-black min-h-[100vh] w-[65vw] flex items-center justify-center z-20 sticky top-0">
+              <motion.div
+                style={{ y: yIndex }}
+                className="flex flex-col h-[25%] -mt-[28%] w-4/5 items-center justify-start z-10"
+              >
+                <h1 className="text-white font-sans text-6xl font-[650] mb-2">
+                  Todos, email, calendar.
+                </h1>
+                <p className="font-sans font-semibold text-gray-50 text-6xl">
+                  All-in-done.
+                </p>
+              </motion.div>
+              <VideoLoader />
+            </div>
+            <div className="h-[100vh] w-[65vw] z-20 absolute bg-none" />
+          </div>
+        </motion.div>
       </div>
-      {/* <div className="bg-[#BCBCBC] fixed h-screen w-screen top-0 left-0 z-0"/> */}
 
+      {/* jgfhfmhjf */}
+
+      <motion.div
+        className="bg-cover bg-red-500 h-[20vh] bg-center fixed top-[8.5vh] w-[12vw] bg-no-repeat transition-all z-20"
+        style={{
+          backgroundImage: "url('/logo-shaded.png')",
+          scale,
+          y,
+        }}
+      />
+      {/* inward Coating */}
+      {/* Outward Coating */}
+      {/* <div className="bg-[#BCBCBC] fixed h-screen w-screen top-0 left-0 z-0"/> */}
     </>
   );
 }

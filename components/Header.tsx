@@ -17,6 +17,7 @@ const DirectionAwareScrollComponent = () => {
       stiffness: 400,
       damping: 30,
       restDelta: 0.001,
+      delay: 0.1,
     };
   
     useEffect(() => {
@@ -53,16 +54,16 @@ const DirectionAwareScrollComponent = () => {
   
     return (
       <>
-      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-[10]">
+      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30 pointer-events-none" />
         <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden">
-          <a
+          <motion.a
             href="https://amie.so/changelog"
             target="_blank"
-            className="rounded-3xl h-11 w-[12%] bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-50"
+            className="rounded-3xl h-11 w-[12%] bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-[100]"
           >
             <Flame className="text-white -mt-1 size-4 font-black stroke-[4px] rotate-[15deg]" />
             <button className="p-1 font-sans">Last Update: Feb 12</button>
-          </a>
+          </motion.a>
           <div>
             <div className="fixed right-0 top-7 pr-6 md:pr-10 flex font-medium gap-6">
               <div className="text-base text-black">

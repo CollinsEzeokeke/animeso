@@ -3,12 +3,12 @@
 
 // import { useStore } from '@/hooks/store';
 import { useState, useRef, useEffect } from 'react';
+import { useScroll } from 'framer-motion';
 
 export const VideoLoader = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canScroll, setCanScroll] = useState(false);
-//   const { setScrollAble } = useStore();
 
   useEffect(() => {
     const handleCanPlay = () => {
@@ -34,13 +34,13 @@ export const VideoLoader = () => {
 //     // setScrollAble(canScroll)
 // }
   return (
-    <div className="absolute inset-0 z-0 h-full top-[5%] w-full scale-95">
+    <div className="absolute inset-0 h-full top-[5%] w-full" >
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
-        className="h-full w-full object-cover"
+        className="h-full w-full object-obtain"
       >
         <source src="/minor.mp4" type="video/mp4" />
       </video>
