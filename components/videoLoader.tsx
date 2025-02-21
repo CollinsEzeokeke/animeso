@@ -3,7 +3,7 @@
 
 // import { useStore } from '@/hooks/store';
 import { useState, useRef, useEffect } from 'react';
-import { useScroll } from 'framer-motion';
+// import { useScroll } from 'framer-motion';
 
 export const VideoLoader = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -34,7 +34,7 @@ export const VideoLoader = () => {
 //     // setScrollAble(canScroll)
 // }
   return (
-    <div className="absolute inset-0 h-full top-[5%] w-full" >
+    <div className="absolute z-10 inset-0 h-full top-[5%] w-full" >
       <video
         ref={videoRef}
         autoPlay

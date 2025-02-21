@@ -1,61 +1,67 @@
-"use client"
+"use client";
 
 import { useScroll, useAnimation, motion } from "framer-motion";
 import { Flame } from "lucide-react";
 import { useRef, useEffect } from "react";
 
 const DirectionAwareScrollComponent = () => {
-    const { scrollY } = useScroll();
-    const lastScrollY = useRef(0);
-    const isScrollingUp = useRef(false);
-    const controls = useAnimation();
-    const returnThreshold = 100; // Pixels from top to trigger return
-  
-    // Spring configuration for natural bounce
-    const springConfig = {
-      type: "spring",
-      stiffness: 400,
-      damping: 30,
-      restDelta: 0.001,
-      delay: 0.1,
-    };
-  
-    useEffect(() => {
-      const updateScrollDirection = () => {
-        const current = scrollY.get();
-        isScrollingUp.current = current < lastScrollY.current;
-        lastScrollY.current = current;
-  
-        if (isScrollingUp.current) {
-          // Spring upward animation
+  const { scrollY } = useScroll();
+  const lastScrollY = useRef(0);
+  const isScrollingUp = useRef(false);
+  const controls = useAnimation();
+  const returnThreshold = 100; // Pixels from top to trigger return
+
+  // Spring configuration for natural bounce
+  const springConfig = {
+    type: "spring",
+    stiffness: 400,
+    damping: 30,
+    restDelta: 0.001,
+    delay: 0.1,
+  };
+
+  useEffect(() => {
+    const updateScrollDirection = () => {
+      const current = scrollY.get();
+      isScrollingUp.current = current < lastScrollY.current;
+      lastScrollY.current = current;
+
+      if (isScrollingUp.current) {
+        // Spring upward animation
+        controls.start({
+          y: "0%",
+          transition: springConfig,
+        });
+      } else {
+        // Only return to position when near top
+        if (current < returnThreshold) {
           controls.start({
-            y: "0%",
-            transition: springConfig,
+            y: "-100%",
+            transition: {
+              type: "tween",
+              ease: "easeOut",
+              duration: 0.35,
+            },
           });
-        } else {
-          // Only return to position when near top
-          if (current < returnThreshold) {
-            controls.start({
-              y: "-100%",
-              transition: {
-                type: "tween",
-                ease: "easeOut",
-                duration: 0.35,
-              },
-            });
-          }
         }
-      };
-  
-      const unsubscribe = scrollY.on("change", updateScrollDirection);
-      return () => unsubscribe();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [scrollY, controls]);
-  
-    return (
-      <>
-      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30 pointer-events-none" />
-        <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden">
+      }
+    };
+
+    const unsubscribe = scrollY.on("change", updateScrollDirection);
+    return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scrollY, controls]);
+
+  return (
+    <>
+      {/* <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30" >
+        <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden"> */}
+      <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30 overflow-hidden">
+        <motion.nav
+          animate={controls}
+          className="w-full min-h-[9vh] flex justify-center items-center absolute top-0"
+          style={{ y: "-100%" }} // Initial hidden position
+        >
           <motion.a
             href="https://amie.so/changelog"
             target="_blank"
@@ -88,8 +94,8 @@ const DirectionAwareScrollComponent = () => {
           </div>
         </motion.nav>
       </div>
-      </>
-    );
-  };
+    </>
+  );
+};
 
-  export default DirectionAwareScrollComponent;
+export default DirectionAwareScrollComponent;
