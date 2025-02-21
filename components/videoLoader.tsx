@@ -1,11 +1,12 @@
 // components/VideoLoader.tsx
 'use client';
 
-// import { useStore } from '@/hooks/store';
+import { MotionValue, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
-// import { useScroll } from 'framer-motion';
 
-export const VideoLoader = () => {
+export const VideoLoader = (
+  {y} : {y: MotionValue<string>}
+) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canScroll, setCanScroll] = useState(false);
@@ -34,7 +35,7 @@ export const VideoLoader = () => {
 //     // setScrollAble(canScroll)
 // }
   return (
-    <div className="absolute z-10 inset-0 h-full top-[5%] w-full" >
+    <motion.div className="absolute z-10 inset-0 h-full top-[5%] w-full" style={{y}}>
       <video
         ref={videoRef}
         autoPlay
@@ -44,6 +45,6 @@ export const VideoLoader = () => {
       >
         <source src="/minor.mp4" type="video/mp4" />
       </video>
-    </div>
+    </motion.div>
   );
 };

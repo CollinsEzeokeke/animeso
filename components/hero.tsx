@@ -7,11 +7,24 @@ import { Monitor, Plus, Search, Settings } from "lucide-react";
 
 export default function Hero() {
   const { scrollYProgress } = useScroll();
-
+  // calculations for the scale of the image and moving up
   const rawScale = useTransform(scrollYProgress, [0, 0.25], [1.1, 0.3]);
   const y = useTransform(scrollYProgress, [0, 0.25], ["0%", "-70%"]);
-  const yIndex = useTransform(scrollYProgress, [0, 0.25], ["0%", "-40%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.25], ["0%", "-35%"]);
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
+  const move = useTransform(scrollYProgress, [0.25, 0.5], ["0%", "-10%"]);
+  const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
+  const moving = useTransform(scrollYProgress, [0.25, 0.5], ["0%", "-9vh"]);
+  const movingStiff = useSpring(moving, { stiffness: 500, damping: 50 });
+
+  // calculations for the zoom effect on hero
+  // const zoomIn = useTransform(scrollYProgress, [0.30, 0.10], [1, 3])
+  const zoomIn = useTransform(
+    scrollYProgress,
+    [0.29, 0.295, 0.3], // Input scroll ranges
+    [1, 1, 3] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
+  );
+  const stiffZoom = useSpring(zoomIn, { stiffness: 500, damping: 60 });
   return (
     <>
       <div>
@@ -24,10 +37,13 @@ export default function Hero() {
           }}
         >
           <div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
-            <div className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative">
+            <motion.div className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative" style={{scale: stiffZoom}}>
               {" "}
               <motion.div
                 style={{ y: yIndex }}
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.4, delay: 1 }}
                 className="flex flex-col h-[25%] -mt-[28%] w-4/5 items-center justify-center z-50"
               >
                 <h1 className="text-white font-sans text-6xl font-[650] mb-2">
@@ -37,14 +53,21 @@ export default function Hero() {
                   All-in-done.
                 </p>
               </motion.div>
-              <VideoLoader />
+              <VideoLoader y={moveUp} />
               {/* New wrapper div for bottom placement */}
-              <div className="absolute bottom-0 left-0 w-full h-[90vh] pointer-events-none bg-purple-500">
+              <div className="absolute bottom-0 left-0 w-full h-[90vh] pointer-events-none">
                 {" "}
                 {/* Full container overlay */}
-                <div className="relative w-full h-full flex items-end justify-center bg-red-500">
+                <div className="relative w-full h-full flex items-end justify-center">
                   {" "}
-                  <div className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2">
+                  <motion.div
+                    className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
+                    style={{
+                      y: movingStiff,
+                      scaleX: stiffZoom,
+                      scaleY: stiffZoom,
+                    }}
+                  >
                     {/* Search Icon */}
                     <Search className="w-5 h-5 mx-1 text-gray-700" />
 
@@ -52,7 +75,12 @@ export default function Hero() {
                     <div className="w-px h-6 bg-gray-300 mx-2"></div>
 
                     {/* Folder Replacement */}
-                    <div className="w-5 h-5 mx-1 bg-blue-400 rounded"></div>
+                    <motion.div
+                      className="relative"
+                      style={{ scale: stiffZoom, transformOrigin: "left center" }}
+                    >
+                      <div className="w-5 h-5 mx-1 bg-blue-400 rounded" />
+                    </motion.div>
                     {/* Plus Icon */}
                     <Plus className="w-5 h-5 mx-1 text-gray-700" />
 
@@ -64,10 +92,10 @@ export default function Hero() {
 
                     {/* Settings Icon */}
                     <Settings className="w-5 h-5 mx-2 text-gray-700" />
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* makes contents unclickable */}
             <div className="h-[100vh] w-[65vw] z-50 absolute bg-none" />
