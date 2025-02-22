@@ -56,7 +56,7 @@ const DirectionAwareScrollComponent = () => {
     <>
       {/* <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30" >
         <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden"> */}
-      <div className="w-screen h-[9.5vh] bg-[#BFBFBF] fixed top-0 z-30 overflow-hidden">
+      <motion.div initial={{y:0 }} className="w-screen h-[9.5vh] bg-[#BFBFBF] fixed top-0 z-30 overflow-hidden">
         <motion.nav
           animate={controls}
           className="w-full min-h-[9vh] flex justify-center items-center absolute top-0"
@@ -93,7 +93,7 @@ const DirectionAwareScrollComponent = () => {
             </div>
           </div>
         </motion.nav>
-      </div>
+      </motion.div>
     </>
   );
 };

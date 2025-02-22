@@ -5,7 +5,7 @@ import { MotionValue, motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 
 export const VideoLoader = (
-  {y} : {y: MotionValue<string>}
+  {y, zoom} : {y: MotionValue<string>, zoom?: MotionValue<number>}
 ) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,7 +35,7 @@ export const VideoLoader = (
 //     // setScrollAble(canScroll)
 // }
   return (
-    <motion.div className="absolute z-10 inset-0 h-full top-[5%] w-full" style={{y}}>
+    <motion.div className="absolute z-10 inset-0 h-full top-[5%] w-full" style={{y, scale: zoom}}>
       <video
         ref={videoRef}
         autoPlay
