@@ -25,6 +25,7 @@ export default function Hero() {
     [1, 1.2, 2] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
   );
   const stiffZoom = useSpring(zoomIn, { stiffness: 500, damping: 60 });
+// opacity calculation for text
   const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
@@ -41,8 +42,23 @@ export default function Hero() {
     [0.31, 0.33],
     ["none", "0.5px solid gray"] // from blue-400 to red-500
   );
-
-  // const movingAnother = useTransform(scrollYProgress, [0.31, 0.33], [0, 1]);
+// calculation for the motion that's makes the container move up further
+  const movingAnother = useTransform(scrollYProgress, [0.31, 0.33], ["0%", "-30%"]);
+  const springingAnother = useSpring(movingAnother, {
+    stiffness: 500,
+    damping: 60,
+  });
+// calculation for the second zoom effect into the folder replacement container
+  // const anotherZoom = useTransform(scrollYProgress, [0.36, 0.4], [2, 2.5])
+  // const anotherZoomSpring = useSpring(anotherZoom, {
+  //   stiffness: 500,
+  //   damping: 60,
+  // })
+// combining scales
+// const combinedScale = useTransform(
+//   [stiffZoom, anotherZoomSpring],
+//   (latest: number[]) => Math.max(...latest)
+// );
   return (
     <>
       <div className="overflow-x-hidden">
@@ -54,11 +70,12 @@ export default function Hero() {
             marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          <div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
-            {/* style={{scale: stiffZoom}} */}
+          <motion.div
+           className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+          
             <motion.div
               className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
-              style={{ scale: stiffZoom }}
+              style={{ y: springingAnother, scale: stiffZoom }}
             >
               {" "}
               <motion.div
@@ -97,10 +114,6 @@ export default function Hero() {
                     {/* Folder Replacement */}
                     <motion.div
                       className="relative mr-4"
-                      style={{
-                        scale: stiffZoom,
-                        transformOrigin: "left center",
-                      }}
                     >
                       <motion.div
                         className="w-6 h-4 mx-1 rounded"
@@ -125,7 +138,7 @@ export default function Hero() {
 
             {/* makes contents unclickable */}
             <div className="h-[100vh] w-[65vw] z-50 absolute bg-none" />
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
