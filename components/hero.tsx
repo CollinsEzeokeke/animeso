@@ -22,11 +22,11 @@ export default function Hero() {
   const zoomIn = useTransform(
     scrollYProgress,
     [0.29, 0.295, 0.3, 0.34, 0.4,], // Input scroll ranges
-    [1, 1.2, 2, 3, 6] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
+    [1, 1.5, 2, 2.5, 3] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
   );
   const stiffZoom = useSpring(zoomIn, { stiffness: 500, damping: 60 });
 // calculation for the motion that's makes the container move up further
-  const movingAnother = useTransform(scrollYProgress, [0.31, 0.33, 0.34, 0.4], ["0%", "-30%", "-50%", "-155%"]);
+  const movingAnother = useTransform(scrollYProgress, [0.31, 0.33, 0.34, 0.4], ["0%", "-30%", "-55%", "-70%"]);
   const springingAnother = useSpring(movingAnother, {
     stiffness: 500,
     damping: 60,
