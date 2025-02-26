@@ -6,34 +6,207 @@ import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 
 export default function Hero() {
-  const { scrollYProgress } = useScroll();
-  // calculations for the scale of the image and moving up
-  const rawScale = useTransform(scrollYProgress, [0, 0.25], [1.1, 0.3]);
-  const y = useTransform(scrollYProgress, [0, 0.25], ["0%", "-70%"]);
-  const yIndex = useTransform(scrollYProgress, [0, 0.25], ["0%", "-35%"]);
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+  });
+  // Adjust the scroll progress ranges for smoother animations
+  const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
+  const y = useTransform(scrollYProgress, [0, 0.05], ["0%", "-70%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
+
+  // Adjust zoom effect ranges
+  // const zoomIn = useTransform(
+  //   scrollYProgress,
+  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12],
+  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8.5]
+  // );
+
+  // const zoomIn = useTransform(
+  //   scrollYProgress,
+  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13],
+  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9]
+  // );
+
+  // const zoomIn = useTransform(
+  //   scrollYProgress,
+  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135, 0.14],
+  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9, 9.5, 10]
+  // );
+
+  // const zoomIn = useTransform(
+  //   scrollYProgress,
+  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135, 0.14, 0.145, 0.15],
+  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9, 9.5, 10, 10.5, 11]
+  // );
+
+  const zoomIn = useTransform(
+    scrollYProgress,
+    [
+      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+      0.135, 0.14, 0.145, 0.15, 0.155, 0.16,
+    ],
+    [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 15, 20, 30, 40, 50, 55, 60]
+  );
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [
+  //     0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12,
+  //     0.125, 0.13,
+  //   ],
+  //   [
+  //     "0%",
+  //     "-45%",
+  //     "-70%",
+  //     "-90%",
+  //     "-100%",
+  //     "-110%",
+  //     "-120%",
+  //     "-130%",
+  //     "-140%",
+  //     "-150%",
+  //     "-220%",
+  //     "-225%",
+  //     "-235%",
+  //   ]
+  // );
+
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [
+  //     0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12,
+  //     0.125, 0.13, 0.135, 0.14,
+  //   ],
+  //   [
+  //     "0%",
+  //     "-45%",
+  //     "-70%",
+  //     "-90%",
+  //     "-100%",
+  //     "-110%",
+  //     "-120%",
+  //     "-130%",
+  //     "-140%",
+  //     "-150%",
+  //     "-220%",
+  //     "-500%",
+  //     "-1000%",
+  //     "-1500%",
+  //     "-2170%",
+  //   ]
+  // );
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [
+  //     0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+  //     0.135, 0.14, 0.145, 0.15, 0.155, 0.16,
+  //   ],
+  //   [
+  //     "0%",
+  //     "-45%",
+  //     "-70%",
+  //     "-90%",
+  //     "-100%",
+  //     "-110%",
+  //     "-120%",
+  //     "-130%",
+  //     "-140%",
+  //     "-220%",
+  //     "-500%",
+  //     "-800%",
+  //     "-1200%",
+  //     "-1500%",
+  //     "-1800%",
+  //     "-2000%",
+  //     "-2170%",
+  //   ]
+  // );
+    const movingAnother = useTransform(
+    scrollYProgress,
+    [
+      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+      0.135, 0.14, 0.145, 0.15, 0.155, 0.16,
+    ],
+    [
+      "0%",
+      "-35%",
+      "-50%",
+      "-65%",
+      "-80%",
+      "-95%",
+      "-110%",
+      "-125%",
+      "-140%",
+      "-300%",
+      "-500%",
+      "-700%",
+      "-1000%",
+      "-1300%",
+      "-1600%",
+      "-1900%",
+      "-2170%",
+    ]
+  );
+
+  const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
+  const visibilitySpring = useSpring(visibility, {stiffness: 500, damping: 50});
+
+  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "transparent"]);
+  const colorSpring = useSpring(colorChange, {stiffness: 500, damping: 50});
+
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12],
+  //   [
+  //     "0%",
+  //     "-45%",
+  //     "-70%",
+  //     "-90%",
+  //     "-100%",
+  //     "-110%",
+  //     "-120%",
+  //     "-130%",
+  //     "-140%",
+  //     "-150%",
+  //     "-220%",
+  //   ]
+  // );
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
-  const move = useTransform(scrollYProgress, [0.25, 0.5], ["0%", "-10%"]);
+  const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
-  const moving = useTransform(scrollYProgress, [0.25, 0.5], ["0%", "-9vh"]);
+  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
 
   // calculations for the zoom effect on hero
-  // const zoomIn = useTransform(scrollYProgress, [0.30, 0.10], [1, 3])
-  const zoomIn = useTransform(
-    scrollYProgress,
-    [0.29, 0.295, 0.3, 0.34, 0.4,], // Input scroll ranges
-    [1, 1.5, 2, 2.5, 3] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
-  );
-  const stiffZoom = useSpring(zoomIn, { stiffness: 500, damping: 60 });
-// calculation for the motion that's makes the container move up further
-  const movingAnother = useTransform(scrollYProgress, [0.31, 0.33, 0.34, 0.4], ["0%", "-30%", "-55%", "-70%"]);
+  // const zoomIn = useTransform(
+  //   scrollYProgress,
+  //   [0.15, 0.155, 0.16, 0.165, 0.17, 0.175, 0.18, 0.185, 0.19], // Input scroll ranges
+  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8.5] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
+  // );
+  const stiffZoom = useSpring(zoomIn, {
+    stiffness: 300,
+    damping: 90,
+    restDelta: 0.001,
+  });
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [0.14, 0.145, 0.15, 0.155, 0.16, 0.165, 0.17, 0.175, 0.18, 0.19, 0.195],
+  //   ["0%", "-45%", "-70%", "-90%", "-100%", "-110%", "-120%", "-130%", "-140%", "-150%", "-160%"]
+  // );
   const springingAnother = useSpring(movingAnother, {
-    stiffness: 500,
-    damping: 60,
+    stiffness: 300,
+    damping: 90,
+    restDelta: 0.001,
   });
 
-  
-// opacity calculation for text
+  // const x = useTransform(scrollYProgress, [0.17, 0.18], [0, 200]);
+  const x = useTransform(
+    scrollYProgress,
+    [0.17, 0.175, 0.18, 0.185, 0.19],
+    [0, 400, 800, 1200, 1750]
+  );
+  const xSpring = useSpring(x, { stiffness: 500, damping: 90 });
+
+  // opacity calculation for text
   const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
@@ -44,40 +217,39 @@ export default function Hero() {
     scrollYProgress,
     [0.31, 0.33],
     ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
-  ); 
-   const border = useTransform(
+  );
+  const border = useTransform(
     scrollYProgress,
     [0.31, 0.33],
     ["none", "0.5px solid gray"] // from blue-400 to red-500
   );
-// calculation for the second zoom effect into the folder replacement container
+  // calculation for the second zoom effect into the folder replacement container
   // const anotherZoom = useTransform(scrollYProgress, [0.36, 0.4], [2, 2.5])
   // const anotherZoomSpring = useSpring(anotherZoom, {
   //   stiffness: 500,
   //   damping: 60,
   // })
-// combining scales
-// const combinedScale = useTransform(
-//   [stiffZoom, anotherZoomSpring],
-//   (latest: number[]) => Math.max(...latest)
-// );
+  // combining scales
+  // const combinedScale = useTransform(
+  //   [stiffZoom, anotherZoomSpring],
+  //   (latest: number[]) => Math.max(...latest)
+  // );
   return (
     <>
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden ">
         <DirectionAwareScrollComponent />
         <motion.div
-          className="h-[110vh] w-full overflow-x-hidden flex justify-center"
+          className="h-[110vh] w-full overflow-x-hidden flex overflow-y-hidden justify-center"
           style={{
             zIndex: 10,
             marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          <motion.div
-           className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
-          
+          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
             <motion.div
               className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
-              style={{ y: springingAnother, scale: stiffZoom }}
+              style={{ y: springingAnother, scale: stiffZoom, x: xSpring }}
+              // , x: xSpring
             >
               {" "}
               <motion.div
@@ -94,7 +266,7 @@ export default function Hero() {
                   All-in-done.
                 </p>
               </motion.div>
-              <VideoLoader y={moveUp} />
+              <VideoLoader visibility={visibilitySpring} y={moveUp} />
               {/* New wrapper div for bottom placement */}
               <div className="absolute bottom-0 left-0 w-full h-[90vh] pointer-events-none">
                 {" "}
@@ -105,6 +277,7 @@ export default function Hero() {
                     className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
                     style={{
                       y: movingStiff,
+                      color: colorSpring,
                     }}
                   >
                     {/* Search Icon */}
@@ -114,11 +287,9 @@ export default function Hero() {
                     <div className="w-px h-6 bg-gray-300 mx-2"></div>
 
                     {/* Folder Replacement */}
-                    <motion.div
-                      className="relative mr-4"
-                    >
+                    <motion.div className="relative mr-0">
                       <motion.div
-                        className="w-6 h-4 mx-1 rounded"
+                        className="w-8 h-6 mx-0 rounded"
                         style={{ backgroundColor, border }}
                       />
                     </motion.div>
