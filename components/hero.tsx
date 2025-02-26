@@ -216,7 +216,7 @@ export default function Hero() {
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.31, 0.33],
-    ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
+    ["rgb(96, 165, 250)", "none"] // from blue-400 to red-500
   );
   const border = useTransform(
     scrollYProgress,
