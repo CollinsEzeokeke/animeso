@@ -150,7 +150,7 @@ export default function Hero() {
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
   const visibilitySpring = useSpring(visibility, {stiffness: 500, damping: 50});
 
-  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "rgba()"]);
+  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "none"]);
   const colorSpring = useSpring(colorChange, {stiffness: 500, damping: 50});
 
   // const movingAnother = useTransform(
