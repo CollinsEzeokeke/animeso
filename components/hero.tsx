@@ -47,79 +47,7 @@ export default function Hero() {
     ],
     [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 15, 20, 30, 40, 50, 55, 60]
   );
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [
-  //     0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12,
-  //     0.125, 0.13,
-  //   ],
-  //   [
-  //     "0%",
-  //     "-45%",
-  //     "-70%",
-  //     "-90%",
-  //     "-100%",
-  //     "-110%",
-  //     "-120%",
-  //     "-130%",
-  //     "-140%",
-  //     "-150%",
-  //     "-220%",
-  //     "-225%",
-  //     "-235%",
-  //   ]
-  // );
-
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [
-  //     0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12,
-  //     0.125, 0.13, 0.135, 0.14,
-  //   ],
-  //   [
-  //     "0%",
-  //     "-45%",
-  //     "-70%",
-  //     "-90%",
-  //     "-100%",
-  //     "-110%",
-  //     "-120%",
-  //     "-130%",
-  //     "-140%",
-  //     "-150%",
-  //     "-220%",
-  //     "-500%",
-  //     "-1000%",
-  //     "-1500%",
-  //     "-2170%",
-  //   ]
-  // );
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [
-  //     0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
-  //     0.135, 0.14, 0.145, 0.15, 0.155, 0.16,
-  //   ],
-  //   [
-  //     "0%",
-  //     "-45%",
-  //     "-70%",
-  //     "-90%",
-  //     "-100%",
-  //     "-110%",
-  //     "-120%",
-  //     "-130%",
-  //     "-140%",
-  //     "-220%",
-  //     "-500%",
-  //     "-800%",
-  //     "-1200%",
-  //     "-1500%",
-  //     "-1800%",
-  //     "-2000%",
-  //     "-2170%",
-  //   ]
-  // );
+  
     const movingAnother = useTransform(
     scrollYProgress,
     [
@@ -153,52 +81,24 @@ export default function Hero() {
   const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "none"]);
   const colorSpring = useSpring(colorChange, {stiffness: 500, damping: 50});
 
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12],
-  //   [
-  //     "0%",
-  //     "-45%",
-  //     "-70%",
-  //     "-90%",
-  //     "-100%",
-  //     "-110%",
-  //     "-120%",
-  //     "-130%",
-  //     "-140%",
-  //     "-150%",
-  //     "-220%",
-  //   ]
-  // );
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
   const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
   const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
 
-  // calculations for the zoom effect on hero
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.15, 0.155, 0.16, 0.165, 0.17, 0.175, 0.18, 0.185, 0.19], // Input scroll ranges
-  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8.5] // Corresponding scale values (smooth transition from 1->3 between 0.3-0.4)
-  // );
   const stiffZoom = useSpring(zoomIn, {
     stiffness: 300,
     damping: 90,
     restDelta: 0.001,
   });
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [0.14, 0.145, 0.15, 0.155, 0.16, 0.165, 0.17, 0.175, 0.18, 0.19, 0.195],
-  //   ["0%", "-45%", "-70%", "-90%", "-100%", "-110%", "-120%", "-130%", "-140%", "-150%", "-160%"]
-  // );
+
   const springingAnother = useSpring(movingAnother, {
     stiffness: 300,
     damping: 90,
     restDelta: 0.001,
   });
 
-  // const x = useTransform(scrollYProgress, [0.17, 0.18], [0, 200]);
   const x = useTransform(
     scrollYProgress,
     [0.17, 0.175, 0.18, 0.185, 0.19],
@@ -223,17 +123,7 @@ export default function Hero() {
     [0.31, 0.33],
     ["none", "0.5px solid gray"] // from blue-400 to red-500
   );
-  // calculation for the second zoom effect into the folder replacement container
-  // const anotherZoom = useTransform(scrollYProgress, [0.36, 0.4], [2, 2.5])
-  // const anotherZoomSpring = useSpring(anotherZoom, {
-  //   stiffness: 500,
-  //   damping: 60,
-  // })
-  // combining scales
-  // const combinedScale = useTransform(
-  //   [stiffZoom, anotherZoomSpring],
-  //   (latest: number[]) => Math.max(...latest)
-  // );
+
   return (
     <>
       <div className="overflow-x-hidden ">
