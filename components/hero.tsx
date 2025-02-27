@@ -150,7 +150,7 @@ export default function Hero() {
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
   const visibilitySpring = useSpring(visibility, {stiffness: 500, damping: 50});
 
-  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "transparent"]);
+  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "rgba()"]);
   const colorSpring = useSpring(colorChange, {stiffness: 500, damping: 50});
 
   // const movingAnother = useTransform(
@@ -216,7 +216,7 @@ export default function Hero() {
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.31, 0.33],
-    ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
+    ["rgb(96, 165, 250)", "rgba()"] // from blue-400 to red-500
   );
   const border = useTransform(
     scrollYProgress,
