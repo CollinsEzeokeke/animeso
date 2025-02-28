@@ -76,7 +76,6 @@ export default function Hero() {
       "-1930%", // to 50 ===> 18 ===> 0.15
       "-2130%", // to 55 ===> 19 ===> 0.155
       "-2300%", // to 60 ===> 20 ===> 0.16
-      // "-2170%", // to 60 ===> 20 ===> 0.16
     ]
   );
 
@@ -120,12 +119,12 @@ export default function Hero() {
   // Add this new color transform
   const backgroundColor = useTransform(
     scrollYProgress,
-    [0.31, 0.33],
-    ["rgb(96, 165, 250)", "rgba()"] // from blue-400 to red-500
+    [0.085, 0.09],
+    ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
   );
   const border = useTransform(
     scrollYProgress,
-    [0.31, 0.33],
+    [0.085, 0.09],
     ["none", "0.5px solid gray"] // from blue-400 to red-500
   );
 

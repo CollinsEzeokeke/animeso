@@ -8,8 +8,7 @@ export default function Page() {
         <ScrollLock />
         <Hero />
       </div>
-
-      {/* Content section with increased height to ensure enough scroll space */}
+      
       <section className="relative z-0 bg-white min-h-[160vh]">
       </section>
     </main>
