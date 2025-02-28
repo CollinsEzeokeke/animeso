@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export default function Hero() {
   const { scrollYProgress } = useScroll({
@@ -49,18 +49,18 @@ export default function Hero() {
       "-230%",
       "-260%",
       "-350%",
-      "-550%",
-      "-750%",
-      "-950%",
-      "-1140%",
-      "-1330%",
-      "-1530%",
-      "-1730%",
+      "-550%", // 11th value
+      "-750%", // 12th value  
+      "-950%", // 13th value
+      "-1140%", // 14th value
+      "-1330%", // 15th value
+      "-1530%", // 16th value
+      "-1730%", // 17th value
       "-1930%",
-      "-2130%",
+      "-2150%",
+      "-2300%",
       "-2300%", // Value at 0.16
       "-2300%", // Keep same value at 0.17
-      "-2300%", // Keep same value at 0.18
     ]
   );
 
@@ -83,13 +83,15 @@ export default function Hero() {
   const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
 
-  const stiffZoom = useSpring(zoomIn, {
+  const [isLocked, setIsLocked] = useState(false);
+
+  const springingAnother = useSpring(movingAnother, {
     stiffness: 300,
     damping: 90,
     restDelta: 0.001,
   });
 
-  const springingAnother = useSpring(movingAnother, {
+  const stiffZoom = useSpring(zoomIn, {
     stiffness: 300,
     damping: 90,
     restDelta: 0.001,
@@ -103,7 +105,11 @@ export default function Hero() {
     ],
     [0, 100, 300, 350, 580, 800, 890, 1050, 1200, 1345, 1555, 1715, 1730, 1750]
   );
-  const xSpring = useSpring(x, { stiffness: 500, damping: 90 });
+
+  const xSpring = useSpring(x, {
+    stiffness: 500,
+    damping: 90
+  });
 
   // opacity calculation for text
   const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
@@ -131,16 +137,38 @@ export default function Hero() {
     damping: 50,
   });
 
-  // Add effect to monitor scroll position
+  // Update the useEffect to handle locking
   useEffect(() => {
-    const unsubscribe = scrollYProgress.onChange((value) => {
-      if (value >= 0.16 && containerRef.current) {
-        // Optional: You could add additional control here if needed
+    const unsubscribe = scrollYProgress.on("change", (value) => {
+      if (value >= 0.16) {
+        setIsLocked(true);
+      } else {
+        setIsLocked(false);
       }
     });
 
     return () => unsubscribe();
   }, [scrollYProgress]);
+
+  useEffect(() => {
+    if (isLocked) {
+      // Lock all motion values
+      springingAnother.set("-2300%");
+      stiffZoom.set(60);
+      xSpring.set(1715);
+      moveUp.set("-10%");
+      movingStiff.set("-9vh");
+      scale.set(0.3);
+      y.set("-70%");
+      yIndex.set("-35%");
+      
+      // Prevent further scrolling
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrolling when unlocked
+      document.body.style.overflow = 'auto';
+    }
+  }, [isLocked, springingAnother, stiffZoom, xSpring, moveUp, movingStiff, scale, y, yIndex]);
 
   return (
     <>
@@ -154,11 +182,11 @@ export default function Hero() {
         >
           <motion.div
             className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen"
-            // ref={containerRef}
           >
             <motion.div
               className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
               style={{ y: springingAnother, scale: stiffZoom, x: xSpring }}
+              ref={containerRef}
             >
               {" "}
               <motion.div
@@ -182,14 +210,6 @@ export default function Hero() {
                 {/* Full container overlay */}
                 <div className="relative w-full h-full flex items-end justify-center">
                   {" "}
-                  {/* <motion.div
-                    className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
-                    style={{
-                      y: movingStiff,
-                      color: colorSpring,
-                      opacity: opacitySpring,
-                    }}
-                  > */}
                   <motion.div
                     className="z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
                     style={{
@@ -223,17 +243,6 @@ export default function Hero() {
                           opacity: blackBarSpring,
                         }}
                       />
-                      {/* <motion.div
-                        className="w-8 h-6 mx-0 rounded absolute top-0 left-0"
-                        style={{
-                          backgroundColor: "black",
-                          opacity: useTransform(
-                            scrollYProgress,
-                            [0.085, 0.09],
-                            [0, 1]
-                          ),
-                        }}
-                      /> */}
                       <motion.div
                         className="w-8 h-6 mx-0 rounded absolute top-0 left-0"
                         style={{
