@@ -83,13 +83,20 @@ export default function Hero() {
   const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
   const stiffOpacity = useSpring(reduceOpacity, { stiffness: 500, damping: 60 });
   
-  // Pre-calculate transforms for height and opacity
+  // Pre-calculate transforms for height, width  and opacity
   const heightTransform = useTransform(
     scrollYProgress,
     [0.155, 0.16],
     ["24px", "40px"]
   );
   
+  // Add width transform that changes from w-8 (32px) to w-10 (40px)
+  const widthTransform = useTransform(
+    scrollYProgress,
+    [0.155, 0.16],
+    ["32px", "40px"]
+  );
+
   const opacityTransform = useTransform(
     scrollYProgress,
     [0.085, 0.09, 0.185, 0.4],
@@ -129,11 +136,16 @@ export default function Hero() {
       
       // Handle threshold crossing immediately for better UX
       if (value >= 0.18 && !isLocked) {
-        setIsLocked(true);
-        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          setIsLocked(true);
+          // Allow scrolling when content should be visible
+          document.body.style.overflow = 'auto';
+        });
       } else if (value < 0.16 && isLocked) {
-        setIsLocked(false);
-        document.body.style.overflow = 'auto';
+        requestAnimationFrame(() => {
+          setIsLocked(false);
+          document.body.style.overflow = 'auto';
+        });
       }
       
       // Debounce the animation locking
@@ -253,8 +265,9 @@ export default function Hero() {
                         style={{
                           backgroundColor: "black",
                           height: heightTransform,
+                          width: widthTransform,
                           opacity: opacityTransform,
-                          willChange: "opacity, height"
+                          willChange: "opacity, width, height"
                         }}
                       />
                     </motion.div>

@@ -12,16 +12,28 @@ import React from "react";
 const MotionContent = React.memo(({ isLocked, children, animationSettings }: { isLocked: boolean, children: ReactNode, animationSettings?: { duration: number, stiffness: number, damping: number } }) => (
   <motion.div
     initial={{ opacity: 0, y: 100 }}
-    animate={{ opacity: isLocked ? 1 : 0, y: isLocked ? 0 : 100 }}
+    animate={{ 
+      opacity: isLocked ? 1 : 0, 
+      y: isLocked ? 0 : 100,
+      display: isLocked ? 'block' : 'none'
+    }}
     transition={{
-      duration: animationSettings?.duration || 0.8,
-      ease: "easeOut",
-      type: "spring",
-      stiffness: animationSettings?.stiffness || 500,
-      damping: animationSettings?.damping || 90,
+      opacity: {
+        duration: animationSettings?.duration || 0.8,
+        ease: "easeOut",
+      },
+      y: {
+        type: "spring",
+        stiffness: animationSettings?.stiffness || 500,
+        damping: animationSettings?.damping || 90,
+      },
+      display: {
+        delay: isLocked ? 0 : 0.8 // Delay display:none when hiding
+      }
     }}
     style={{
       willChange: "opacity, transform",
+      pointerEvents: isLocked ? 'auto' : 'none'
     }}
     className="relative w-full"
   >
