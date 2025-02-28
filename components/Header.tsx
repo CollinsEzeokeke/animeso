@@ -1,5 +1,6 @@
 "use client";
 
+import { useWindowSize } from "@uidotdev/usehooks";
 import { useScroll, useAnimation, motion } from "framer-motion";
 import { Flame } from "lucide-react";
 import { useRef, useEffect } from "react";
@@ -19,6 +20,7 @@ const DirectionAwareScrollComponent = () => {
     restDelta: 0.001,
     delay: 0.1,
   };
+  const { width } = useWindowSize();
 
   useEffect(() => {
     const updateScrollDirection = () => {
@@ -56,16 +58,20 @@ const DirectionAwareScrollComponent = () => {
     <>
       {/* <div className="w-screen h-[9.5vh] bg-[#BCBCBC] fixed top-0 z-30" >
         <motion.nav animate={controls}  className="w-full min-h-[9vh] flex justify-center items-center fixed top-0 overflow-hidden"> */}
-      <motion.div initial={{y:0 }} animate={{y: 0}} className="w-screen h-[9.5vh] bg-[#BFBFBF] fixed top-0 z-30 overflow-hidden">
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: 0 }}
+        className={`w-screen h-[9.5vh] bg-[#BFBFBF] fixed top-0 z-30 overflow-hidden`}
+      >
         <motion.nav
           animate={controls}
-          className="w-full min-h-[9vh] flex justify-center items-center absolute top-0"
+          className={`w-full min-h-[9vh] flex justify-center items-center absolute top-0 ${width === 1024 && "bg-yellow-500"}`}
           initial={{ y: "0%" }}
         >
           <motion.a
             href="https://amie.so/changelog"
             target="_blank"
-            className="rounded-3xl h-11 w-[12%] bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-[100]"
+            className={`rounded-3xl h-11 ${width === 1440 && "w-[12%]" } ${width === 1024 && "w-[20%]" } ${width === 1024 && "-mt-2" } ${width === 768 && "w-[25%]" } ${width === 768 && "-mt-2" } bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-[100]`}
           >
             <Flame className="text-white -mt-1 size-4 font-black stroke-[4px] rotate-[15deg]" />
             <button className="p-1 font-sans">Last Update: Feb 12</button>
