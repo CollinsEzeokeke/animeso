@@ -15,6 +15,7 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end start"],
   });
+  // Get the window width
   const { width } = useWindowSize();
 
   console.log("this is the width of the application: ", width);
