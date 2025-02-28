@@ -1,9 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import DirectionAwareScrollComponent from "@/components/Header";
+// import DirectionAwareScrollComponent from "@/components/Header";
 import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 export default function Hero() {
   const { scrollYProgress } = useScroll({
@@ -15,75 +16,66 @@ export default function Hero() {
   const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
 
   // Adjust zoom effect ranges
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12],
-  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8.5]
-  // );
-
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13],
-  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9]
-  // );
-
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135, 0.14],
-  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9, 9.5, 10]
-  // );
-
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13, 0.135, 0.14, 0.145, 0.15],
-  //   [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 8.5, 9, 9.5, 10, 10.5, 11]
-  // );
-
   const zoomIn = useTransform(
     scrollYProgress,
     [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125
-      , 0.13, 0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
+      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
     ],
-    [1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10,
-       15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+    [
+      1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+      60,
+    ]
   );
-  
-    const movingAnother = useTransform(
+
+  // Add a ref for the container
+  const containerRef = useRef(null);
+
+  // Modify the movingAnother transform to stop at scrollYProgress 0.16
+  const movingAnother = useTransform(
     scrollYProgress,
     [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125,
-       0.13, 0.135, 0.1375, 0.14,  0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
+      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
     ],
     [
       "0%",
       "-49%",
-      "-140%", // 3.5
-      "-149%", //4
-      "-149%", // 4.5 to
-      "-180%", // 5
-      "-200%", // to 6  ==> 7      
-      "-230%", // to 7 ===> 8
-      "-260%", // to 8 ===> 9
-      "-350%",// to 10 ===> 10
-      "-550%", // to 15 ===> 11 ===> 0.13
-      "-750%", // to 20 ===> 12 ===> 0.135
-      "-950%", // to 25 ===> 13 ===> 0.1375
-      "-1140%", // to 30 ===> 14  ===> 0.14
-      "-1330%", // to 35 ===> 15 ===> 0.1425
-      "-1530%", // to 40 ===> 16 ===> 0.145
-      "-1730%", // to 45 ===> 17 ===> 0.1475
-      "-1930%", // to 50 ===> 18 ===> 0.15
-      "-2130%", // to 55 ===> 19 ===> 0.155
-      "-2300%", // to 60 ===> 20 ===> 0.16
+      "-140%",
+      "-149%",
+      "-149%",
+      "-180%",
+      "-200%",
+      "-230%",
+      "-260%",
+      "-350%",
+      "-550%",
+      "-750%",
+      "-950%",
+      "-1140%",
+      "-1330%",
+      "-1530%",
+      "-1730%",
+      "-1930%",
+      "-2130%",
+      "-2300%", // Value at 0.16
+      "-2300%", // Keep same value at 0.17
+      "-2300%", // Keep same value at 0.18
     ]
   );
 
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
-  const visibilitySpring = useSpring(visibility, {stiffness: 500, damping: 50});
+  const visibilitySpring = useSpring(visibility, {
+    stiffness: 500,
+    damping: 50,
+  });
 
-  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "none"]);
-  const colorSpring = useSpring(colorChange, {stiffness: 500, damping: 50});
+  const colorChange = useTransform(
+    scrollYProgress,
+    [0.155, 0.16],
+    ["#fff", "none"]
+  );
+  const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
 
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
   const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
@@ -105,8 +97,11 @@ export default function Hero() {
 
   const x = useTransform(
     scrollYProgress,
-    [0.105, 0.11, 0.125, 0.13, 0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.16, 0.185, 0.19],
-    [0, 100, 300,350, 580, 800, 890, 1050, 1200, 1345, 1555, 1715, 1730, 1750]
+    [
+      0.105, 0.11, 0.125, 0.13, 0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475,
+      0.15, 0.16, 0.185, 0.19,
+    ],
+    [0, 100, 300, 350, 580, 800, 890, 1050, 1200, 1345, 1555, 1715, 1730, 1750]
   );
   const xSpring = useSpring(x, { stiffness: 500, damping: 90 });
 
@@ -122,28 +117,48 @@ export default function Hero() {
     [0.085, 0.09],
     ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
   );
-  const border = useTransform(
+  // Create a transform specifically for the container's background
+  const containerBgOpacity = useTransform(
     scrollYProgress,
-    [0.085, 0.09],
-    ["none", "0.5px solid gray"] // from blue-400 to red-500
+    [0.185, 0.19],
+    [1, 0] // From visible to invisible
   );
+
+  // keeping the black bar visible
+  const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
+  const blackBarSpring = useSpring(blackBar, {
+    stiffness: 500,
+    damping: 50,
+  });
+
+  // Add effect to monitor scroll position
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.onChange((value) => {
+      if (value >= 0.16 && containerRef.current) {
+        // Optional: You could add additional control here if needed
+      }
+    });
+
+    return () => unsubscribe();
+  }, [scrollYProgress]);
 
   return (
     <>
-      <div className="overflow-x-hidden ">
-        <DirectionAwareScrollComponent />
+      <div className="overflow-x-hidden">
         <motion.div
-          className="h-[110vh] w-full overflow-x-hidden flex overflow-y-hidden justify-center"
+          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden justify-center"
           style={{
             zIndex: 10,
             marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+          <motion.div
+            className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen"
+            // ref={containerRef}
+          >
             <motion.div
               className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
               style={{ y: springingAnother, scale: stiffZoom, x: xSpring }}
-              // , x: xSpring
             >
               {" "}
               <motion.div
@@ -167,11 +182,29 @@ export default function Hero() {
                 {/* Full container overlay */}
                 <div className="relative w-full h-full flex items-end justify-center">
                   {" "}
-                  <motion.div
+                  {/* <motion.div
                     className="bg-white z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
                     style={{
                       y: movingStiff,
                       color: colorSpring,
+                      opacity: opacitySpring,
+                    }}
+                  > */}
+                  <motion.div
+                    className="z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
+                    style={{
+                      y: movingStiff,
+                      color: colorSpring,
+                      backgroundColor: useTransform(
+                        containerBgOpacity,
+                        (opacity) => `rgba(255, 255, 255, ${opacity})` // Make white background transparent
+                      ),
+                      // Keep the shadow visible or fade it with the background
+                      boxShadow: useTransform(containerBgOpacity, (opacity) =>
+                        opacity === 0
+                          ? "none"
+                          : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
+                      ),
                     }}
                   >
                     {/* Search Icon */}
@@ -184,7 +217,33 @@ export default function Hero() {
                     <motion.div className="relative mr-0">
                       <motion.div
                         className="w-8 h-6 mx-0 rounded"
-                        style={{ backgroundColor, border }}
+                        style={{
+                          backgroundColor,
+                          // border,
+                          opacity: blackBarSpring,
+                        }}
+                      />
+                      {/* <motion.div
+                        className="w-8 h-6 mx-0 rounded absolute top-0 left-0"
+                        style={{
+                          backgroundColor: "black",
+                          opacity: useTransform(
+                            scrollYProgress,
+                            [0.085, 0.09],
+                            [0, 1]
+                          ),
+                        }}
+                      /> */}
+                      <motion.div
+                        className="w-8 h-6 mx-0 rounded absolute top-0 left-0"
+                        style={{
+                          backgroundColor: "black",
+                          opacity: useTransform(
+                            scrollYProgress,
+                            [0.085, 0.09, 0.185, 0.4],
+                            [0, 1, 1, 1] // Stays visible
+                          ),
+                        }}
                       />
                     </motion.div>
                     {/* Plus Icon */}
