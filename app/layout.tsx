@@ -44,7 +44,7 @@ export default function RootLayout({
             commit={process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA} // optional but recommended
             branch={process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF} // optional but recommended
           />
-          {children}
+            {children}
         </body>
       </ReactLenis>
     </html>
