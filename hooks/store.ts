@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 type State = {
-  isScrollAble: boolean;
-  setScrollAble: (scrollAble: boolean) => void;
+  isLocked: boolean;
+  setIsLocked: (scrollAble: boolean) => void;
 };
 
 export const useStore = create<State>((set) => ({
-  isScrollAble: false,
-  setScrollAble: (scrollAble) => set({ isScrollAble: scrollAble }),
+  isLocked: false,
+  setIsLocked: (scrollAble) => set({ isLocked: scrollAble }),
 }));

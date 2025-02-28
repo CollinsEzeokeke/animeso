@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
+import { useStore } from "@/hooks/store";
 
 export default function Hero() {
   const { scrollYProgress } = useScroll({
@@ -83,7 +84,7 @@ export default function Hero() {
   const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
 
-  const [isLocked, setIsLocked] = useState(false);
+  const { setIsLocked, isLocked } = useStore();
 
   const springingAnother = useSpring(movingAnother, {
     stiffness: 300,
@@ -139,36 +140,51 @@ export default function Hero() {
 
   // Update the useEffect to handle locking
   useEffect(() => {
+    // Make sure we start unlocked
+    setIsLocked(false);
+    document.body.style.overflow = 'auto';
+    
     const unsubscribe = scrollYProgress.on("change", (value) => {
-      if (value >= 0.16) {
+      console.log("this is the value", value);
+      if(value >= 0.18){
         setIsLocked(true);
+      }
+      if (value >= 0.16) {
+        // Dispatch a custom event when animation is complete
+        const event = new CustomEvent('heroAnimationComplete', { detail: { complete: true } });
+        window.dispatchEvent(event);
+        
+        // Lock all motion values
+        springingAnother.set("-2300%");
+        stiffZoom.set(60);
+        xSpring.set(1715);
+        moveUp.set("-10%");
+        movingStiff.set("-9vh");
+        scale.set(0.3);
+        y.set("-70%");
+        yIndex.set("-35%");
+        
+        // Prevent further scrolling
+        document.body.style.overflow = 'hidden';
       } else {
         setIsLocked(false);
+        document.body.style.overflow = 'auto';
       }
     });
 
     return () => unsubscribe();
-  }, [scrollYProgress]);
+  }, [moveUp, movingStiff, scale, scrollYProgress, setIsLocked, springingAnother, stiffZoom, xSpring, y, yIndex]);
 
+  // Modify the second useEffect
   useEffect(() => {
+    // Only apply the locked state when isLocked becomes true through scrolling
+    // No need to set initial values here
     if (isLocked) {
-      // Lock all motion values
-      springingAnother.set("-2300%");
-      stiffZoom.set(60);
-      xSpring.set(1715);
-      moveUp.set("-10%");
-      movingStiff.set("-9vh");
-      scale.set(0.3);
-      y.set("-70%");
-      yIndex.set("-35%");
-      
-      // Prevent further scrolling
       document.body.style.overflow = 'hidden';
     } else {
-      // Re-enable scrolling when unlocked
       document.body.style.overflow = 'auto';
     }
-  }, [isLocked, springingAnother, stiffZoom, xSpring, moveUp, movingStiff, scale, y, yIndex]);
+  }, [isLocked]);
 
   return (
     <>
