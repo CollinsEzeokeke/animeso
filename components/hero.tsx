@@ -8,177 +8,169 @@ import { useRef, useEffect } from "react";
 import { useStore } from "@/hooks/store";
 
 export default function Hero() {
+  const containerRef = useRef(null);
+  const { setIsLocked, isLocked } = useStore();
+  
+  // Single useScroll hook for better performance
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end start"],
   });
-  // Adjust the scroll progress ranges for smoother animations
+  
+  // Create all transform values at the top level of the component
+  // Simplified ranges with fewer keyframes for better performance
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
+  const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
+  
   const y = useTransform(scrollYProgress, [0, 0.05], ["0%", "-70%"]);
   const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
-
-  // Adjust zoom effect ranges
+  
+  // Simplified zoom effect with fewer keyframes
   const zoomIn = useTransform(
     scrollYProgress,
-    [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
-      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
-    ],
-    [
-      1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-      60,
-    ]
+    [0.08, 0.1, 0.12, 0.14, 0.16],
+    [1, 5, 15, 35, 60]
   );
-
-  // Add a ref for the container
-  const containerRef = useRef(null);
-
-  // Modify the movingAnother transform to stop at scrollYProgress 0.16
+  
+  // Simplified movement animation with fewer keyframes
   const movingAnother = useTransform(
     scrollYProgress,
-    [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
-      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
-    ],
-    [
-      "0%",
-      "-49%",
-      "-140%",
-      "-149%",
-      "-149%",
-      "-180%",
-      "-200%",
-      "-230%",
-      "-260%",
-      "-350%",
-      "-550%", // 11th value
-      "-750%", // 12th value  
-      "-950%", // 13th value
-      "-1140%", // 14th value
-      "-1330%", // 15th value
-      "-1530%", // 16th value
-      "-1730%", // 17th value
-      "-1930%",
-      "-2150%",
-      "-2300%",
-      "-2300%", // Value at 0.16
-      "-2300%", // Keep same value at 0.17
-    ]
+    [0.08, 0.1, 0.12, 0.14, 0.16, 0.17, 0.18],
+    ["0%", "-180%", "-550%", "-1330%", "-2300%", "-2300%", "-2300%"]
   );
-
+  
+  // Create springs for smoother animations with optimized stiffness/damping
+  const stiffZoom = useSpring(zoomIn, { 
+    stiffness: 300, 
+    damping: 90, 
+    restDelta: 0.001
+  });
+  
+  const springingAnother = useSpring(movingAnother, { 
+    stiffness: 300, 
+    damping: 90, 
+    restDelta: 0.001 
+  });
+  
+  // Other animations with simplified keyframes
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
-  const visibilitySpring = useSpring(visibility, {
-    stiffness: 500,
-    damping: 50,
-  });
-
-  const colorChange = useTransform(
-    scrollYProgress,
-    [0.155, 0.16],
-    ["#fff", "none"]
-  );
-  const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
-
-  const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
   const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
-  const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
   const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
-  const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
-
-  const { setIsLocked, isLocked } = useStore();
-
-  const springingAnother = useSpring(movingAnother, {
-    stiffness: 300,
-    damping: 90,
-    restDelta: 0.001,
-  });
-
-  const stiffZoom = useSpring(zoomIn, {
-    stiffness: 300,
-    damping: 90,
-    restDelta: 0.001,
-  });
-
+  
+  // Simplified horizontal movement
   const x = useTransform(
     scrollYProgress,
-    [
-      0.105, 0.11, 0.125, 0.13, 0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475,
-      0.15, 0.16, 0.185, 0.19,
-    ],
-    [0, 100, 300, 350, 580, 800, 890, 1050, 1200, 1345, 1555, 1715, 1730, 1750]
+    [0.105, 0.13, 0.145, 0.16],
+    [0, 350, 1200, 1715]
   );
-
-  const xSpring = useSpring(x, {
-    stiffness: 500,
-    damping: 90
-  });
-
-  // opacity calculation for text
-  const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
-  const stiffOpacity = useSpring(reduceOpacity, {
-    stiffness: 500,
-    damping: 60,
-  });
-  // Add this new color transform
-  const backgroundColor = useTransform(
-    scrollYProgress,
-    [0.085, 0.09],
-    ["rgb(96, 165, 250)", "transparent"] // from blue-400 to red-500
-  );
-  // Create a transform specifically for the container's background
-  const containerBgOpacity = useTransform(
-    scrollYProgress,
-    [0.185, 0.19],
-    [1, 0] // From visible to invisible
-  );
-
-  // keeping the black bar visible
+  
+  // Springs for smoother animations
+  const visibilitySpring = useSpring(visibility, { stiffness: 500, damping: 50 });
+  const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
+  const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
+  const xSpring = useSpring(x, { stiffness: 500, damping: 90 });
+  
+  // Color and opacity transitions
+  const colorChange = useTransform(scrollYProgress, [0.155, 0.16], ["#fff", "none"]);
+  const backgroundColor = useTransform(scrollYProgress, [0.085, 0.09], ["rgb(96, 165, 250)", "transparent"]);
+  const containerBgOpacity = useTransform(scrollYProgress, [0.185, 0.19], [1, 0]);
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
-  const blackBarSpring = useSpring(blackBar, {
-    stiffness: 500,
-    damping: 50,
-  });
-
-  // Update the useEffect to handle locking
+  
+  // Springs for color transitions
+  const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
+  const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
+  
+  // Opacity for text
+  const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
+  const stiffOpacity = useSpring(reduceOpacity, { stiffness: 500, damping: 60 });
+  
+  // Pre-calculate transforms for height and opacity
+  const heightTransform = useTransform(
+    scrollYProgress,
+    [0.155, 0.16],
+    ["24px", "40px"]
+  );
+  
+  const opacityTransform = useTransform(
+    scrollYProgress,
+    [0.085, 0.09, 0.185, 0.4],
+    [0, 1, 1, 1]
+  );
+  
+  // Background color transform for the menu bar
+  const bgColorTransform = useTransform(
+    containerBgOpacity,
+    (opacity) => `rgba(255, 255, 255, ${opacity})`
+  );
+  
+  // Box shadow transform
+  const boxShadowTransform = useTransform(
+    containerBgOpacity,
+    (opacity) => opacity === 0
+      ? "none"
+      : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
+  );
+  
+  // Debounced scroll handler for better performance
   useEffect(() => {
-    // Make sure we start unlocked
+    let timeoutId: NodeJS.Timeout | null = null;
+    let isScrollHandlerActive = true;
+    
+    // Reset any existing state
     setIsLocked(false);
     document.body.style.overflow = 'auto';
     
-    const unsubscribe = scrollYProgress.on("change", (value) => {
-      console.log("this is the value", value);
-      if(value >= 0.18){
+    const handleScroll = () => {
+      if (!isScrollHandlerActive) return;
+      
+      const value = scrollYProgress.get();
+      
+      // Debounce expensive operations
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      // Handle threshold crossing immediately for better UX
+      if (value >= 0.18 && !isLocked) {
         setIsLocked(true);
-      }
-      if (value >= 0.16) {
-        // Dispatch a custom event when animation is complete
-        const event = new CustomEvent('heroAnimationComplete', { detail: { complete: true } });
-        window.dispatchEvent(event);
-        
-        // Lock all motion values
-        springingAnother.set("-2300%");
-        stiffZoom.set(60);
-        xSpring.set(1715);
-        moveUp.set("-10%");
-        movingStiff.set("-9vh");
-        scale.set(0.3);
-        y.set("-70%");
-        yIndex.set("-35%");
-        
-        // Prevent further scrolling
         document.body.style.overflow = 'hidden';
-      } else {
+      } else if (value < 0.16 && isLocked) {
         setIsLocked(false);
         document.body.style.overflow = 'auto';
       }
-    });
+      
+      // Debounce the animation locking
+      timeoutId = setTimeout(() => {
+        if (value >= 0.16) {
+          // Lock all motion values at final positions
+          springingAnother.set("-2300%");
+          stiffZoom.set(60);
+          xSpring.set(1715);
+          moveUp.set("-10%");
+          movingStiff.set("-9vh");
+          scale.set(0.3);
+          y.set("-70%");
+          yIndex.set("-35%");
+          
+          // Dispatch event only once when crossing threshold
+          if (!isLocked) {
+            const event = new CustomEvent('heroAnimationComplete', { 
+              detail: { complete: true } 
+            });
+            window.dispatchEvent(event);
+          }
+        }
+      }, 16); // ~1 frame at 60fps
+    };
+    
+    const unsubscribe = scrollYProgress.on("change", handleScroll);
+    
+    return () => {
+      isScrollHandlerActive = false;
+      if (timeoutId) clearTimeout(timeoutId);
+      unsubscribe();
+    };
+  }, [isLocked, moveUp, movingStiff, scale, scrollYProgress, setIsLocked, springingAnother, stiffZoom, xSpring, y, yIndex]);
 
-    return () => unsubscribe();
-  }, [moveUp, movingStiff, scale, scrollYProgress, setIsLocked, springingAnother, stiffZoom, xSpring, y, yIndex]);
-
-  // Modify the second useEffect
+  // Separate effect for body overflow to avoid unnecessary renders
   useEffect(() => {
-    // Only apply the locked state when isLocked becomes true through scrolling
-    // No need to set initial values here
     if (isLocked) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -201,7 +193,12 @@ export default function Hero() {
           >
             <motion.div
               className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
-              style={{ y: springingAnother, scale: stiffZoom, x: xSpring }}
+              style={{ 
+                y: springingAnother,
+                scale: stiffZoom, 
+                x: xSpring,
+                willChange: "transform" // Hardware acceleration hint
+              }}
               ref={containerRef}
             >
               {" "}
@@ -231,16 +228,9 @@ export default function Hero() {
                     style={{
                       y: movingStiff,
                       color: colorSpring,
-                      backgroundColor: useTransform(
-                        containerBgOpacity,
-                        (opacity) => `rgba(255, 255, 255, ${opacity})` // Make white background transparent
-                      ),
-                      // Keep the shadow visible or fade it with the background
-                      boxShadow: useTransform(containerBgOpacity, (opacity) =>
-                        opacity === 0
-                          ? "none"
-                          : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
-                      ),
+                      backgroundColor: bgColorTransform,
+                      boxShadow: boxShadowTransform,
+                      willChange: "transform, background-color, box-shadow"
                     }}
                   >
                     {/* Search Icon */}
@@ -255,19 +245,16 @@ export default function Hero() {
                         className="w-8 h-6 mx-0 rounded"
                         style={{
                           backgroundColor,
-                          // border,
                           opacity: blackBarSpring,
                         }}
                       />
                       <motion.div
-                        className="w-8 h-6 mx-0 rounded absolute top-0 left-0"
+                        className="w-8 mx-0 rounded absolute top-0 left-0"
                         style={{
                           backgroundColor: "black",
-                          opacity: useTransform(
-                            scrollYProgress,
-                            [0.085, 0.09, 0.185, 0.4],
-                            [0, 1, 1, 1] // Stays visible
-                          ),
+                          height: heightTransform,
+                          opacity: opacityTransform,
+                          willChange: "opacity, height"
                         }}
                       />
                     </motion.div>
@@ -300,6 +287,7 @@ export default function Hero() {
             backgroundImage: "url('/logo-shaded.png')",
             scale,
             y,
+            willChange: "transform"
           }}
         />
       </div>
