@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-// import DirectionAwareScrollComponent from "@/components/Header";
+import { useWindowSize } from '@uidotdev/usehooks';
 import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
@@ -15,7 +15,10 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end start"],
   });
-  
+  const { width } = useWindowSize();
+
+  console.log("this is the width of the application: ", width);
+    
   // Create all transform values at the top level of the component
   // Simplified ranges with fewer keyframes for better performance
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
