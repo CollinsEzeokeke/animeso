@@ -8,14 +8,40 @@ import { useRef, useEffect, useState } from "react";
 import { useStore } from "@/hooks/store/store";
 
 export default function Hero() {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { setIsLocked, isLocked } = useStore();
-  const [currentProgress, setCurrentProgress] = useState(0);
+  // const [currentProgress, setCurrentProgress] = useState(0);
+  const [freezePoint, setFreezePoint] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [isFixed, setIsFixed] = useState(false)
 
   // Single useScroll hook for better performance
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress, scrollY } = useScroll();
+
+    // 2. Calculate freeze point and container height
+    useEffect(() => {
+      const calculateDimensions = () => {
+        const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight
+        setFreezePoint(totalScrollHeight * 0.16) //5961945031712474
+        if (containerRef.current) {
+          setContainerHeight(containerRef.current.offsetHeight)
+        }
+      }
+  
+      calculateDimensions()
+      window.addEventListener('resize', calculateDimensions)
+      return () => window.removeEventListener('resize', calculateDimensions)
+    }, [])
+
+      // 3. Toggle fixed state based on scroll position
+  useEffect(() => {
+    const unsubscribe = scrollY.on("change", (latest) => {
+      setIsFixed(latest >= freezePoint)
+    })
+    return () => unsubscribe()
+  }, [freezePoint, scrollY])
+console.log("these are my fixed boolean, containerHeight and FreezePoints respectively", isFixed, containerHeight, freezePoint);
+
 
   // Get the window width
   const { width, height } = useWindowSize();
@@ -47,23 +73,23 @@ export default function Hero() {
       60,
     ]
   );
-  // Add this new effect to track scroll progress
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      setCurrentProgress(latest);
-      // Send to backend API endpoint
-      fetch("/api/log-scroll", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ scrollProgress: latest }),
-      });
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+  // // Add this new effect to track scroll progress
+  // useEffect(() => {
+  //   const unsubscribe = scrollYProgress.on("change", (latest) => {
+  //     setCurrentProgress(latest);
+  //     // Send to backend API endpoint
+  //     fetch("/api/log-scroll", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ scrollProgress: latest }),
+  //     });
+  //   });
+  //   return () => unsubscribe();
+  // }, [scrollYProgress]);
   // Modify the movingAnother transform to stop at scrollYProgress 0.16
-  console.log("this is my latest scroll positon", currentProgress);
+  // console.log("this is my latest scroll positon", currentProgress);
   const movingAnother = useTransform(
     scrollYProgress,
     // 0.11,
@@ -90,8 +116,8 @@ export default function Hero() {
       "-1530%", // 16th value
       "-1730%", // 17th value
       "-1930%",
-      "-2150%",
-      "-2300%",
+      "-2170%",
+      "-2400%",
       "-2400%", // Value at 0.16
       "-2500%", // Keep same value at 0.17
     ]
@@ -457,3 +483,8 @@ export default function Hero() {
     </>
   );
 }
+
+
+// lock the height at this point since it is where the background forms
+
+// 0.15961945031712474
