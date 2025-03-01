@@ -221,7 +221,7 @@ export default function Hero() {
       document.body.style.overflow = "auto";
     }
   }, [isLocked]);
-  if (!width) return "w-[12vw]";
+  if (!width) return null;
 
   return (
     <>
@@ -250,12 +250,30 @@ export default function Hero() {
                 initial={{ y: -10 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.4, delay: 1 }}
-                className="flex flex-col h-[25%] -mt-[28%] w-4/5 items-center justify-center z-50"
+                className="flex flex-col h-[25%] -mt-[28%] w-full items-center justify-center z-50"
               >
-                <h1 className="text-white font-sans text-6xl font-[650] mb-2">
+                <h1 className={`text-white font-sans ${
+                width >= 1024
+                ? "text-6xl"
+              : width >= 768
+              ? "text-[2.5rem]"
+              : width >= 596
+              ? "text-4xl"
+              : width >= 425
+              ? "text-2xl"
+            : "" } font-[650] mb-2`}>
                   Todos, email, calendar.
                 </h1>
-                <p className="font-sans font-semibold text-gray-50 text-6xl">
+                <p className={`font-sans font-semibold text-gray-50 ${
+                width >= 1024
+                ? "text-6xl"
+              : width >= 768
+              ? "text-[2.5rem]"
+              : width >= 596
+              ? "text-4xl"
+              : width >= 425
+              ? "text-2xl"
+            : "" }`}>
                   All-in-done.
                 </p>
               </motion.div>
@@ -292,9 +310,9 @@ export default function Hero() {
                         }}
                       />
                       <motion.div
-                        className="w-8 mx-0 rounded absolute top-0 left-0"
+                        className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat"
                         style={{
-                          backgroundColor: "black",
+                          backgroundImage: "url('/firstShow.png')",
                           height: heightTransform,
                           width: widthTransform,
                           opacity: opacityTransform,
@@ -338,8 +356,10 @@ export default function Hero() {
               ? "w-[20vw]"
               : width >= 768
               ? "w-[25vw]"
-              : width >= 500
+              : width >= 600
               ? "w-[28vw]"
+              : width < 600
+              ? "w-[35vw]"
               : ""
           }`}
           style={{

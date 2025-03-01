@@ -65,13 +65,13 @@ const DirectionAwareScrollComponent = () => {
       >
         <motion.nav
           animate={controls}
-          className={`w-full min-h-[9vh] flex justify-center items-center absolute top-0 ${width === 1024 && "bg-yellow-500"}`}
+          className={`w-full min-h-[9vh] flex justify-center items-center absolute top-0`}
           initial={{ y: "0%" }}
         >
           <motion.a
             href="https://amie.so/changelog"
             target="_blank"
-            className={`rounded-3xl h-11 ${width === 1440 && "w-[12%]" } ${width === 1024 && "w-[20%]" } ${width === 1024 && "-mt-2" } ${width === 768 && "w-[25%]" } ${width === 768 && "-mt-2" } bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-[100]`}
+            className={`rounded-3xl h-11 ${width === 1440 ? "w-[12%]" : ""} ${width === 1024 ? "w-[20%] -mt-2" : ""} ${width === 768 ? "w-[25%] -mt-2" : ""} ${width && width < 768 ? "hidden" : ""} bg-[#999999] hover:bg-[#858585] flex items-center justify-center text-sm font-bold text-white font-sans top-7 fixed z-[100]`}
           >
             <Flame className="text-white -mt-1 size-4 font-black stroke-[4px] rotate-[15deg]" />
             <button className="p-1 font-sans">Last Update: Feb 12</button>
