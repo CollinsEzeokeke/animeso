@@ -17,7 +17,9 @@ export default function Hero() {
   });
 
   // Get the window width
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
+
+  console.log("height is: ", height);
 
   // Create all transform values at the top level of the component
   // Simplified ranges with fewer keyframes for better performance
@@ -76,11 +78,11 @@ export default function Hero() {
   const xSpring = useSpring(x, { stiffness: 500, damping: 90 });
 
   // Color and opacity transitions
-  const colorChange = useTransform(
-    scrollYProgress,
-    [0.155, 0.16],
-    ["#fff", "none"]
-  );
+  // const colorChange = useTransform(
+  //   scrollYProgress,
+  //   [0.155, 0.16],
+  //   ["#fff", "none"]
+  // );
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.085, 0.09],
@@ -94,7 +96,7 @@ export default function Hero() {
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
 
   // Springs for color transitions
-  const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
+  // const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
 
   // Opacity for text
@@ -142,24 +144,24 @@ export default function Hero() {
     let lastTimestamp = 0;
     let animationFrameId: number | null = null;
     let isScrollHandlerActive = true;
-    
+
     // Throttling function to limit execution rate
     const throttledScrollHandler = (currentTimestamp: number) => {
       // Execute at most once every 16ms (~ 60fps)
       if (currentTimestamp - lastTimestamp < 16) {
         return;
       }
-      
+
       lastTimestamp = currentTimestamp;
       const value = scrollYProgress.get();
-      
+
       // Only update locked state when threshold is crossed
       if (value >= 0.18 && !isLocked) {
         setIsLocked(true);
       } else if (value < 0.16 && isLocked) {
         setIsLocked(false);
       }
-      
+
       // Optimize by only setting final values when animation is complete
       if (value >= 0.16 && value < 0.19) {
         // Lock all motion values at final positions - prevents further calculations
@@ -173,14 +175,14 @@ export default function Hero() {
         yIndex.set("-35%");
       }
     };
-    
+
     const handleScroll = () => {
       if (!isScrollHandlerActive) return;
-      
+
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      
+
       // Use requestAnimationFrame to sync with browser render cycle
       animationFrameId = requestAnimationFrame((timestamp) => {
         throttledScrollHandler(timestamp);
@@ -219,20 +221,32 @@ export default function Hero() {
     }
   }, [isLocked]);
   if (!width) return null;
+  if (!height) return null;
 
   return (
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden justify-center"
+          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center bg-blue-500"
           style={{
             zIndex: 10,
-            marginTop: "9.5vh", // Add margin for header space
+            // marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen bg-pink-500">
             <motion.div
-              className="bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative"
+              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative bg-red-500 
+                ${
+                  width <= 768 && height <= 679
+                    ? "-mt-[20%]"
+                    : width <= 596 && height <= 679
+                    ? "w-5/6"
+                    : width <= 470 && height <= 679
+                    ? "w-5/6"
+                    : width <= 425 && height <= 679
+                    ? "w-5/6"
+                    : ""
+                }`}
               style={{
                 y: springingAnother,
                 scale: stiffZoom,
@@ -247,45 +261,57 @@ export default function Hero() {
                 initial={{ y: -10 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.4, delay: 1 }}
-                className="flex flex-col h-[25%] -mt-[28%] w-full items-center justify-center z-50"
+                className={`flex flex-col h-[25%] -mt-[28%] ${
+                  width >= 1024 ? "w-5/6" : "w-5/6"
+                } items-center justify-center z-50`}
               >
-                <h1 className={`text-white font-sans ${
-                width >= 1024
-                ? "text-6xl"
-              : width >= 768
-              ? "text-[2.5rem]"
-              : width >= 596
-              ? "text-4xl"
-              : width >= 425
-              ? "text-2xl"
-            : "" } font-[650] mb-2`}>
+                <h1
+                  className={`text-white font-sans ${
+                    width >= 1024
+                      ? "text-5xl"
+                      : width >= 768
+                      ? "text-4xl"
+                      : width >= 596
+                      ? "text-3xl"
+                      : width === 470
+                      ? "text-2xl"
+                      : width >= 426
+                      ? "text-2xl"
+                      : ""
+                  } font-[650] mb-2`}
+                >
                   Todos, email, calendar.
                 </h1>
-                <p className={`font-sans font-semibold text-gray-50 ${
-                width >= 1024
-                ? "text-6xl"
-              : width >= 768
-              ? "text-[2.5rem]"
-              : width >= 596
-              ? "text-4xl"
-              : width >= 425
-              ? "text-2xl"
-            : "" }`}>
+                <p
+                  className={`font-sans font-semibold text-gray-50 ${
+                    width >= 1024
+                      ? "text-5xl"
+                      : width >= 768
+                      ? "text-[2.5rem]"
+                      : width >= 596
+                      ? "text-3xl"
+                      : width === 470
+                      ? "text-2xl"
+                      : width >= 425
+                      ? "text-2xl"
+                      : ""
+                  }`}
+                >
                   All-in-done.
                 </p>
               </motion.div>
               <VideoLoader visibility={visibilitySpring} y={moveUp} />
               {/* New wrapper div for bottom placement */}
-              <div className="absolute bottom-0 left-0 w-full h-[90vh] pointer-events-none">
+              <div className={`absolute bottom-0 left-0 w-full pointer-events-none ${width <= 768 ? "flex items-center bg-amber-950 h-[45vh]" : "h-[90vh]"}`}>
                 {" "}
                 {/* Full container overlay */}
-                <div className="relative w-full h-full flex items-end justify-center">
+                <div className={`relative w-full flex ${width <= 768 ? "bg-red-500 justify-center items-center h-full" : "items-end justify-center h-full"}`}>
                   {" "}
                   <motion.div
-                    className="z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative top-2 flex items-center justify-between px-2"
+                    className={`z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-blue-500 ${width <= 768 ? "top-2" : "top-2"}`}
                     style={{
                       y: movingStiff,
-                      color: colorSpring,
+                      // color: colorSpring,
                       backgroundColor: bgColorTransform,
                       boxShadow: boxShadowTransform,
                       willChange: "transform, background-color, box-shadow",
@@ -352,7 +378,7 @@ export default function Hero() {
               : width >= 1024
               ? "w-[20vw]"
               : width >= 768
-              ? "w-[25vw]"
+              ? "w-[25vw] h-28"
               : width >= 600
               ? "w-[28vw]"
               : width < 600
