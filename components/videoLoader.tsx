@@ -2,8 +2,7 @@
 'use client';
 
 import { MotionValue, motion } from 'framer-motion';
-import { useRef, useEffect, useMemo, useState } from 'react';
-import { useScrollStore } from '../hooks/store/scrollStore';
+import { useState, useRef, useEffect, useMemo } from 'react';
 
 export const VideoLoader = ({
   y, 
@@ -13,80 +12,59 @@ export const VideoLoader = ({
   visibility?: MotionValue<number>
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { setCanScroll } = useScrollStore();
-  const hasStartedPlaying = useRef(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [canScroll, setCanScroll] = useState(false);
 
+  // Video event handlers
   useEffect(() => {
+    // Skip unnecessary work if video ref isn't available
     if (!videoRef.current) return;
     
     const video = videoRef.current;
     
-    // Use the 'loadedmetadata' event instead of 'canplaythrough'
-    // which triggers earlier in the loading process
-    const handleLoaded = () => {
-      setIsLoaded(true);
-    };
-    
+    // Use passive event listeners for better performance
     const handleCanPlay = () => {
-      if (hasStartedPlaying.current) return;
-      
-      // Use a single RAF call for better performance
+      // Use requestAnimationFrame to avoid layout thrashing
       requestAnimationFrame(() => {
-        video.play().then(() => {
-          hasStartedPlaying.current = true;
-        }).catch(err => {
+        video?.play().catch(err => {
           console.warn('Auto-play failed:', err);
-          // If autoplay fails, allow scrolling
-          setCanScroll(true);
         });
       });
     };
 
     const handleEnded = () => {
       setCanScroll(true);
+      
+      // Batch style changes together
+      requestAnimationFrame(() => {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+      });
     };
 
-    // Add event listeners with passive option
-    video.addEventListener('loadedmetadata', handleLoaded, { passive: true });
+    // Add event listeners with passive option when possible
     video.addEventListener('canplaythrough', handleCanPlay, { passive: true });
     video.addEventListener('ended', handleEnded, { passive: true });
 
-    // Optimize video settings
-    if (video.playsInline === false) {
-      video.playsInline = true;
-    }
-    
-    // Set low quality for better performance if needed
-    // This can significantly improve performance on mobile
-    video.setAttribute('playsinline', '');
-    
     // Cleanup function
     return () => {
-      video.removeEventListener('loadedmetadata', handleLoaded);
       video.removeEventListener('canplaythrough', handleCanPlay);
       video.removeEventListener('ended', handleEnded);
       
-      // Clear video source and references
-      if (!video.ended && video.readyState > 2) {
-        video.pause();
-      }
-      
-      // Nullify src instead of setting to empty string (more efficient)
-      URL.revokeObjectURL(video.src);
-      video.removeAttribute('src');
+      // Remove references to avoid memory leaks
+      video.src = '';
       video.load();
-      hasStartedPlaying.current = false;
     };
-  }, [setCanScroll]);
+  }, []);
 
-  // Memoize styles for better performance
+  // Use memoized styles to prevent unnecessary style calculations
   const motionStyles = useMemo(() => ({
     y,
     visibility,
     willChange: 'transform, opacity'
   }), [y, visibility]);
 
+  // Apply CSS containment for better performance isolation
   return (
     <motion.div 
       className="absolute z-10 inset-0 h-full top-[5%] w-full contain-paint"
@@ -98,150 +76,10 @@ export const VideoLoader = ({
         muted
         playsInline
         className="h-full w-full object-obtain"
-        preload="metadata" // Changed from "auto" to "metadata" for faster initial loading
-        style={{
-          visibility: isLoaded ? 'visible' : 'hidden',
-          // Add hardware acceleration
-          transform: 'translateZ(0)'
-        }}
+        preload="auto"
       >
         <source src="/minor.mp4" type="video/mp4" />
       </video>
     </motion.div>
   );
 };
-
-
-// // components/VideoLoader.tsx
-// 'use client';
-
-// import { MotionValue, motion } from 'framer-motion';
-// import { useRef, useEffect, useMemo, useState } from 'react';
-// import { useScrollStore } from '../hooks/store/scrollStore';
-// import { useWindowSize } from '@uidotdev/usehooks';
-
-// export const VideoLoader = ({
-//   y, 
-//   visibility
-// }: {
-//   y: MotionValue<string>, 
-//   visibility?: MotionValue<number>
-// }) => {
-//   const videoRef = useRef<HTMLVideoElement>(null);
-//   const { setCanScroll } = useScrollStore();
-//   const hasStartedPlaying = useRef(false);
-//   const [isLoaded, setIsLoaded] = useState(false);
-//   const { height } = useWindowSize();
-
-//   // Calculate responsive position based on screen height
-//   const responsiveTop = useMemo(() => {
-//     if (!height) return '5%';
-    
-//     if (height <= 405) {
-//       return '2%';
-//     } else if (height <= 600) {
-//       return '3%';
-//     } else if (height <= 800) {
-//       return '4%';
-//     } else {
-//       return '5%';
-//     }
-//   }, [height]);
-
-//   useEffect(() => {
-//     if (!videoRef.current) return;
-    
-//     const video = videoRef.current;
-    
-//     // Use the 'loadedmetadata' event instead of 'canplaythrough'
-//     // which triggers earlier in the loading process
-//     const handleLoaded = () => {
-//       setIsLoaded(true);
-//     };
-    
-//     const handleCanPlay = () => {
-//       if (hasStartedPlaying.current) return;
-      
-//       // Use a single RAF call for better performance
-//       requestAnimationFrame(() => {
-//         video.play().then(() => {
-//           hasStartedPlaying.current = true;
-//         }).catch(err => {
-//           console.warn('Auto-play failed:', err);
-//           // If autoplay fails, allow scrolling
-//           setCanScroll(true);
-//         });
-//       });
-//     };
-
-//     const handleEnded = () => {
-//       setCanScroll(true);
-//     };
-
-//     // Add event listeners with passive option
-//     video.addEventListener('loadedmetadata', handleLoaded, { passive: true });
-//     video.addEventListener('canplaythrough', handleCanPlay, { passive: true });
-//     video.addEventListener('ended', handleEnded, { passive: true });
-
-//     // Optimize video settings
-//     if (video.playsInline === false) {
-//       video.playsInline = true;
-//     }
-    
-//     // Set low quality for better performance if needed
-//     // This can significantly improve performance on mobile
-//     video.setAttribute('playsinline', '');
-    
-//     // Cleanup function
-//     return () => {
-//       video.removeEventListener('loadedmetadata', handleLoaded);
-//       video.removeEventListener('canplaythrough', handleCanPlay);
-//       video.removeEventListener('ended', handleEnded);
-      
-//       // Clear video source and references
-//       if (!video.ended && video.readyState > 2) {
-//         video.pause();
-//       }
-      
-//       // Nullify src instead of setting to empty string (more efficient)
-//       URL.revokeObjectURL(video.src);
-//       video.removeAttribute('src');
-//       video.load();
-//       hasStartedPlaying.current = false;
-//     };
-//   }, [setCanScroll]);
-
-//   // Memoize styles for better performance
-//   const motionStyles = useMemo(() => ({
-//     y,
-//     visibility,
-//     willChange: 'transform, opacity'
-//   }), [y, visibility]);
-
-//   return (
-//     <motion.div 
-//       className="absolute z-10 inset-0 w-full contain-paint"
-//       style={{
-//         ...motionStyles,
-//         height: '100%',
-//         top: responsiveTop
-//       }}
-//     >
-//       <video
-//         ref={videoRef}
-//         autoPlay
-//         muted
-//         playsInline
-//         className="h-full w-full object-contain"
-//         preload="metadata" // Changed from "auto" to "metadata" for faster initial loading
-//         style={{
-//           visibility: isLoaded ? 'visible' : 'hidden',
-//           // Add hardware acceleration
-//           transform: 'translateZ(0)'
-//         }}
-//       >
-//         <source src="/minor.mp4" type="video/mp4" />
-//       </video>
-//     </motion.div>
-//   );
-// };
