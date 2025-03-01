@@ -2,7 +2,7 @@
 import DirectionAwareScrollComponent from "@/components/Header";
 import Hero from "@/components/hero";
 import { ScrollLock } from "@/components/scrollLock";
-import { useStore } from "@/hooks/store";
+import { useStore } from "@/hooks/store/store";
 import { motion, useReducedMotion } from "framer-motion";
 import { Geiger } from "react-geiger";
 import { useMemo, ReactNode } from "react";

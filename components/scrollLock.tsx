@@ -1,40 +1,50 @@
 // components/ScrollLock.tsx
 "use client";
 
-// import { useStore } from "@/hooks/store";
+import { useScrollStore } from "../hooks/store/scrollStore";
 import { useEffect, useRef } from "react";
 
 export const ScrollLock = () => {
-    // const {isScrollAble} = useStore();
-  // Use a ref to track whether we've already locked the scroll
+  const { isScrollLocked, canScroll } = useScrollStore();
   const hasLockedScroll = useRef(false);
+  const originalStyles = useRef({ body: '', html: '' });
 
   useEffect(() => {
-    // Avoid re-locking if already locked
-    if (hasLockedScroll.current) return;
-    
-    // Store original styles to restore them later
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    const htmlOriginalStyle = window.getComputedStyle(document.documentElement).overflow;
-    
-    // Use requestAnimationFrame to batch style changes together
-    // This prevents layout thrashing and improves performance
-    requestAnimationFrame(() => {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-      hasLockedScroll.current = true;
-    });
-
-    // Cleanup on unmount
-    return () => {
-      // Use requestAnimationFrame for cleanup as well
+    if (!isScrollLocked || canScroll) {
+      // Restore scrolling
+      if (hasLockedScroll.current) {
+        requestAnimationFrame(() => {
+          document.documentElement.style.overflow = originalStyles.current.html;
+          document.body.style.overflow = originalStyles.current.body;
+          hasLockedScroll.current = false;
+        });
+      }
+    } else if (!hasLockedScroll.current) {
+      // Store original styles
+      originalStyles.current = {
+        body: window.getComputedStyle(document.body).overflow,
+        html: window.getComputedStyle(document.documentElement).overflow
+      };
+      
+      // Lock scrolling
       requestAnimationFrame(() => {
-        document.documentElement.style.overflow = htmlOriginalStyle;
-        document.body.style.overflow = originalStyle;
-        hasLockedScroll.current = false;
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+        hasLockedScroll.current = true;
       });
+    }
+
+    return () => {
+      // Cleanup on unmount
+      if (hasLockedScroll.current) {
+        requestAnimationFrame(() => {
+          document.documentElement.style.overflow = originalStyles.current.html;
+          document.body.style.overflow = originalStyles.current.body;
+          hasLockedScroll.current = false;
+        });
+      }
     };
-  }, []);
+  }, [isScrollLocked, canScroll]);
 
   return null;
 };

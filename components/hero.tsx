@@ -5,7 +5,7 @@ import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
-import { useStore } from "@/hooks/store";
+import { useStore } from "@/hooks/store/store";
 
 export default function Hero() {
   const containerRef = useRef(null);
