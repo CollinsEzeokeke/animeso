@@ -139,64 +139,61 @@ export default function Hero() {
 
   // Debounced scroll handler for better performance
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
+    let lastTimestamp = 0;
+    let animationFrameId: number | null = null;
     let isScrollHandlerActive = true;
-
-    // Reset any existing state
-    setIsLocked(false);
-    document.body.style.overflow = "auto";
-
+    
+    // Throttling function to limit execution rate
+    const throttledScrollHandler = (currentTimestamp: number) => {
+      // Execute at most once every 16ms (~ 60fps)
+      if (currentTimestamp - lastTimestamp < 16) {
+        return;
+      }
+      
+      lastTimestamp = currentTimestamp;
+      const value = scrollYProgress.get();
+      
+      // Only update locked state when threshold is crossed
+      if (value >= 0.18 && !isLocked) {
+        setIsLocked(true);
+      } else if (value < 0.16 && isLocked) {
+        setIsLocked(false);
+      }
+      
+      // Optimize by only setting final values when animation is complete
+      if (value >= 0.16 && value < 0.19) {
+        // Lock all motion values at final positions - prevents further calculations
+        springingAnother.set("-2300%");
+        stiffZoom.set(60);
+        xSpring.set(1715);
+        moveUp.set("-10%");
+        movingStiff.set("-9vh");
+        scale.set(0.3);
+        y.set("-70%");
+        yIndex.set("-35%");
+      }
+    };
+    
     const handleScroll = () => {
       if (!isScrollHandlerActive) return;
-
-      const value = scrollYProgress.get();
-
-      // Debounce expensive operations
-      if (timeoutId) clearTimeout(timeoutId);
-
-      // Handle threshold crossing immediately for better UX
-      if (value >= 0.18 && !isLocked) {
-        requestAnimationFrame(() => {
-          setIsLocked(true);
-          // Allow scrolling when content should be visible
-          document.body.style.overflow = "auto";
-        });
-      } else if (value < 0.16 && isLocked) {
-        requestAnimationFrame(() => {
-          setIsLocked(false);
-          document.body.style.overflow = "auto";
-        });
+      
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
       }
-
-      // Debounce the animation locking
-      timeoutId = setTimeout(() => {
-        if (value >= 0.16) {
-          // Lock all motion values at final positions
-          springingAnother.set("-2300%");
-          stiffZoom.set(60);
-          xSpring.set(1715);
-          moveUp.set("-10%");
-          movingStiff.set("-9vh");
-          scale.set(0.3);
-          y.set("-70%");
-          yIndex.set("-35%");
-
-          // Dispatch event only once when crossing threshold
-          if (!isLocked) {
-            const event = new CustomEvent("heroAnimationComplete", {
-              detail: { complete: true },
-            });
-            window.dispatchEvent(event);
-          }
-        }
-      }, 16); // ~1 frame at 60fps
+      
+      // Use requestAnimationFrame to sync with browser render cycle
+      animationFrameId = requestAnimationFrame((timestamp) => {
+        throttledScrollHandler(timestamp);
+      });
     };
 
     const unsubscribe = scrollYProgress.on("change", handleScroll);
 
     return () => {
       isScrollHandlerActive = false;
-      if (timeoutId) clearTimeout(timeoutId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       unsubscribe();
     };
   }, [

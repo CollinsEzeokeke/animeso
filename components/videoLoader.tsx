@@ -2,7 +2,7 @@
 'use client';
 
 import { MotionValue, motion } from 'framer-motion';
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import { useScrollStore } from '../hooks/store/scrollStore';
 
 export const VideoLoader = ({
@@ -15,22 +15,31 @@ export const VideoLoader = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const { setCanScroll } = useScrollStore();
   const hasStartedPlaying = useRef(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!videoRef.current) return;
     
     const video = videoRef.current;
     
+    // Use the 'loadedmetadata' event instead of 'canplaythrough'
+    // which triggers earlier in the loading process
+    const handleLoaded = () => {
+      setIsLoaded(true);
+    };
+    
     const handleCanPlay = () => {
       if (hasStartedPlaying.current) return;
       
+      // Use a single RAF call for better performance
       requestAnimationFrame(() => {
-        video.play().catch(err => {
+        video.play().then(() => {
+          hasStartedPlaying.current = true;
+        }).catch(err => {
           console.warn('Auto-play failed:', err);
           // If autoplay fails, allow scrolling
           setCanScroll(true);
         });
-        hasStartedPlaying.current = true;
       });
     };
 
@@ -39,19 +48,33 @@ export const VideoLoader = ({
     };
 
     // Add event listeners with passive option
+    video.addEventListener('loadedmetadata', handleLoaded, { passive: true });
     video.addEventListener('canplaythrough', handleCanPlay, { passive: true });
     video.addEventListener('ended', handleEnded, { passive: true });
 
+    // Optimize video settings
+    if (video.playsInline === false) {
+      video.playsInline = true;
+    }
+    
+    // Set low quality for better performance if needed
+    // This can significantly improve performance on mobile
+    video.setAttribute('playsinline', '');
+    
     // Cleanup function
     return () => {
+      video.removeEventListener('loadedmetadata', handleLoaded);
       video.removeEventListener('canplaythrough', handleCanPlay);
       video.removeEventListener('ended', handleEnded);
       
       // Clear video source and references
-      if (!video.ended) {
+      if (!video.ended && video.readyState > 2) {
         video.pause();
       }
-      video.src = '';
+      
+      // Nullify src instead of setting to empty string (more efficient)
+      URL.revokeObjectURL(video.src);
+      video.removeAttribute('src');
       video.load();
       hasStartedPlaying.current = false;
     };
@@ -75,7 +98,12 @@ export const VideoLoader = ({
         muted
         playsInline
         className="h-full w-full object-obtain"
-        preload="auto"
+        preload="metadata" // Changed from "auto" to "metadata" for faster initial loading
+        style={{
+          visibility: isLoaded ? 'visible' : 'hidden',
+          // Add hardware acceleration
+          transform: 'translateZ(0)'
+        }}
       >
         <source src="/minor.mp4" type="video/mp4" />
       </video>
