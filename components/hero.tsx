@@ -227,15 +227,15 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center bg-blue-500"
+          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center"
           style={{
             zIndex: 10,
             // marginTop: "9.5vh", // Add margin for header space
           }}
         >
-          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen bg-pink-500">
+          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative bg-red-500 
+              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative
                 ${
                   width <= 768 && height <= 679
                     ? "-mt-[20%]"
