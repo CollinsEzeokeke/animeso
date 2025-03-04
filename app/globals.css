@@ -56,3 +56,14 @@ body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+
+/* Desktop - 7
+
+position: absolute;
+width: 1440px;
+height: 761px;
+left: 0px;
+top: 0px;
+
+background: linear-gradient(109.56deg, #CDD5E1 6.49%, #95B0D8 41.59%, #2260E4 101.09%); */
