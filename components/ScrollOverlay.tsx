@@ -1,5 +1,5 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface ScrollOverlayProps {
   // The scroll progress at which the overlay should start appearing
@@ -11,19 +11,19 @@ interface ScrollOverlayProps {
 }
 
 export default function ScrollOverlay({
-  triggerPoint = 0.16,
+  // triggerPoint = 0.26,
   backgroundImage = "/logo-shaded.png",
   children,
 }: ScrollOverlayProps) {
-  const { scrollYProgress } = useScroll();
+  // const { scrollYProgress } = useScroll();
   
   // Create transform values for animation
   // Map 0.16-0.25 scroll progress to 0-1 opacity and 100px-0px y translation
-  const opacity = useTransform(
-    scrollYProgress, 
-    [triggerPoint, triggerPoint + 0.09], 
-    [0, 1]
-  );
+  // const opacity = useTransform(
+  //   scrollYProgress, 
+  //   [triggerPoint, triggerPoint + 0.09], 
+  //   [0, 1]
+  // );
   
   // const yTranslate = useTransform(
   //   scrollYProgress,
@@ -32,8 +32,8 @@ export default function ScrollOverlay({
   // );
 
   return (
-    <section className="fixed top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-hidden">
-      <div className="h-[100vh]" />
+    <section className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] bg-red-500 overflow-y-auto">
+      <div className="min-h-[300vh] bg-blue-500" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-[65vw] h-full relative">
           {/* Background image container with animation */}
@@ -41,7 +41,7 @@ export default function ScrollOverlay({
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ 
               backgroundImage: `url('${backgroundImage}')`,
-              opacity,
+              // opacity,
               // y: yTranslate
             }}
           />
@@ -50,7 +50,7 @@ export default function ScrollOverlay({
           <motion.div 
             className="absolute inset-0 flex items-center justify-center"
             style={{ 
-              opacity,
+              // opacity,
               // y: yTranslate
             }}
           >
