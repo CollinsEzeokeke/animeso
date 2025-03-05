@@ -13,40 +13,45 @@ export default function Hero() {
   // const [currentProgress, setCurrentProgress] = useState(0);
   const [freezePoint, setFreezePoint] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
-  const [isFixed, setIsFixed] = useState(false)
+  const [isFixed, setIsFixed] = useState(false);
 
   // Single useScroll hook for better performance
   const { scrollYProgress, scrollY } = useScroll();
 
-    // 2. Calculate freeze point and container height
-    useEffect(() => {
-      const calculateDimensions = () => {
-        const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight
-        setFreezePoint(totalScrollHeight * 0.16) //5961945031712474
-        if (containerRef.current) {
-          setContainerHeight(containerRef.current.offsetHeight)
-        }
+  // 2. Calculate freeze point and container height
+  useEffect(() => {
+    const calculateDimensions = () => {
+      const totalScrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setFreezePoint(totalScrollHeight * 0.16); //0.15961945031712474
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current.offsetHeight);
       }
-  
-      calculateDimensions()
-      window.addEventListener('resize', calculateDimensions)
-      return () => window.removeEventListener('resize', calculateDimensions)
-    }, [])
+    };
 
-      // 3. Toggle fixed state based on scroll position
+    calculateDimensions();
+    window.addEventListener("resize", calculateDimensions);
+    return () => window.removeEventListener("resize", calculateDimensions);
+  }, []);
+
+  // 3. Toggle fixed state based on scroll position
   useEffect(() => {
     const unsubscribe = scrollY.on("change", (latest) => {
-      setIsFixed(latest >= freezePoint)
-    })
-    return () => unsubscribe()
-  }, [freezePoint, scrollY])
-console.log("these are my fixed boolean, containerHeight and FreezePoints respectively", isFixed, containerHeight, freezePoint);
-
+      setIsFixed(latest >= freezePoint);
+    });
+    return () => unsubscribe();
+  }, [freezePoint, scrollY]);
+  console.log(
+    "these are my fixed boolean, containerHeight and FreezePoints respectively",
+    isFixed,
+    containerHeight,
+    freezePoint
+  );
 
   // Get the window width
   const { width, height } = useWindowSize();
 
-  console.log("height is: ", height);
+  // console.log("height is: ", height);
 
   // Create all transform values at the top level of the component
   // Simplified ranges with fewer keyframes for better performance
@@ -73,7 +78,7 @@ console.log("these are my fixed boolean, containerHeight and FreezePoints respec
       60,
     ]
   );
-  // // Add this new effect to track scroll progress
+  // Add this new effect to track scroll progress
   // useEffect(() => {
   //   const unsubscribe = scrollYProgress.on("change", (latest) => {
   //     setCurrentProgress(latest);
@@ -94,8 +99,8 @@ console.log("these are my fixed boolean, containerHeight and FreezePoints respec
     scrollYProgress,
     // 0.11,
     [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.115, 0.12, 0.125, 0.13,
-      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
+      0.08, 0.085, 0.09, 0.095, 0.1, 0.115, 0.12, 0.125, 0.13, 0.135, 0.1375,
+      0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
     ],
     [
       "0%",
@@ -164,7 +169,11 @@ console.log("these are my fixed boolean, containerHeight and FreezePoints respec
   });
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
-  const xSpring = useSpring(x, { stiffness: 500, damping: 90, restDelta: 0.01 });
+  const xSpring = useSpring(x, {
+    stiffness: 500,
+    damping: 90,
+    restDelta: 0.01,
+  });
   // Color and opacity transitions
   // const colorChange = useTransform(
   //   scrollYProgress,
@@ -483,7 +492,6 @@ console.log("these are my fixed boolean, containerHeight and FreezePoints respec
     </>
   );
 }
-
 
 // lock the height at this point since it is where the background forms
 
