@@ -135,19 +135,7 @@ export default function Hero() {
     ],
     [0, 100, 300, 350, 580, 800, 890, 1050, 1200, 1345, 1555, 1715, 1730, 1750]
   );
-  // Simplified movement animation with fewer keyframes
-  // const movingAnother = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.1, 0.12, 0.14, 0.16, 0.17, 0.18],
-  //   ["0%", "-180%", "-550%", "-1330%", "-2300%", "-2300%", "-2300%"]
-  // );
-  // Simplified horizontal movement
-  // const x = useTransform(
-  //   scrollYProgress,
-  //   [0.105, 0.13, 0.145, 0.16],
-  //   [0, 350, 1400, 1715]
-  // );
-  // Create springs for smoother animations with optimized stiffness/damping
+
   const stiffZoom = useSpring(zoomIn, {
     stiffness: 300,
     damping: 90,
@@ -461,34 +449,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div
-        className={`${
-          width === 1440 ? "w-full" : "w-full"
-        } h-full flex justify-center overflow-hidden`}
-      >
-        <motion.div
-          //  ${width >= 1440 && "w-[12vw]"} ${width >= 1024 && "w-[20vw]"} ${width >= 768 && "w-[25vw]"} ${width >= 768 && "-mt-2"} ${width < 768 && width >= 700 && "w-[28vw]"}
-          className={`bg-cover h-[20vh] bg-center fixed top-[8.5vh] flex justify-self-center -translate-x-1/2 bg-no-repeat transition-all z-50 ${
-            width >= 1440
-              ? "w-[12vw]"
-              : width >= 1024
-              ? "w-[20vw]"
-              : width >= 768
-              ? "w-[25vw] h-28"
-              : width >= 600
-              ? "w-[28vw]"
-              : width < 600
-              ? "w-[35vw]"
-              : ""
-          }`}
-          style={{
-            backgroundImage: "url('/logo-shaded.png')",
-            scale,
-            y,
-            willChange: "transform",
-          }}
-        />
-      </div>
     </>
   );
 }
