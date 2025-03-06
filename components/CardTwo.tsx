@@ -19,10 +19,6 @@ export default function CardTwo({className}: CardTwoProps) {
       >
         <div 
         className="absolute rounded-xl shadow-lg flex justify-evenly items-center w-full h-full"
-        // style={{
-        //   background: 'linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(240,240,245,0.95) 100%)',
-        //   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'
-        // }}
       >
         {/* Purple accent bar */}
         <div className="relative left-0 top-0 bottom-0 w-1 bg-purple-500 h-[90%] rounded-lg" />
