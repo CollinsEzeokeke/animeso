@@ -93,7 +93,7 @@ export default function Hero() {
   //   });
   //   return () => unsubscribe();
   // }, [scrollYProgress]);
-  // Modify the movingAnother transform to stop at scrollYProgress 0.16
+  // // Modify the movingAnother transform to stop at scrollYProgress 0.16
   // console.log("this is my latest scroll positon", currentProgress);
   const movingAnother = useTransform(
     scrollYProgress,
