@@ -7,6 +7,8 @@ import { Geiger } from "react-geiger";
 import React from "react";
 import { motion, useTransform, useSpring, useScroll } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
+import SecondScrollOverlay from "@/components/SecondScrollOverlay";
+import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
 
 
 export default function Page() {
@@ -67,6 +69,8 @@ export default function Page() {
         
         {/* Overlay content that animates on scroll */}
         <ScrollOverlay />
+        <SecondScrollOverlay />
+        <ThirdScrollOverlay />
         
         {/* Post-scroll content */}
         {/* {postScrollContent} */}

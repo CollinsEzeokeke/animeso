@@ -1,10 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import DailyStatus from "./DailyStatus";
 import WeatherLocation from "./WeatherLocation";
 import NotificationSummary from "./NotificationSummary";
+import ActionButtons from "./ActionButtons";
 
-export default function ScrollOverlay() {
+export default function ThirdScrollOverlay() {
   return (
     <section className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-y-auto">
       <div className="min-h-[100vh]" />
@@ -17,13 +17,13 @@ export default function ScrollOverlay() {
             {/* the contents go into this place */}
             {/* max-w-3xl */}
             <div className=" w-full text-center space-y-6 z-10">
-              <DailyStatus />
+                THIS IS THE THIRD SCROLL OVERLAY AND IT SUCKS
               <WeatherLocation />
               <NotificationSummary />
             </div>
            
             {/* ActionButtons component is now rendered outside this container and fixed at the bottom */}
-            {/* <ActionButtons /> */}
+            <ActionButtons />
           </motion.div> 
         </div>
       </div>
