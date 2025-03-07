@@ -7,9 +7,9 @@ import ActionButtons from "./ActionButtons";
 export default function ThirdScrollOverlay() {
   return (
     <section className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-y-auto">
-      <div className="min-h-[100vh]" />
+      <div className="min-h-[80vh]" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[70vw] h-full relative bg-red-500">
+        <div className="w-[70vw] h-full relative bg-green-500">
           {/* Content container with animation */}
           <motion.div
             className="absolute inset-0 flex items-center justify-center bg-blue-500"

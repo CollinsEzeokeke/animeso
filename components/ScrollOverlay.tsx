@@ -7,9 +7,9 @@ import NotificationSummary from "./NotificationSummary";
 export default function ScrollOverlay() {
   return (
     <section className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-y-auto">
-      <div className="min-h-[100vh]" />
+      {/* <div className="" /> */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[70vw] h-full relative bg-red-500">
+        <div className="w-[70vw] h-full relative bg-purple-500">
           {/* Content container with animation */}
           <motion.div
             className="absolute inset-0 flex items-center justify-center bg-blue-500"
