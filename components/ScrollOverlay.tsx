@@ -12,7 +12,7 @@ export default function ScrollOverlay() {
         <div className="w-[70vw] h-full relative bg-purple-500">
           {/* Content container with animation */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-blue-500"
+            className="absolute inset-0 flex items-center justify-center bg-black"
           >
             {/* the contents go into this place */}
             {/* max-w-3xl */}
@@ -27,7 +27,7 @@ export default function ScrollOverlay() {
           </motion.div> 
         </div>
       </div>
-      <div className="h-[100vh]" />
+      <div className="h-[60vh]" />
     </section>
   );
 }
