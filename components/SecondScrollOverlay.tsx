@@ -3,6 +3,7 @@ import {
   useScroll,
   useMotionValueEvent,
   motion,
+  useTransform,
   // useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
@@ -22,7 +23,11 @@ export default function SecondScrollOverlay() {
   //   [0, 0.2, 0.8, 1], // Input range - scroll progress values
   //   [0.3, 1, 1, 0.3]   // Output range - opacity values
   // );
-
+  const orangeHeight = useTransform(
+    scrollYProgress,
+    [0.99, 0.66], // Input range (from higher to lower scroll value)
+    ["25vh", "63.5vh"] // Output range (from lower to higher height)
+  );
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest > 0.99 || latest <= 0.66) {
@@ -37,9 +42,13 @@ export default function SecondScrollOverlay() {
   return (
     <div className="h-[130vh] bg-red-500 z-[60] relative" ref={containerRef}>
       {/* Red container contents - you can add more elements here */}
-      <div className="h-[25vh] flex items-center justify-center text-white">
+      {/* h-[25vh]  */}
+      <motion.div
+        className="h-[25vh] flex items-center bg-orange-300 justify-center text-white"
+        style={{ height: orangeHeight }}
+      >
         Scroll down to see the fixed blue container
-      </div>
+      </motion.div>
 
       {/* Blue container - conditionally fixed based on scroll */}
       <motion.div
@@ -49,7 +58,6 @@ export default function SecondScrollOverlay() {
             : "relative mx-auto"
         }
          `}
-         
         //  ${isFixed2 ? "mt-[50vh]" : ""}
         style={
           {
