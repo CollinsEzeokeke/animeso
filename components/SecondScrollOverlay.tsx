@@ -4,7 +4,6 @@ import {
   useMotionValueEvent,
   motion,
   useTransform,
-  // useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
 
@@ -18,15 +17,13 @@ export default function SecondScrollOverlay() {
     offset: ["end start", "start start"], // From when container enters view to when it leaves
   });
 
-  // Transform scroll progress to opacity (for demonstration)
-  // const blueContainerOpacity = useTransform(scrollYProgress,
-  //   [0, 0.2, 0.8, 1], // Input range - scroll progress values
-  //   [0.3, 1, 1, 0.3]   // Output range - opacity values
-  // );
+  //  equal division into three main points and equal at the same time from 0.99 to 0.66
+  // 
+
   const orangeHeight = useTransform(
     scrollYProgress,
     [0.99, 0.66], // Input range (from higher to lower scroll value)
-    ["25vh", "63.5vh"] // Output range (from lower to higher height)
+    ["20vh", "63.5vh"] // Output range (from lower to higher height)
   );
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -40,11 +37,11 @@ export default function SecondScrollOverlay() {
   });
 
   return (
-    <div className="h-[130vh] bg-red-500 z-[60] relative" ref={containerRef}>
+    <div className="h-[130vh] bg-red-500 z-[60] relative mb-56" ref={containerRef}>
       {/* Red container contents - you can add more elements here */}
       {/* h-[25vh]  */}
       <motion.div
-        className="h-[25vh] flex items-center bg-orange-300 justify-center text-white"
+        className="h-[20vh] flex items-center bg-orange-300 justify-center text-white"
         style={{ height: orangeHeight }}
       >
         Scroll down to see the fixed blue container
@@ -52,9 +49,9 @@ export default function SecondScrollOverlay() {
 
       {/* Blue container - conditionally fixed based on scroll */}
       <motion.div
-        className={`h-[50vh] bg-blue-500 w-[80%] z-[1000] ${
+        className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
           isFixed
-            ? "fixed top-[20vh] left-1/2 -translate-x-1/2"
+            ? "fixed top-[18vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"
         }
          `}
@@ -75,10 +72,10 @@ export default function SecondScrollOverlay() {
         <div className="h-[50vh] w-[80%] mx-auto opacity-0">Placeholder</div>
       )}
 
-      {/* More content for scrolling */}
+      {/* More content for scrolling
       <div className="h-[55vh] flex items-end justify-center pb-10 text-white">
         Keep scrolling to unfix the blue container
-      </div>
+      </div> */}
     </div>
   );
 }
