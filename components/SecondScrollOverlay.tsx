@@ -1,47 +1,4 @@
-// // import { motion } from "framer-motion";
-// export default function SecondScrollOverlay() {
-//   return (
-//     <section className="relative w-full bg-pink-800 pointer-events-none z-[60] flex flex-col items-center">
-//       <div className="h-[50vh]" />
-//       <div className="flex justify-center w-full">
-//         <div className="relative bg-purple-950 w-5/6">
-//           <div className="h-[100vh]">
-//             <div className="sticky top-5 bg-green-500 z-50">
-//               <div className="h-[50vh] border-white border-8 bg-black flex items-center justify-center text-white text-2xl">Card 1</div>
-//             </div>
-//           </div>
-
-//           <div className="h-[100vh]">
-//             <div className="sticky top-5 bg-green-500 z-40">
-//               <div className="h-[50vh] border-white border-8 bg-black flex items-center justify-center text-white text-2xl">Card 2</div>
-//             </div>
-//           </div>
-
-//           <div className="h-[100vh]">
-//             <div className="sticky top-5 bg-green-500 z-30">
-//               <div className="h-[50vh] border-white border-8 bg-black flex items-center justify-center text-white text-2xl">Card 3</div>
-//             </div>
-//           </div>
-
-//           <div className="h-[100vh]">
-//             <div className="sticky top-5 bg-green-500 z-20">
-//               <div className="h-[50vh] border-white border-8 bg-black flex items-center justify-center text-white text-2xl">Card 4</div>
-//             </div>
-//           </div>
-
-//           <div className="h-[100vh]">
-//             <div className="sticky top-5 bg-green-500 z-10">
-//               <div className="h-[50vh] border-white border-8 bg-black flex items-center justify-center text-white text-2xl">Card 5</div>
-//             </div>
-//           </div>
-
-//           <div className="h-[30vh]"></div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
+"use client";
 import {
   useScroll,
   useMotionValueEvent,
