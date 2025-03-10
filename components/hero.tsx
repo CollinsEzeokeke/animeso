@@ -10,56 +10,14 @@ import { useStore } from "@/hooks/store/store";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { setIsLocked, isLocked } = useStore();
-  // const [currentProgress, setCurrentProgress] = useState(0);
-  // const [freezePoint, setFreezePoint] = useState(0);
-  // const [containerHeight, setContainerHeight] = useState(0);
-  // const [isFixed, setIsFixed] = useState(false);
-
-  // Single useScroll hook for better performance
   const { scrollYProgress } = useScroll();
-
-  // 2. Calculate freeze point and container height
-  // useEffect(() => {
-  //   const calculateDimensions = () => {
-  //     const totalScrollHeight =
-  //       document.documentElement.scrollHeight - window.innerHeight;
-  //     setFreezePoint(totalScrollHeight * 0.16); //0.15961945031712474
-  //     if (containerRef.current) {
-  //       setContainerHeight(containerRef.current.offsetHeight);
-  //     }
-  //   };
-
-  //   calculateDimensions();
-  //   window.addEventListener("resize", calculateDimensions);
-  //   return () => window.removeEventListener("resize", calculateDimensions);
-  // }, []);
-
-  // 3. Toggle fixed state based on scroll position
-  // useEffect(() => {
-  //   const unsubscribe = scrollY.on("change", (latest) => {
-  //     // setIsFixed(latest >= freezePoint);
-  //   });
-  //   return () => unsubscribe();
-  // }, [freezePoint, scrollY]);
-  // console.log(
-  //   "these are my fixed boolean, containerHeight and FreezePoints respectively",
-  //   isFixed,
-  //   containerHeight,
-  //   freezePoint
-  // );
-
-  // Get the window width
   const { width, height } = useWindowSize();
-
-  // console.log("height is: ", height);
-
-  // Create all transform values at the top level of the component
-  // Simplified ranges with fewer keyframes for better performance
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
-
   const y = useTransform(scrollYProgress, [0, 0.05], ["0%", "-70%"]);
   const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
+
+  // this is where the basic animation configuration starts for the hero zoom effect
 
   const zoomIn = useTransform(
     scrollYProgress,
@@ -124,23 +82,33 @@ export default function Hero() {
     damping: 90,
     restDelta: 0.001,
   });
-  // Other animations with simplified keyframes
+
+  const xSpring = useSpring(x, {
+    stiffness: 500,
+    damping: 90,
+    restDelta: 0.01,
+  });
+  // Opacity for texts on top
+  const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
+  const stiffOpacity = useSpring(reduceOpacity, {
+    stiffness: 500,
+    damping: 60,
+  });
+  // end of basic animation configuration for the hero zoom effect
+
+  // For the video component holder
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
   const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
-  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
   // Springs for smoother animations
   const visibilitySpring = useSpring(visibility, {
     stiffness: 500,
     damping: 50,
   });
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
-  const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
-  const xSpring = useSpring(x, {
-    stiffness: 500,
-    damping: 90,
-    restDelta: 0.01,
-  });
 
+  //  for the menu bar
+  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
+  const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.085, 0.09],
@@ -151,15 +119,10 @@ export default function Hero() {
     [0.185, 0.19],
     [1, 0]
   );
-  const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
 
+  //  folder changes
+  const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
-  // Opacity for text
-  const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
-  const stiffOpacity = useSpring(reduceOpacity, {
-    stiffness: 500,
-    damping: 60,
-  });
   // Pre-calculate transforms for height, width  and opacity
   const heightTransform = useTransform(
     scrollYProgress,
@@ -202,7 +165,6 @@ export default function Hero() {
 
       lastTimestamp = currentTimestamp;
       const value = scrollYProgress.get();
-
       // Only update locked state when threshold is crossed
       if (value >= 0.18 && !isLocked) {
         setIsLocked(true);
@@ -276,6 +238,7 @@ export default function Hero() {
           }}
         >
           <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+            {/* this part has all the different styles and animations  */}
             <motion.div
               className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative
                 ${
@@ -420,7 +383,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
-
     </>
   );
 }
