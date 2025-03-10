@@ -46,7 +46,7 @@ export default function StackedDevices({
           >
             {index === 1 && (
               <>
-                kfajdfk
+                <video src="/phoneVidOne.mov"/>
               </>
             )}
           </Device>
