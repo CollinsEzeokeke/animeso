@@ -46,6 +46,7 @@ export default function StackedDevices({
           >
             {index === 1 && (
               <>
+              {/* just change the src of the videas each time and try not to cause rerenders or load all at once using switch...... */}
                 <video src="/phoneVidOne.mov"/>
               </>
             )}
