@@ -6,6 +6,8 @@ import {
   useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
+import PhoneTiltWork from "./phoneTiltWork";
+
 
 export default function SecondScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +25,7 @@ export default function SecondScrollOverlay() {
   const orangeHeight = useTransform(
     scrollYProgress,
     [0.99, 0.66], // Input range (from higher to lower scroll value)
-    ["20vh", "63.5vh"] // Output range (from lower to higher height)
+    ["15vh", "63.5vh"] // Output range (from lower to higher height)
   );
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -41,7 +43,7 @@ export default function SecondScrollOverlay() {
       {/* Red container contents - you can add more elements here */}
       {/* h-[25vh]  */}
       <motion.div
-        className="h-[20vh] flex items-center bg-orange-300 justify-center text-white"
+        className=" flex items-center bg-orange-300 justify-center text-white"
         style={{ height: orangeHeight }}
       >
         Scroll down to see the fixed blue container
@@ -51,7 +53,7 @@ export default function SecondScrollOverlay() {
       <motion.div
         className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
           isFixed
-            ? "fixed top-[18vh] left-1/2 -translate-x-1/2"
+            ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"
         }
          `}
@@ -62,9 +64,7 @@ export default function SecondScrollOverlay() {
           }
         }
       >
-        <div className="flex items-center justify-center h-full text-white text-xl">
-          {isFixed ? "I'm fixed now!" : "I'm in normal flow"}
-        </div>
+       <PhoneTiltWork />
       </motion.div>
 
       {/* Placeholder when blue container is fixed */}
