@@ -12,7 +12,7 @@ export default function StackedDevices({
   offset = 5,
 }: StackedDevicesProps) {
   return (
-    <div className={`relative ${className} bg-pink-500`}>
+    <div className={`relative ${className}`}>
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
@@ -27,7 +27,7 @@ export default function StackedDevices({
         >
           <Device
             className={`shadow-xl ${
-              index === 1 ? "border-none" : "border-white  border-4"
+              index === 1 ? "border-none" : "border-white border-4"
             }`}
             style={{
               opacity: `${index === 0 ? 0 : 1}`,

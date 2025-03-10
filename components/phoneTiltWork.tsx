@@ -10,16 +10,16 @@ export default function PhoneTiltWork() {
         {/* max-w-7xl */}
           {/* Left column - Text content */}
           <div className="flex items-end justify-end w-1/2">
-            <div className="flex flex-col items-center space-y-0 pt-10 w-4/5 h-2/3">
+            <div className="flex flex-col items-center -space-y-1 pt-10 w-4/5 h-2/3">
               {/* Primary heading */}
-              <span className="flex items-center gap-0">
+              <span className="flex items-start gap-0">
                 <span className="text-4xl font-bold text-white">Enjoy</span>
                 <Image
                   src="/email.svg"
                   width={100}
                   height={200}
                   alt=" "
-                  className="opacity-100 animate-fadeIn"
+                  className="opacity-100 animate-fadeIn relative -mt-5"
                   style={{ animationDelay: "0.7s" }}
                 />
                 <span className="text-4xl font-bold text-white">
@@ -28,19 +28,18 @@ export default function PhoneTiltWork() {
               </span>
 
               {/* Secondary text */}
-              <span className="flex items-center gap-0">
+              <span className="flex items-start">
                 <span className="text-4xl font-bold ">
-                  {/* <AnimatedText text="Schedule" delay={1.1} faded={true} /> */}
                   Schedule
                 </span>
-                <Image src="/email-todos.svg" width={100} height={200} alt="" />
-                <span className="text-4xl font-bold ">with drag</span>
+                <Image src="/email-todos.svg" width={150} height={200} alt="" className="-mt-5"/>
+                <span className="text-4xl font-bold ml-3">with drag</span>
               </span>
 
               {/* Tertiary text */}
-              <span className="flex items-center gap-0">
+              <span className="flex items-start gap-3">
                 <span className="text-4xl font-bold ">and drop. </span>
-                <span className="text-4xl font-bold ml-2">Made for you.</span>
+                <span className="text-4xl font-bold">Made for you.</span>
               </span>
             </div>
           </div>

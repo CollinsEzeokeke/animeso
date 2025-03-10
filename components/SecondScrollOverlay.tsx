@@ -20,7 +20,7 @@ export default function SecondScrollOverlay() {
   });
 
   //  equal division into three main points and equal at the same time from 0.99 to 0.66
-  // 
+  // is: 0.99 to 0.825 to 0.66
 
   const orangeHeight = useTransform(
     scrollYProgress,
@@ -40,14 +40,10 @@ export default function SecondScrollOverlay() {
 
   return (
     <div className="h-[130vh] bg-inherit z-[60] relative mb-56" ref={containerRef}>
-      {/* Red container contents - you can add more elements here */}
-      {/* h-[25vh]  */}
       <motion.div
         className=" flex items-center bg-inherit justify-center text-white"
         style={{ height: orangeHeight }}
       />
-
-      {/* Blue container - conditionally fixed based on scroll */}
       <motion.div
         className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
           isFixed
