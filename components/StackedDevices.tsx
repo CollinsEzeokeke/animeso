@@ -46,9 +46,7 @@ export default function StackedDevices({
           >
             {index === 1 && (
               <>
-                hello world this is some contents that i want rendered out only
-                on the first line or row so that it would appear and seem very
-                real as possible and cool as fuckkk!!!!!!!!!!!!
+                kfajdfk
               </>
             )}
           </Device>

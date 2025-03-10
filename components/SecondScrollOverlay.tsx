@@ -7,6 +7,7 @@ import {
 } from "framer-motion";
 import { useRef, useState } from "react";
 import PhoneTiltWork from "./phoneTiltWork";
+import { useProgressor } from "@/hooks/store/store";
 
 export default function SecondScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,6 +18,8 @@ export default function SecondScrollOverlay() {
     target: containerRef,
     offset: ["end start", "start start"], // From when container enters view to when it leaves
   });
+
+  const { setCurrentProgression } = useProgressor();
 
   //  equal division into three main points and equal at the same time from 0.99 to 0.66
   // is: 0.99 to 0.825 to 0.66
@@ -32,6 +35,19 @@ export default function SecondScrollOverlay() {
       setIsFixed(false);
     } else {
       setIsFixed(true);
+    }
+
+    // Use threshold-based checks instead of exact equality
+    const threshold = 0.01; // Adjust this value as needed
+
+    if (Math.abs(latest - 0.99) < threshold) {
+      setCurrentProgression(0.99);
+    }
+    if (Math.abs(latest - 0.825) < threshold) {
+      setCurrentProgression(0.825);
+    }
+    if (Math.abs(latest - 0.66) < threshold) {
+      setCurrentProgression(0.66);
     }
   });
 
