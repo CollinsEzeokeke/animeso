@@ -61,12 +61,6 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 0.05], ["0%", "-70%"]);
   const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
 
-  // Simplified zoom effect with fewer keyframes
-  // const zoomIn = useTransform(
-  //   scrollYProgress,
-  //   [0.08, 0.1, 0.12, 0.14, 0.16],
-  //   [1, 5, 15, 35, 60]
-  // );
   const zoomIn = useTransform(
     scrollYProgress,
     [
@@ -78,23 +72,7 @@ export default function Hero() {
       60,
     ]
   );
-  // Add this new effect to track scroll progress
-  // useEffect(() => {
-  //   const unsubscribe = scrollYProgress.on("change", (latest) => {
-  //     setCurrentProgress(latest);
-  //     // Send to backend API endpoint
-  //     fetch("/api/log-scroll", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ scrollProgress: latest }),
-  //     });
-  //   });
-  //   return () => unsubscribe();
-  // }, [scrollYProgress]);
-  // // Modify the movingAnother transform to stop at scrollYProgress 0.16
-  // console.log("this is my latest scroll positon", currentProgress);
+
   const movingAnother = useTransform(
     scrollYProgress,
     // 0.11,
@@ -162,12 +140,7 @@ export default function Hero() {
     damping: 90,
     restDelta: 0.01,
   });
-  // Color and opacity transitions
-  // const colorChange = useTransform(
-  //   scrollYProgress,
-  //   [0.155, 0.16],
-  //   ["#fff", "none"]
-  // );
+
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.085, 0.09],
@@ -179,8 +152,7 @@ export default function Hero() {
     [1, 0]
   );
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
-  // Springs for color transitions
-  // const colorSpring = useSpring(colorChange, { stiffness: 500, damping: 50 });
+
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
   // Opacity for text
   const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
