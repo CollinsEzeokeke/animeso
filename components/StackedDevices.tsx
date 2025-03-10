@@ -17,7 +17,7 @@ export default function StackedDevices({
           key={index}
           className="absolute"
           style={{
-            top: `${index === 1 ? 5 : 0 }px`,
+            top: `${index === 1 ? 5 : 0}px`,
             left: `0px`,
             zIndex: count - index,
             opacity: index === 0 ? 0 : 1,
@@ -46,8 +46,17 @@ export default function StackedDevices({
           >
             {index === 1 && (
               <>
-              {/* just change the src of the videas each time and try not to cause rerenders or load all at once using switch...... */}
-                <video src="/phoneVidOne.mov"/>
+                {/* just change the src of the videas each time and try not to cause rerenders or load all at once using switch...... */}
+                <div className="h-full w-[20vw] bg-red-500 overflow-hidden">
+                  <video 
+                    src="/phoneVidOne.mov" 
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                </div>
               </>
             )}
           </Device>

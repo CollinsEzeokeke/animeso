@@ -25,7 +25,7 @@ export default function Device({ className, style = {}, children }: DeviceProps)
     >
       {/* Screen content */}
       <div
-        className="absolute inset-2 rounded-[35px] bg-gray-50 flex items-center justify-center overflow-hidden"
+        className="absolute inset-2 rounded-[35px] flex items-center justify-center overflow-hidden"
         style={{
           transformStyle: "preserve-3d",
           transform: "translateZ(1px)",
