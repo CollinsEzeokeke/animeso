@@ -47,10 +47,11 @@ export default function StackedDevices({
             {index === 1 && (
               <>
                 {/* just change the src of the videas each time and try not to cause rerenders or load all at once using switch...... */}
-                <div className="h-full w-[20vw] bg-red-500 overflow-hidden">
-                  <video 
-                    src="/phoneVidOne.mov" 
-                    className="h-full w-full object-cover"
+                <div className="relative w-[20vw] h-[65vh] overflow-hidden">
+                  <video
+                    src="/phoneVidOne.mov"
+                    // className="absolute object-obtain w-full h-full top-0 left-0"
+                    className="w-full h-full object-fill scale-x-100 origin-left"
                     autoPlay
                     muted
                     loop
