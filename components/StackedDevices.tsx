@@ -9,7 +9,6 @@ interface StackedDevicesProps {
 export default function StackedDevices({
   count = 3,
   className = "",
-  offset = 5,
 }: StackedDevicesProps) {
   return (
     <div className={`relative ${className}`}>
@@ -18,17 +17,16 @@ export default function StackedDevices({
           key={index}
           className="absolute"
           style={{
-            top: `${index * offset}px`,
+            top: `${index === 1 ? 5 : 0 }px`,
             left: `0px`,
             zIndex: count - index,
             opacity: index === 0 ? 0 : 1,
-            // backgroundColor: index === 0 ? "red" : index === 1 ? "blue" : "green"
           }}
         >
           <Device
             className={`shadow-xl ${
               index === 1 ? "border-none" : "border-white border-4"
-            }`}
+            } ${index === 1 ? " h-[65vh]" : "h-[66.5vh]"}`}
             style={{
               opacity: `${index === 0 ? 0 : 1}`,
               transform: `perspective(1500px) 
@@ -59,5 +57,3 @@ export default function StackedDevices({
     </div>
   );
 }
-
-// left: ${index * offset}

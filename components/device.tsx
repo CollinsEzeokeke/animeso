@@ -10,7 +10,7 @@ export default function Device({ className, style = {}, children }: DeviceProps)
   return (
     <div
       className={cn(
-        "relative w-[20vw] h-[65vh] bg-white rounded-[40px] shadow-device",
+        "relative w-[20vw] bg-white rounded-[40px] shadow-device",
         "flex flex-col items-center",
         "device-3d",
         className
