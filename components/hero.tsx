@@ -4,49 +4,49 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { VideoLoader } from "./videoLoader";
 import { useScroll, useTransform, useSpring } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useStore } from "@/hooks/store/store";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { setIsLocked, isLocked } = useStore();
   // const [currentProgress, setCurrentProgress] = useState(0);
-  const [freezePoint, setFreezePoint] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
-  const [isFixed, setIsFixed] = useState(false);
+  // const [freezePoint, setFreezePoint] = useState(0);
+  // const [containerHeight, setContainerHeight] = useState(0);
+  // const [isFixed, setIsFixed] = useState(false);
 
   // Single useScroll hook for better performance
-  const { scrollYProgress, scrollY } = useScroll();
+  const { scrollYProgress } = useScroll();
 
   // 2. Calculate freeze point and container height
-  useEffect(() => {
-    const calculateDimensions = () => {
-      const totalScrollHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setFreezePoint(totalScrollHeight * 0.16); //0.15961945031712474
-      if (containerRef.current) {
-        setContainerHeight(containerRef.current.offsetHeight);
-      }
-    };
+  // useEffect(() => {
+  //   const calculateDimensions = () => {
+  //     const totalScrollHeight =
+  //       document.documentElement.scrollHeight - window.innerHeight;
+  //     setFreezePoint(totalScrollHeight * 0.16); //0.15961945031712474
+  //     if (containerRef.current) {
+  //       setContainerHeight(containerRef.current.offsetHeight);
+  //     }
+  //   };
 
-    calculateDimensions();
-    window.addEventListener("resize", calculateDimensions);
-    return () => window.removeEventListener("resize", calculateDimensions);
-  }, []);
+  //   calculateDimensions();
+  //   window.addEventListener("resize", calculateDimensions);
+  //   return () => window.removeEventListener("resize", calculateDimensions);
+  // }, []);
 
   // 3. Toggle fixed state based on scroll position
-  useEffect(() => {
-    const unsubscribe = scrollY.on("change", (latest) => {
-      setIsFixed(latest >= freezePoint);
-    });
-    return () => unsubscribe();
-  }, [freezePoint, scrollY]);
-  console.log(
-    "these are my fixed boolean, containerHeight and FreezePoints respectively",
-    isFixed,
-    containerHeight,
-    freezePoint
-  );
+  // useEffect(() => {
+  //   const unsubscribe = scrollY.on("change", (latest) => {
+  //     // setIsFixed(latest >= freezePoint);
+  //   });
+  //   return () => unsubscribe();
+  // }, [freezePoint, scrollY]);
+  // console.log(
+  //   "these are my fixed boolean, containerHeight and FreezePoints respectively",
+  //   isFixed,
+  //   containerHeight,
+  //   freezePoint
+  // );
 
   // Get the window width
   const { width, height } = useWindowSize();

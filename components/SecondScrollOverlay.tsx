@@ -8,7 +8,6 @@ import {
 import { useRef, useState } from "react";
 import PhoneTiltWork from "./phoneTiltWork";
 
-
 export default function SecondScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
@@ -34,12 +33,13 @@ export default function SecondScrollOverlay() {
     } else {
       setIsFixed(true);
     }
-
-    console.log("Scroll progress:", latest, "Fixed:", isFixed);
   });
 
   return (
-    <div className="h-[130vh] bg-inherit z-[60] relative mb-56" ref={containerRef}>
+    <div
+      className="h-[130vh] bg-inherit z-[60] relative mb-56"
+      ref={containerRef}
+    >
       <motion.div
         className=" flex items-center bg-inherit justify-center text-white"
         style={{ height: orangeHeight }}
@@ -52,7 +52,7 @@ export default function SecondScrollOverlay() {
         }
          `}
       >
-       <PhoneTiltWork />
+        <PhoneTiltWork />
       </motion.div>
     </div>
   );
