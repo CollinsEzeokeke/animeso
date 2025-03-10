@@ -39,15 +39,13 @@ export default function SecondScrollOverlay() {
   });
 
   return (
-    <div className="h-[130vh] bg-red-500 z-[60] relative mb-56" ref={containerRef}>
+    <div className="h-[130vh] bg-inherit z-[60] relative mb-56" ref={containerRef}>
       {/* Red container contents - you can add more elements here */}
       {/* h-[25vh]  */}
       <motion.div
-        className=" flex items-center bg-orange-300 justify-center text-white"
+        className=" flex items-center bg-inherit justify-center text-white"
         style={{ height: orangeHeight }}
-      >
-        Scroll down to see the fixed blue container
-      </motion.div>
+      />
 
       {/* Blue container - conditionally fixed based on scroll */}
       <motion.div
@@ -57,25 +55,9 @@ export default function SecondScrollOverlay() {
             : "relative mx-auto"
         }
          `}
-        //  ${isFixed2 ? "mt-[50vh]" : ""}
-        style={
-          {
-            // opacity: blueContainerOpacity
-          }
-        }
       >
        <PhoneTiltWork />
       </motion.div>
-
-      {/* Placeholder when blue container is fixed */}
-      {isFixed && (
-        <div className="h-[50vh] w-[80%] mx-auto opacity-0">Placeholder</div>
-      )}
-
-      {/* More content for scrolling
-      <div className="h-[55vh] flex items-end justify-center pb-10 text-white">
-        Keep scrolling to unfix the blue container
-      </div> */}
     </div>
   );
 }
