@@ -2,7 +2,12 @@
 import { motion } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { VideoLoader } from "./videoLoader";
-import { useScroll, useTransform, useSpring  } from "framer-motion"; //useMotionValueEvent add if you wish to track the scrollYProgress then uncomment line 156
+import {
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValueEvent,
+} from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useStore } from "@/hooks/store/store";
@@ -24,12 +29,20 @@ export default function Hero() {
 
   const zoomIn = useTransform(
     scrollYProgress,
+    // [
+    //   0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
+    //   0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
+    // ],
+    // [
+    //   0.12, 0.1225, 0.125, 0.1275, 0.13, 0.1325, 0.135, 0.1375, 0.14, 0.1425,
+    //   0.145, 0.1475, 0.15, 0.1525, 0.155, 0.1575, 0.16, 0.1625, 0.165, 0.17,
+    // ],
     [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12, 0.125, 0.13,
-      0.135, 0.1375, 0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16,
+      0.012, 0.02, 0.028, 0.036, 0.044, 0.052, 0.06, 0.068, 0.076, 0.084, 0.092,
+      0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17,
     ],
     [
-      1, 2.5, 3.5, 4, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+      1, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
       60,
     ]
   );
@@ -37,19 +50,27 @@ export default function Hero() {
   const movingAnother = useTransform(
     scrollYProgress,
     // 0.11,
+    // [
+    //   0.08, 0.085, 0.09, 0.095, 0.1, 0.115, 0.12, 0.125, 0.13, 0.135, 0.1375,
+    //   0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
+    // ],
+    // [
+    //   0.012, 0.02, 0.028, 0.036, 0.044, 0.052, 0.06, 0.068, 0.076, 0.084, 0.092,
+    //   0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17,
+    // ],
     [
-      0.08, 0.085, 0.09, 0.095, 0.1, 0.115, 0.12, 0.125, 0.13, 0.135, 0.1375,
-      0.14, 0.1425, 0.145, 0.1475, 0.15, 0.155, 0.16, 0.17, 0.18,
+      0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083,
+      0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.17,
     ],
     [
       "0%",
-      "-49%",
+      "-60%",
+      "-112%",
       "-140%",
-      "-149%",
-      "-200%",
-      "-250%",
-      "-260%",
-      "-350%",
+      "-155%",
+      "-178%",
+      "-220%",
+      "-270%",
       "-550%", // 11th value
       "-750%", // 12th value
       "-950%", // 13th value
@@ -153,9 +174,9 @@ export default function Hero() {
       : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
   );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log("this is the latest value: ", latest)
-  // })
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("this is the latest value: ", latest);
+  });
   // Debounced scroll handler for better performance
   useEffect(() => {
     let lastTimestamp = 0;

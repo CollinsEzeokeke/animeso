@@ -10,7 +10,7 @@ export default function Desktop({ className, style = {}, children }: DesktopProp
   return (
     <div
       className={cn(
-        "relative w-[45vw] h-[60vh] rounded-[40px] shadow-device",
+        "relative w-[40vw] h-[90vh] rounded-[40px] shadow-device",
         "flex flex-col items-center z-[60]",
         "device-3d",
         className

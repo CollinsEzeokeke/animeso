@@ -60,7 +60,7 @@ export default function StackedDesktops({
   // };
 
   return (
-    <div className={`relative h-[80%] w-[60%]${className}`}>
+    <div className={`relative h-[60%] w-[50%]${className}`}>
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
@@ -81,11 +81,11 @@ export default function StackedDesktops({
             {index === 1 && (
               <>
                 {/* Conditionally render videos based on currentProgression */}
-                <div className="relative w-[45vw] h-[60vh] overflow-hidden">
+                <div className="relative w-[40vw] h-[90vh] overflow-hidden">
                   {/* {renderVideo()} */}
                   <video
                     src="/one.mp4"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain "
                     autoPlay
                     muted
                     loop
