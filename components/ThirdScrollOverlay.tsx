@@ -6,7 +6,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
-import StackedDesktops from "./stackedDesktops";
+// import StackedDesktops from "./stackedDesktops";
 import { useThirdScrollOverlay } from "@/hooks/store/store";
 
 export default function ThirdScrollOverlay() {
@@ -74,9 +74,31 @@ export default function ThirdScrollOverlay() {
             isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
           }  z-0`}
         >
-          sfdakhfjahkfjahdjfkhajsdfhajkshdfjha
+          <span className="flex flex-col gap-3 space-y-2">
+            {/* <span className="bg-red-500 text-3xl font-semibold ">
+              Emails are closer than even to your todos and calendar.
+              <span className="text-3xl font-semibold">
+                {" "}
+                No need to break up with
+              </span>
+            </span> */}
+
+            <span className="bg-red-500 text-3xl font-semibold space-x-2">
+              <span className="bg-blue-500">
+                Emails are closer than ever to your todos and calendar.
+              </span>
+              <span>No need to break up with</span>
+            </span>
+
+            <span className="text-3xl font-semibold">
+              {" "}
+              your apps, just connect them.{" "}
+            </span>
+            {/* <span> Like to miss meetings? Not with Amie in the menubar.</span>
+            <span> Share your free slots with anyone you like.</span> */}
+          </span>
         </div>
-        <StackedDesktops />
+        {/* <StackedDesktops /> */}
         {/* <div className="bg-pink-500 h-full w-full absolute z-0"/> */}
       </motion.div>
     </div>
