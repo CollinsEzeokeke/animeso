@@ -8,7 +8,7 @@ import React from "react";
 import { motion, useTransform, useSpring, useScroll } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import SecondScrollOverlay from "@/components/SecondScrollOverlay";
-// import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
+import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
 
 export default function Page() {
   const { width, height } = useWindowSize();
@@ -69,8 +69,8 @@ export default function Page() {
         <div className="bg-black relative">
           <ScrollOverlay />
           <SecondScrollOverlay />
-          <div className="h-[100vh] bg-purple-500"/>
-          {/* <ThirdScrollOverlay /> */}
+          {/* <div className="h-[100vh] bg-purple-500"/> */}
+          <ThirdScrollOverlay />
         </div>
 
         {/* Post-scroll content */}

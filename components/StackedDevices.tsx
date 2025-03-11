@@ -1,4 +1,5 @@
 import Device from "./device";
+import { useProgressor } from "@/hooks/store/store";
 
 interface StackedDevicesProps {
   count?: number;
@@ -6,10 +7,62 @@ interface StackedDevicesProps {
   offset?: number;
 }
 
+
 export default function StackedDevices({
   count = 3,
   className = "",
 }: StackedDevicesProps) {
+  const {currentProgression} = useProgressor();
+  
+  const renderVideo = () => {
+    if (currentProgression >= 0.99) {
+      return (
+        <video
+          src="/phoneVidOne.mov"
+          className="w-full h-full object-fill scale-x-100 origin-left"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else if (currentProgression >= 0.825) {
+      return (
+        <video
+          src="/phoneVidTwo.mp4"
+          className="w-full h-full object-fill scale-x-100 origin-left"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else if (currentProgression <= 0.66) {
+      return (
+        <video
+          src="/phoneVidOne.mov"
+          className="w-full h-full object-fill scale-x-100 origin-left"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else {
+      // Default video or fallback
+      return (
+        <video
+          src="/phoneVidOne.mov"
+          className="w-full h-full object-fill scale-x-100 origin-left"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
       {Array.from({ length: count }).map((_, index) => (
@@ -46,17 +99,9 @@ export default function StackedDevices({
           >
             {index === 1 && (
               <>
-                {/* just change the src of the videas each time and try not to cause rerenders or load all at once using switch...... */}
+                {/* Conditionally render videos based on currentProgression */}
                 <div className="relative w-[20vw] h-[65vh] overflow-hidden">
-                  <video
-                    src="/phoneVidOne.mov"
-                    // className="absolute object-obtain w-full h-full top-0 left-0"
-                    className="w-full h-full object-fill scale-x-100 origin-left"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
+                  {renderVideo()}
                 </div>
               </>
             )}
