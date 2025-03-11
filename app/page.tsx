@@ -69,7 +69,6 @@ export default function Page() {
         <div className="bg-black relative">
           <ScrollOverlay />
           <SecondScrollOverlay />
-          {/* <div className="h-[100vh] bg-purple-500"/> */}
           <ThirdScrollOverlay />
           <ActionButtons />
         </div>
