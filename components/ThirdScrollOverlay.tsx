@@ -1,32 +1,50 @@
 "use client";
-import { motion } from "framer-motion";
-import WeatherLocation from "./WeatherLocation";
-import NotificationSummary from "./NotificationSummary";
-import ActionButtons from "./ActionButtons";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
 
 export default function ThirdScrollOverlay() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFixed, setIsFixed] = useState(false);
+
+  // Track scroll progress of the entire red container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["end start", "start start"], // From when container enters view to when it leaves
+  });
+
+  const orangeHeight = useTransform(
+    scrollYProgress,
+    [0.99, 0.66], // Input range (from higher to lower scroll value)
+    ["15vh", "63.5vh"] // Output range (from lower to higher height)
+  );
+  // Monitor scroll progress and set fixed state
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.99 || latest <= 0.66) {
+      setIsFixed(false);
+    } else {
+      setIsFixed(true);
+    }
+  });
+
   return (
-    <section className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-y-auto">
-      <div className="min-h-[80vh]" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[70vw] h-full relative bg-green-500">
-          {/* Content container with animation */}
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-blue-500"
-          >
-            {/* the contents go into this place */}
-            {/* max-w-3xl */}
-            <div className=" w-full text-center space-y-6 z-10">
-                THIS IS THE THIRD SCROLL OVERLAY AND IT SUCKS
-              <WeatherLocation />
-              <NotificationSummary />
-            </div>
-           
-            {/* ActionButtons component is now rendered outside this container and fixed at the bottom */}
-            <ActionButtons />
-          </motion.div> 
-        </div>
-      </div>
-    </section>
+    <div
+      className="h-[140vh] bg-blue-500 z-[60] relative mb-56"
+      ref={containerRef}
+    >
+      <motion.div
+        className=" flex items-center bg-inherit justify-center text-white"
+        style={{ height: orangeHeight }}
+      />
+      <motion.div
+        className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
+          isFixed
+            ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
+            : "relative mx-auto"
+        }
+         `}
+      >
+        Desktop Tilting Work
+      </motion.div>
+    </div>
   );
 }

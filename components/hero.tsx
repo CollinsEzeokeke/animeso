@@ -10,7 +10,10 @@ import { useStore } from "@/hooks/store/store";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { setIsLocked, isLocked } = useStore();
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
   const { width, height } = useWindowSize();
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });

@@ -34,7 +34,6 @@ export default function Page() {
           } h-full flex justify-center overflow-hidden relative`}
         >
           <motion.div
-            //  ${width >= 1440 && "w-[12vw]"} ${width >= 1024 && "w-[20vw]"} ${width >= 768 && "w-[25vw]"} ${width >= 768 && "-mt-2"} ${width < 768 && width >= 700 && "w-[28vw]"}
             className={`bg-cover h-[20vh] bg-center fixed top-[8.5vh] flex justify-self-center -translate-x-1/2 bg-no-repeat transition-all z-[1000] ${
               width >= 1440
                 ? "w-[12vw]"
