@@ -19,3 +19,17 @@ export const useProgressor = create<SectionProgressor>((set) => ({
   currentProgression: 0.99,
   setCurrentProgression: (progress) => set({ currentProgression: progress }),
 }));
+
+
+type ThirdScrollOverlay = {
+  thirdScrollProgress: number;
+  setThirdScrollProgress: (progress: number) => void;
+};
+
+export const useThirdScrollOverlay = create<ThirdScrollOverlay>((set) => ({
+  thirdScrollProgress: 0,
+  setThirdScrollProgress: (progress) => set({ thirdScrollProgress: progress }),
+}));
+
+
+

@@ -9,6 +9,7 @@ import { motion, useTransform, useSpring, useScroll } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import SecondScrollOverlay from "@/components/SecondScrollOverlay";
 import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
+import ActionButtons from "@/components/ActionButtons";
 
 export default function Page() {
   const { width, height } = useWindowSize();
@@ -70,6 +71,7 @@ export default function Page() {
           <SecondScrollOverlay />
           {/* <div className="h-[100vh] bg-purple-500"/> */}
           <ThirdScrollOverlay />
+          <ActionButtons />
         </div>
 
         {/* Post-scroll content */}

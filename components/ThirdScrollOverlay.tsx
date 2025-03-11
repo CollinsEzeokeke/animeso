@@ -20,6 +20,7 @@ export default function ThirdScrollOverlay() {
   );
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("this is the latest value: ", latest)
     if (latest > 0.99 || latest <= 0.66) {
       setIsFixed(false);
     } else {
@@ -29,7 +30,7 @@ export default function ThirdScrollOverlay() {
 
   return (
     <div
-      className="h-[140vh] bg-black z-[60] relative mb-56"
+      className="h-[200vh] bg-black z-[60] relative mb-56"
       ref={containerRef}
     >
       <motion.div
@@ -37,7 +38,7 @@ export default function ThirdScrollOverlay() {
         style={{ height: orangeHeight }}
       />
       <motion.div
-        className={`h-[80vh]  w-[80%] z-[1000] ${
+        className={`h-[80vh] w-[80%] z-[1000] flex items-center justify-center ${
           isFixed
             ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"

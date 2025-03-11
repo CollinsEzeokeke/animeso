@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { VideoLoader } from "./videoLoader";
-import { useScroll, useTransform, useSpring,useMotionValueEvent } from "framer-motion";
+import { useScroll, useTransform, useSpring  } from "framer-motion"; //useMotionValueEvent add if you wish to track the scrollYProgress then uncomment line 156
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useStore } from "@/hooks/store/store";
@@ -12,7 +12,7 @@ export default function Hero() {
   const { setIsLocked, isLocked } = useStore();
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   });
   const { width, height } = useWindowSize();
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
@@ -153,9 +153,9 @@ export default function Hero() {
       : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
   );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("this is the latest value: ", latest)
-  })
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log("this is the latest value: ", latest)
+  // })
   // Debounced scroll handler for better performance
   useEffect(() => {
     let lastTimestamp = 0;
