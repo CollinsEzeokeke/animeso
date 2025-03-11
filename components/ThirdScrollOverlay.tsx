@@ -7,10 +7,12 @@ import {
 } from "framer-motion";
 import { useRef, useState } from "react";
 import StackedDesktops from "./stackedDesktops";
+import { useThirdScrollOverlay } from "@/hooks/store/store";
 
 export default function ThirdScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
+  const { setThirdScrollProgress } = useThirdScrollOverlay();
 
   // Track scroll progress of the entire red container
   const { scrollYProgress } = useScroll({
@@ -26,10 +28,27 @@ export default function ThirdScrollOverlay() {
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     console.log("this is the latest value: ", latest);
+    // equal distances 0.40 ───── 0.5967 ───── 0.7933 ───── 0.99
     if (latest > 0.99 || latest <= 0.4) {
       setIsFixed(false);
     } else {
       setIsFixed(true);
+    }
+
+    // Use threshold-based checks instead of exact equality
+    const threshold = 0.01; // Adjust this value as needed
+
+    if (Math.abs(latest - 0.99) < threshold) {
+      setThirdScrollProgress(0.99);
+    }
+    if (Math.abs(latest - 0.7933) < threshold) {
+      setThirdScrollProgress(0.7933);
+    }
+    if (Math.abs(latest - 0.5967) < threshold) {
+      setThirdScrollProgress(0.5967);
+    }
+    if (Math.abs(latest - 0.4) < threshold) {
+      setThirdScrollProgress(0.4);
     }
   });
 
@@ -50,7 +69,11 @@ export default function ThirdScrollOverlay() {
         }
          `}
       >
-        <div className={`bg-orange-500 ${isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"}  z-0`}>
+        <div
+          className={`bg-orange-500 w-[45%] ${
+            isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
+          }  z-0`}
+        >
           sfdakhfjahkfjahdjfkhajsdfhajkshdfjha
         </div>
         <StackedDesktops />
