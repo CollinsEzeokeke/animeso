@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { VideoLoader } from "./videoLoader";
-import { useScroll, useTransform, useSpring } from "framer-motion";
+import { useScroll, useTransform, useSpring,useMotionValueEvent } from "framer-motion";
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useStore } from "@/hooks/store/store";
@@ -47,8 +47,6 @@ export default function Hero() {
       "-140%",
       "-149%",
       "-200%",
-      // "-185%",
-      // "-230%",
       "-250%",
       "-260%",
       "-350%",
@@ -154,6 +152,10 @@ export default function Hero() {
       ? "none"
       : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
   );
+  //  this is where the event listener for the scrollYProgress is set for checks and calculations
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("this is the latest value: ", latest)
+  })
   // Debounced scroll handler for better performance
   useEffect(() => {
     let lastTimestamp = 0;
@@ -333,7 +335,6 @@ export default function Hero() {
                     }`}
                     style={{
                       y: movingStiff,
-                      // color: colorSpring,
                       backgroundColor: bgColorTransform,
                       boxShadow: boxShadowTransform,
                       willChange: "transform, background-color, box-shadow",

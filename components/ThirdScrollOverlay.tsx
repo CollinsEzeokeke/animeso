@@ -1,6 +1,7 @@
 "use client";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
+import StackedDesktops from "./stackedDesktops";
 
 export default function ThirdScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,7 @@ export default function ThirdScrollOverlay() {
 
   return (
     <div
-      className="h-[140vh] bg-blue-500 z-[60] relative mb-56"
+      className="h-[140vh] bg-black z-[60] relative mb-56"
       ref={containerRef}
     >
       <motion.div
@@ -36,14 +37,14 @@ export default function ThirdScrollOverlay() {
         style={{ height: orangeHeight }}
       />
       <motion.div
-        className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
+        className={`h-[80vh]  w-[80%] z-[1000] ${
           isFixed
             ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"
         }
          `}
-      >
-        Desktop Tilting Work
+      > 
+        <StackedDesktops />
       </motion.div>
     </div>
   );
