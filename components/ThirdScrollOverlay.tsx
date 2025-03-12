@@ -106,7 +106,10 @@ export default function ThirdScrollOverlay() {
     } else if (thirdScrollProgress >= 0.5967) {
       return " ";
     } else if (thirdScrollProgress >= 0.4) {
-      return " "
+      // side calendar stuff
+      return(<>
+      
+      </>)
     } else {
       // Default nothing if not in the right range
       return " ";
@@ -170,7 +173,7 @@ export default function ThirdScrollOverlay() {
         <div className="h-full flex justify-evenly items-center w-full absolute z-0">
           {/* periodic image on the left */}
           {renderImageLeft()}
-          <div className="w-[40%] h-[50%] flex items-center justify-end">
+          <div className="w-[40%] h-[50%] bg-yellow-500 flex items-center justify-end">
             {/* periodic image on the right */}
             {renderImageRight()}
           </div>
