@@ -30,7 +30,7 @@ export default function ThirdScrollOverlay() {
   );
   // Monitor scroll progress and set fixed state
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("this is the latest value: ", latest);
+    // console.log("this is the latest value: ", latest);
     // equal distances 0.40 ───── 0.5967 ───── 0.7933 ───── 0.99
     if (latest > 0.99 || latest <= 0.4) {
       setIsFixed(false);
@@ -66,25 +66,25 @@ export default function ThirdScrollOverlay() {
       );
     } else if (thirdScrollProgress >= 0.7933) {
       return (
-        <div className="w-[10%] h-[50%] flex items-center justify-end">
+        <div className="w-[10%] h-[50%] flex items-center justify-start">
           <Image
             src="/feature-integrations-left.png"
             alt="mailTodos"
-            width={700}
-            height={600}
-            className="translate-x-8"
+            width={800}
+            height={800}
+            className="-translate-x-3"
           />
         </div>
       );
     } else if (thirdScrollProgress >= 0.5967) {
       return (
-        <div className="w-[30%] h-[50%] flex items-center justify-end">
+        <div className="w-[25%] h-[50%] flex items-center justify-end">
           <Image
             src="/feature-bar-event.png"
             alt="mailTodos"
             width={800}
             height={700}
-            className="translate-x-10 "
+            className="-translate-x-5"
           />
         </div>
       );
@@ -103,9 +103,9 @@ export default function ThirdScrollOverlay() {
         <Image
           src="/feature-integrations-right.png"
           alt="mailTodos"
-          width={200}
-          height={200}
-          className="translate-x-5 "
+          width={150}
+          height={150}
+          className="translate-x-5"
         />
       );
     } else if (thirdScrollProgress >= 0.5967) {
@@ -121,15 +121,15 @@ export default function ThirdScrollOverlay() {
 
   return (
     <div
-      className="h-[200vh] bg-black z-[60] relative mb-56"
+      className="h-[200vh] bg-black z-[60] relative"
       ref={containerRef}
     >
       <motion.div
-        className=" flex items-center bg-blue-500 justify-center text-white"
+        className=" flex items-center  justify-center text-white"
         style={{ height: orangeHeight }}
       />
       <motion.div
-        className={`h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-center ${
+        className={`h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${
           isFixed
             ? "fixed top-[13vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"
@@ -159,22 +159,22 @@ export default function ThirdScrollOverlay() {
               <span className={`${thirdScrollProgress >= 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}> your apps, just connect them. </span>
               <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Like to</span>
             </span>
-            <span className={`text-3xl font-semibold ${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 ? "text-white" : "text-[#a4a1a195]"}`}>
+            <span className={`text-3xl font-semibold ${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
               {" "}
               miss meetings? Not with Amie in the
             </span>
             <span className=" text-3xl font-semibold">
-              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 ? "text-white" : "text-[#a4a1a195]"}`}>menubar. </span>
-              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 ? "text-white" : "text-[#a4a1a195]"}`}>Share your free slots with</span>
+              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933  && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>menubar. </span>
+              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Share your free slots with</span>
             </span>
             <span className="text-3xl font-semibold justify-self-start">
-              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 ? "text-white" : "text-[#a4a1a195]"}`}>anyone you like.</span>
+              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>anyone you like.</span>
             </span>
           </span>
         </motion.div>
 
         <StackedDesktops />
-        <div className="h-full flex justify-evenly items-center w-full absolute z-0">
+        <div className="h-full flex justify-evenly items-center w-full absolute -z-10">
           {/* periodic image on the left */}
           {renderImageLeft()}
           <div className="w-[40%] h-[50%] flex items-center justify-end">

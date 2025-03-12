@@ -6,7 +6,7 @@ import {
   useScroll,
   useTransform,
   useSpring,
-  useMotionValueEvent,
+  // useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
@@ -158,9 +158,9 @@ export default function Hero() {
       : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
   );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("this is the latest value: ", latest);
-  });
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log("this is the latest value: ", latest);
+  // });
   // Debounced scroll handler for better performance
   useEffect(() => {
     let lastTimestamp = 0;

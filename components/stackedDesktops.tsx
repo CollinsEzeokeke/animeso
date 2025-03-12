@@ -19,7 +19,7 @@ export default function StackedDesktops({
         <div className="relative h-full w-full">
           <video
             src="/mailTodos.mp4"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain translate-y-3 scale-y-full"
             autoPlay
             muted
             loop
@@ -39,7 +39,7 @@ export default function StackedDesktops({
       return (
         <video
           src="/three.mp4"
-          className="w-full h-full object-contain "
+          className="w-full h-full object-contain translate-y-3 scale-y-full"
           autoPlay
           muted
           loop
@@ -50,7 +50,7 @@ export default function StackedDesktops({
       return (
         <video
           src="/two.mp4"
-          className="w-full h-full object-contain "
+          className="w-full h-full object-contain translate-y-3 scale-y-full"
           autoPlay
           muted
           loop
@@ -61,7 +61,7 @@ export default function StackedDesktops({
       return (
         <video
           src="/one.mp4"
-          className="w-full h-full object-contain "
+          className="w-full h-full object-contain translate-y-3 scale-y-full"
           autoPlay
           muted
           loop
@@ -75,11 +75,11 @@ export default function StackedDesktops({
   };
   
   return (
-    <div className={`relative h-[60%] w-[50%]${className}`}>
+    <div className={`relative h-[70%] w-[50%] -translate-x-11 ${className}`}>
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="absolute"
+          className="absolute h-full"
           style={{
             top: `${index === 1 ? 5 : 10}px`,
             left: "0px",
@@ -89,14 +89,14 @@ export default function StackedDesktops({
           <Desktop
             className={`shadow-xl ${
               index === 1 ? "border-none" : "border-none border-4"
-            } ${index === 1 ? " h-[50vh]" : "h-[50.5vh]"} ${
+            } ${index === 1 ? " h-[55vh]" : "h-[55.5vh]"} ${
               index === 1 ? "bg-transparent" : "bg-white"
             } ${index === 0 && "bg-transparent"}`}
           >
             {index === 1 && (
               <>
                 {/* Conditionally render videos based on currentProgression */}
-                <div className="relative w-[40vw] h-[90vh] overflow-hidden">
+                <div className="relative w-[45vw] h-full overflow-hidden">
                   {renderVideo()}
                 </div>
               </>

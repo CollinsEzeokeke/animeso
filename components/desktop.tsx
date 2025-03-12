@@ -10,7 +10,7 @@ export default function Desktop({ className, style = {}, children }: DesktopProp
   return (
     <div
       className={cn(
-        "relative w-[40vw] h-[90vh] rounded-[40px] shadow-device",
+        "relative w-[45vw] h-[200vh] rounded-[40px] shadow-device",
         "flex flex-col items-center z-[60]",
         "device-3d",
         className
@@ -20,6 +20,7 @@ export default function Desktop({ className, style = {}, children }: DesktopProp
         backfaceVisibility: "hidden",
         transform:
           "perspective(1500px) rotateX(17.5deg) rotateY(0deg) rotateZ(0deg) translateZ(30px)",
+          // backgroundColor: "red",
           // "",
         ...style,
       }}
