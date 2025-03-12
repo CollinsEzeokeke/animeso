@@ -6,13 +6,14 @@ import {
   useTransform,
 } from "framer-motion";
 import { useRef, useState } from "react";
-// import StackedDesktops from "./stackedDesktops";
+import StackedDesktops from "./stackedDesktops";
 import { useThirdScrollOverlay } from "@/hooks/store/store";
+import Image from "next/image";
 
 export default function ThirdScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
-  const { setThirdScrollProgress } = useThirdScrollOverlay();
+  const { setThirdScrollProgress, thirdScrollProgress } = useThirdScrollOverlay();
 
   // Track scroll progress of the entire red container
   const { scrollYProgress } = useScroll({
@@ -52,6 +53,84 @@ export default function ThirdScrollOverlay() {
     }
   });
 
+  const renderImageLeft = () => {
+    if (thirdScrollProgress >= 0.99) {
+      return " ";
+    } else if (thirdScrollProgress >= 0.7933) {
+      return (
+        <Image src="/feature-integrations-left.png" alt="mailTodos" width={50} height={50} />
+      );
+    } else if (thirdScrollProgress >= 0.5967) {
+      return (
+       <Image src="/feature-bar-event.png" alt="mailTodos" width={50} height={50} />
+      );
+    } else {
+      // Default nothing if not in the right range
+      return " ";
+    }
+  };
+  // const renderImageRight = () => {
+  //   if (thirdScrollProgress >= 0.99) {
+  //     return (
+  //       <div className="relative h-full w-full">
+  //         <video
+  //           src="/mailTodos.mp4"
+  //           className="w-full h-full object-contain"
+  //           autoPlay
+  //           muted
+  //           loop
+  //           playsInline
+  //         />
+  //         <div className="absolute bottom-0 z-[60] h-[18%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
+  //           <Image
+  //             src="/stamponvideo.webp"
+  //             alt="mailTodos"
+  //             width={50}
+  //             height={50}
+  //           />
+  //         </div>
+  //       </div>
+  //     );
+  //   } else if (thirdScrollProgress >= 0.7933) {
+  //     return (
+  //       <video
+  //         src="/three.mp4"
+  //         className="w-full h-full object-contain "
+  //         autoPlay
+  //         muted
+  //         loop
+  //         playsInline
+  //       />
+  //     );
+  //   } else if (thirdScrollProgress >= 0.5967) {
+  //     return (
+  //       <video
+  //         src="/two.mp4"
+  //         className="w-full h-full object-contain "
+  //         autoPlay
+  //         muted
+  //         loop
+  //         playsInline
+  //       />
+  //     );
+  //   } else if (thirdScrollProgress >= 0.4) {
+  //     return (
+  //       <video
+  //         src="/one.mp4"
+  //         className="w-full h-full object-contain "
+  //         autoPlay
+  //         muted
+  //         loop
+  //         playsInline
+  //       />
+  //     );
+  //   } else {
+  //     // Default nothing if not in the right range
+  //     return " ";
+  //   }
+  // };
+
+
   return (
     <div
       className="h-[200vh] bg-black z-[60] relative mb-56"
@@ -69,37 +148,52 @@ export default function ThirdScrollOverlay() {
         }
          `}
       >
+{/*         
         <div
-          className={`bg-orange-500 w-[45%] ${
+          className={`bg-orange-500 w-[45%] -mt-20 ${
             isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
           }  z-0`}
         >
-          <span className="flex flex-col gap-3 space-y-2">
-            {/* <span className="bg-red-500 text-3xl font-semibold ">
-              Emails are closer than even to your todos and calendar.
-              <span className="text-3xl font-semibold">
-                {" "}
-                No need to break up with
+          <span className="flex flex-col gap-2 space-y-0 items-start justify-around ">
+            <span className="text-3xl font-semibold flex flex-col justify-around h-[10%] gap-2 pt-0">
+              <span className="">
+                Emails are closer than ever to your todos
               </span>
-            </span> */}
-
-            <span className="bg-red-500 text-3xl font-semibold space-x-2">
-              <span className="bg-blue-500">
-                Emails are closer than ever to your todos and calendar.
+              <span className="w-full">
+                <span>and calendar.</span>
+                <span className="">{" "} No need to break up with</span>
               </span>
-              <span>No need to break up with</span>
             </span>
 
-            <span className="text-3xl font-semibold">
+            <span className="text-3xl font-semibold  mt-0">
               {" "}
-              your apps, just connect them.{" "}
+             <span>{" "}your apps, just connect them.{" "}</span> 
+             <span>Like to</span>
             </span>
-            {/* <span> Like to miss meetings? Not with Amie in the menubar.</span>
-            <span> Share your free slots with anyone you like.</span> */}
+            <span className="text-3xl font-semibold">
+            {" "}miss meetings? Not with Amie in the
+            </span>
+            <span className=" text-3xl font-semibold">
+              <span>menubar. {" "}</span>
+              <span>Share your free slots with</span>
+            </span>
+            <span className="text-3xl font-semibold justify-self-start">
+              <span>anyone you like.</span>
+            </span>
           </span>
+        </div> 
+       */}
+
+        <StackedDesktops />
+        <div className="bg-pink-500 h-full flex justify-evenly items-center w-full absolute z-0">
+          <div className="bg-red-500 w-[40%] h-[50%]">
+            {/* periodic image on the left */}
+            {renderImageLeft()}
+          </div>
+          <div className="bg-purple-500 w-[40%] h-[50%]">
+            {/* periodic image on the right */}
+          </div>
         </div>
-        {/* <StackedDesktops /> */}
-        {/* <div className="bg-pink-500 h-full w-full absolute z-0"/> */}
       </motion.div>
     </div>
   );

@@ -1,4 +1,6 @@
+import { useThirdScrollOverlay } from "@/hooks/store/store";
 import Desktop from "./desktop";
+import Image from "next/image";
 
 interface StackedDevicesProps {
   count?: number;
@@ -10,55 +12,68 @@ export default function StackedDesktops({
   count = 3,
   className = "",
 }: StackedDevicesProps) {
-  // const renderVideo = () => {
-  //   if (currentProgression >= 0.99) {
-  //     return (
-  //       <video
-  //         src="/phoneVidOne.mov"
-  //         className="w-full h-full object-fill scale-x-100 origin-left"
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else if (currentProgression >= 0.825) {
-  //     return (
-  //       <video
-  //         src="/phoneVidTwo.mp4"
-  //         className="w-full h-full object-fill scale-x-100 origin-left"
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else if (currentProgression <= 0.66) {
-  //     return (
-  //       <video
-  //         src="/phoneVidOne.mov"
-  //         className="w-full h-full object-fill scale-x-100 origin-left"
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else {
-  //     // Default video or fallback
-  //     return (
-  //       <video
-  //         src="/phoneVidOne.mov"
-  //         className="w-full h-full object-fill scale-x-100 origin-left"
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   }
-  // };
-
+  const { thirdScrollProgress } = useThirdScrollOverlay();
+  const renderVideo = () => {
+    if (thirdScrollProgress >= 0.99) {
+      return (
+        <div className="relative h-full w-full">
+          <video
+            src="/mailTodos.mp4"
+            className="w-full h-full object-contain"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <div className="absolute bottom-0 z-[60] h-[18%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
+            <Image
+              src="/stamponvideo.webp"
+              alt="mailTodos"
+              width={50}
+              height={50}
+            />
+          </div>
+        </div>
+      );
+    } else if (thirdScrollProgress >= 0.7933) {
+      return (
+        <video
+          src="/three.mp4"
+          className="w-full h-full object-contain "
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else if (thirdScrollProgress >= 0.5967) {
+      return (
+        <video
+          src="/two.mp4"
+          className="w-full h-full object-contain "
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else if (thirdScrollProgress >= 0.4) {
+      return (
+        <video
+          src="/one.mp4"
+          className="w-full h-full object-contain "
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      );
+    } else {
+      // Default nothing if not in the right range
+      return " ";
+    }
+  };
+  
   return (
     <div className={`relative h-[60%] w-[50%]${className}`}>
       {Array.from({ length: count }).map((_, index) => (
@@ -82,15 +97,7 @@ export default function StackedDesktops({
               <>
                 {/* Conditionally render videos based on currentProgression */}
                 <div className="relative w-[40vw] h-[90vh] overflow-hidden">
-                  {/* {renderVideo()} */}
-                  <video
-                    src="/one.mp4"
-                    className="w-full h-full object-contain "
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
+                  {renderVideo()}
                 </div>
               </>
             )}
