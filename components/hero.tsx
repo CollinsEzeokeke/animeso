@@ -356,16 +356,16 @@ export default function Hero() {
                     {/* Folder Replacement */}
                     <motion.div className="relative mr-0">
                       <motion.div
-                        className="w-8 h-6 mx-0 rounded"
+                        className="w-8 h-6 mx-0 rounded flex items-center justify-center font-semibold text-sm"
                         style={{
                           backgroundColor,
                           opacity: blackBarSpring,
                         }}
-                      />
+                      >25℃</motion.div>
                       <motion.div
-                        className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat"
+                        className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat bg-black"
                         style={{
-                          backgroundImage: "url('/firstShow.png')",
+                          // backgroundImage: "url('/firstShow.png')",
                           height: heightTransform,
                           width: widthTransform,
                           opacity: opacityTransform,

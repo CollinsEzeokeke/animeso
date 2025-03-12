@@ -53,7 +53,7 @@ export default function SecondScrollOverlay() {
 
   return (
     <div
-      className="h-[140vh] bg-blue-500 z-[60] relative mb-56"
+      className="h-[140vh] z-[60] relative mb-56"
       ref={containerRef}
     >
       <motion.div
@@ -61,7 +61,7 @@ export default function SecondScrollOverlay() {
         style={{ height: orangeHeight }}
       />
       <motion.div
-        className={`h-[80vh] bg-blue-500 w-[80%] z-[1000] ${
+        className={`h-[80vh] w-[80%] z-[1000] ${
           isFixed
             ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
             : "relative mx-auto"
