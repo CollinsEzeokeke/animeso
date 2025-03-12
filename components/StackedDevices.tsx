@@ -1,5 +1,7 @@
 import Device from "./device";
 import { useProgressor } from "@/hooks/store/store";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 interface StackedDevicesProps {
   count?: number;
@@ -12,9 +14,17 @@ export default function StackedDevices({
   count = 3,
   className = "",
 }: StackedDevicesProps) {
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, {
+    margin: "100% 0px 0px 0px", // Start loading when one full viewport away
+    once: true // Only trigger once
+  });
+  
   const {currentProgression} = useProgressor();
   
   const renderVideo = () => {
+    if (!isInView) return null; // Don't render anything if not in view
+
     if (currentProgression >= 0.99) {
       return (
         <video
@@ -24,6 +34,7 @@ export default function StackedDevices({
           muted
           loop
           playsInline
+          preload="auto"
         />
       );
     } else if (currentProgression >= 0.825) {
@@ -35,6 +46,7 @@ export default function StackedDevices({
           muted
           loop
           playsInline
+          preload="auto"
         />
       );
     } else if (currentProgression <= 0.66) {
@@ -46,6 +58,7 @@ export default function StackedDevices({
           muted
           loop
           playsInline
+          preload="auto"
         />
       );
     } else {
@@ -58,13 +71,14 @@ export default function StackedDevices({
           muted
           loop
           playsInline
+          preload="auto"
         />
       );
     }
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} ref={containerRef}>
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}

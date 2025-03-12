@@ -22,8 +22,8 @@ export default function Hero() {
   const { width, height } = useWindowSize();
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
-  const y = useTransform(scrollYProgress, [0, 0.05], ["0%", "-70%"]);
-  const yIndex = useTransform(scrollYProgress, [0, 0.05], ["0%", "-35%"]);
+  const y = useTransform(scrollYProgress, [0, 0.01], ["0%", "-70%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["0%", "-35%"]);
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
@@ -34,7 +34,7 @@ export default function Hero() {
       0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17
     ],
     [
-      1, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
+      1.2, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
       60
     ]
   );
