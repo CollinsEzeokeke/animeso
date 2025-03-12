@@ -13,7 +13,8 @@ import Image from "next/image";
 export default function ThirdScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
-  const { setThirdScrollProgress, thirdScrollProgress } = useThirdScrollOverlay();
+  const { setThirdScrollProgress, thirdScrollProgress } =
+    useThirdScrollOverlay();
 
   // Track scroll progress of the entire red container
   const { scrollYProgress } = useScroll({
@@ -55,81 +56,62 @@ export default function ThirdScrollOverlay() {
 
   const renderImageLeft = () => {
     if (thirdScrollProgress >= 0.99) {
-      return " ";
+      return (
+        <div className="w-[15%] h-[50%] flex items-center justify-end"></div>
+      );
     } else if (thirdScrollProgress >= 0.7933) {
       return (
-        <Image src="/feature-integrations-left.png" alt="mailTodos" width={50} height={50} />
+        <div className="w-[10%] h-[50%] flex items-center justify-end">
+          <Image
+            src="/feature-integrations-left.png"
+            alt="mailTodos"
+            width={700}
+            height={600}
+            className="translate-x-8"
+          />
+        </div>
       );
     } else if (thirdScrollProgress >= 0.5967) {
       return (
-       <Image src="/feature-bar-event.png" alt="mailTodos" width={50} height={50} />
+        <div className="w-[30%] h-[50%] flex items-center justify-end">
+          <Image
+            src="/feature-bar-event.png"
+            alt="mailTodos"
+            width={800}
+            height={700}
+            className="translate-x-10 "
+          />
+        </div>
       );
+    } else if (thirdScrollProgress >= 0.44) {
+      return ("");
     } else {
       // Default nothing if not in the right range
       return " ";
     }
   };
-  // const renderImageRight = () => {
-  //   if (thirdScrollProgress >= 0.99) {
-  //     return (
-  //       <div className="relative h-full w-full">
-  //         <video
-  //           src="/mailTodos.mp4"
-  //           className="w-full h-full object-contain"
-  //           autoPlay
-  //           muted
-  //           loop
-  //           playsInline
-  //         />
-  //         <div className="absolute bottom-0 z-[60] h-[18%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
-  //           <Image
-  //             src="/stamponvideo.webp"
-  //             alt="mailTodos"
-  //             width={50}
-  //             height={50}
-  //           />
-  //         </div>
-  //       </div>
-  //     );
-  //   } else if (thirdScrollProgress >= 0.7933) {
-  //     return (
-  //       <video
-  //         src="/three.mp4"
-  //         className="w-full h-full object-contain "
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else if (thirdScrollProgress >= 0.5967) {
-  //     return (
-  //       <video
-  //         src="/two.mp4"
-  //         className="w-full h-full object-contain "
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else if (thirdScrollProgress >= 0.4) {
-  //     return (
-  //       <video
-  //         src="/one.mp4"
-  //         className="w-full h-full object-contain "
-  //         autoPlay
-  //         muted
-  //         loop
-  //         playsInline
-  //       />
-  //     );
-  //   } else {
-  //     // Default nothing if not in the right range
-  //     return " ";
-  //   }
-  // };
-
+  const renderImageRight = () => {
+    if (thirdScrollProgress >= 0.99) {
+      return "";
+    } else if (thirdScrollProgress >= 0.7933) {
+      return (
+        <Image
+          src="/feature-integrations-right.png"
+          alt="mailTodos"
+          width={200}
+          height={200}
+          className="translate-x-5 "
+        />
+      );
+    } else if (thirdScrollProgress >= 0.5967) {
+      return " ";
+    } else if (thirdScrollProgress >= 0.4) {
+      return " "
+    } else {
+      // Default nothing if not in the right range
+      return " ";
+    }
+  };
 
   return (
     <div
@@ -148,7 +130,7 @@ export default function ThirdScrollOverlay() {
         }
          `}
       >
-{/*         
+        {/*         
         <div
           className={`bg-orange-500 w-[45%] -mt-20 ${
             isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
@@ -185,13 +167,12 @@ export default function ThirdScrollOverlay() {
        */}
 
         <StackedDesktops />
-        <div className="bg-pink-500 h-full flex justify-evenly items-center w-full absolute z-0">
-          <div className="bg-red-500 w-[40%] h-[50%]">
-            {/* periodic image on the left */}
-            {renderImageLeft()}
-          </div>
-          <div className="bg-purple-500 w-[40%] h-[50%]">
+        <div className="h-full flex justify-evenly items-center w-full absolute z-0">
+          {/* periodic image on the left */}
+          {renderImageLeft()}
+          <div className="w-[40%] h-[50%] flex items-center justify-end">
             {/* periodic image on the right */}
+            {renderImageRight()}
           </div>
         </div>
       </motion.div>
