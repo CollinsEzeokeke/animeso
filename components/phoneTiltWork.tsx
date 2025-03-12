@@ -17,7 +17,7 @@ export default function PhoneTiltWork() {
             <div className="flex flex-col items-center -space-y-1 pt-10 w-4/5 h-2/3">
               {/* Primary heading */}
               <span className="flex items-start gap-0">
-                <span className={`text-4xl font-extrabold ${currentProgression >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Enjoy</span>
+                <span className={`text-4xl font-semibold ${currentProgression >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Enjoy</span>
                 <Image
                   src="/email.svg"
                   width={100}
@@ -26,24 +26,24 @@ export default function PhoneTiltWork() {
                   className="opacity-100 animate-fadeIn relative -mt-5"
                   style={{ animationDelay: "0.7s" }}
                 />
-                <span className={`text-4xl font-extrabold  ${currentProgression >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
+                <span className={`text-4xl font-semibold  ${currentProgression >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
                   emails on mobile.
                 </span>
               </span>
 
               {/* Secondary text */}
               <span className={`flex items-start ${currentProgression === 0.825 ? "text-white" : "text-[#a4a1a195]"}`}>
-                <span className="text-4xl font-extrabold ">
+                <span className="text-4xl font-semibold ">
                   Schedule
                 </span>
                 <Image src="/email-todos.svg" width={150} height={200} alt="" className="-mt-5"/>
-                <span className={`text-4xl font-extrabold ml-3  ${currentProgression === 0.825 ? "text-white" : "text-[#a4a1a195]"}`}>with drag</span>
+                <span className={`text-4xl font-semibold ml-3  ${currentProgression === 0.825 ? "text-white" : "text-[#a4a1a195]"}`}>with drag</span>
               </span>
 
               {/* Tertiary text */}
               <span className="flex items-start gap-3">
-                <span className={`text-4xl font-extrabold  ${currentProgression === 0.825 ? "text-white" : "text-[#a4a1a195]"}`}>and drop. </span>
-                <span className={`text-4xl font-extrabold  ${currentProgression <= 0.66 ? "text-white" : "text-[#a4a1a195]"}`}>Made for you.</span>
+                <span className={`text-4xl font-semibold  ${currentProgression === 0.825 ? "text-white" : "text-[#a4a1a195]"}`}>and drop. </span>
+                <span className={`text-4xl font-semibold  ${currentProgression <= 0.66 ? "text-white" : "text-[#a4a1a195]"}`}>Made for you.</span>
               </span>
             </div>
           </div>

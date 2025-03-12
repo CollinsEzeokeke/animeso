@@ -13,6 +13,7 @@ import Image from "next/image";
 export default function ThirdScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
+  const [yValue, setYValue] = useState(140);
   const { setThirdScrollProgress, thirdScrollProgress } =
     useThirdScrollOverlay();
 
@@ -42,15 +43,19 @@ export default function ThirdScrollOverlay() {
 
     if (Math.abs(latest - 0.99) < threshold) {
       setThirdScrollProgress(0.99);
+      setYValue(140);
     }
     if (Math.abs(latest - 0.7933) < threshold) {
       setThirdScrollProgress(0.7933);
+      setYValue(140);
     }
     if (Math.abs(latest - 0.5967) < threshold) {
       setThirdScrollProgress(0.5967);
+      setYValue(50);
     }
     if (Math.abs(latest - 0.4) < threshold) {
       setThirdScrollProgress(0.4);
+      setYValue(20);
     }
   });
 
@@ -84,7 +89,7 @@ export default function ThirdScrollOverlay() {
         </div>
       );
     } else if (thirdScrollProgress >= 0.44) {
-      return ("");
+      return "";
     } else {
       // Default nothing if not in the right range
       return " ";
@@ -107,9 +112,7 @@ export default function ThirdScrollOverlay() {
       return " ";
     } else if (thirdScrollProgress >= 0.4) {
       // side calendar stuff
-      return(<>
-      
-      </>)
+      return <></>;
     } else {
       // Default nothing if not in the right range
       return " ";
@@ -133,47 +136,48 @@ export default function ThirdScrollOverlay() {
         }
          `}
       >
-        {/*         
-        <div
-          className={`bg-orange-500 w-[45%] -mt-20 ${
+        {/* ${
             isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
-          }  z-0`}
+          }  */}
+        <motion.div
+          className={`w-[45%] -mt-20 z-0`}
+          style={{ y: yValue }}
         >
           <span className="flex flex-col gap-2 space-y-0 items-start justify-around ">
             <span className="text-3xl font-semibold flex flex-col justify-around h-[10%] gap-2 pt-0">
-              <span className="">
+              <span className={`${thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
                 Emails are closer than ever to your todos
               </span>
-              <span className="w-full">
+              <span className={`${thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]"} w-full`}>
                 <span>and calendar.</span>
-                <span className="">{" "} No need to break up with</span>
+                <span className={`${thirdScrollProgress >= 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}> No need to break up with</span>
               </span>
             </span>
 
             <span className="text-3xl font-semibold  mt-0">
               {" "}
-             <span>{" "}your apps, just connect them.{" "}</span> 
-             <span>Like to</span>
+              <span className={`${thirdScrollProgress >= 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}> your apps, just connect them. </span>
+              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Like to</span>
             </span>
-            <span className="text-3xl font-semibold">
-            {" "}miss meetings? Not with Amie in the
+            <span className={`text-3xl font-semibold ${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 ? "text-white" : "text-[#a4a1a195]"}`}>
+              {" "}
+              miss meetings? Not with Amie in the
             </span>
             <span className=" text-3xl font-semibold">
-              <span>menubar. {" "}</span>
-              <span>Share your free slots with</span>
+              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 ? "text-white" : "text-[#a4a1a195]"}`}>menubar. </span>
+              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 ? "text-white" : "text-[#a4a1a195]"}`}>Share your free slots with</span>
             </span>
             <span className="text-3xl font-semibold justify-self-start">
-              <span>anyone you like.</span>
+              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 ? "text-white" : "text-[#a4a1a195]"}`}>anyone you like.</span>
             </span>
           </span>
-        </div> 
-       */}
+        </motion.div>
 
         <StackedDesktops />
         <div className="h-full flex justify-evenly items-center w-full absolute z-0">
           {/* periodic image on the left */}
           {renderImageLeft()}
-          <div className="w-[40%] h-[50%] bg-yellow-500 flex items-center justify-end">
+          <div className="w-[40%] h-[50%] flex items-center justify-end">
             {/* periodic image on the right */}
             {renderImageRight()}
           </div>
