@@ -94,7 +94,7 @@ const DirectionAwareScrollComponent = () => {
       willChange: "transform",
       translateZ: 0, // Hardware acceleration
     }),
-    []
+    [y]
   );
 
   return (
