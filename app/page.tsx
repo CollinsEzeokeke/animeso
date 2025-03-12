@@ -66,7 +66,7 @@ export default function Page() {
         </div>
 
         {/* Overlay content that animates on scroll */}
-        <div className="bg-black relative">
+        <div className="bg-black relative mt-[0vh]">
           <ScrollOverlay />
           <SecondScrollOverlay />
           <ThirdScrollOverlay />

@@ -6,7 +6,7 @@ import {
   useScroll,
   useTransform,
   useSpring,
-  // useMotionValueEvent,
+  useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
 import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef, useEffect } from "react";
@@ -47,27 +47,27 @@ export default function Hero() {
     ],
     [
       "15%",
-      "-30%",
-      "-50%",
+      "-20%",
+      "-20%",
       "-60%",
-      "-112%",
-      "-140%",
-      "-155%",
-      "-178%",
-      "-220%",
-      "-270%",
-      "-315%", // 11th value
-      "-400%", // 12th value
-      "-620%", // 13th value
-      "-859.5%", // 14th value
-      "-1029.5%", // 15th value
-      "-1150%", // 16th value
-      "-1265%", // 17th value
-      "-1460%",
-      "-1675%",
-      "-1870%",
-      "-2050%", // Value at 0.16
-      "-2250%", // Keep same value at 0.17
+      "-112%", //this is the value at 0.027
+      "-130%", // this is the value at 0.035
+      "-140%", // this is the value at 0.043
+      "-150%", // this is the value at 0.051
+      "-180%", // this is the value at 0.059
+      "-200%", // this is the value at 0.067
+      "-240%", // this is the value at 0.075
+      "-310%", // this is the value at 0.083
+      "-480%", // this is the value at 0.091
+      "-680%", // this is the value at 0.099
+      "-880%", // this is the value at 0.107
+      "-1080%", // this is the value at 0.115
+      "-1250%", // this is the value at 0.123
+      "-1460%", //this is the value at 0.131
+      "-1650%", // this is the value at 0.139
+      "-1850%", // this is the value at 0.147
+      "-2050%", // this is the Value at 0.155
+      "-2600%", // this is the value at 0.17
       // "-2500%", // Keep same value at 0.17
     ]
   );
@@ -77,7 +77,7 @@ export default function Hero() {
       0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099, 0.107,
       0.115, 0.123, 0.131, 0.17,
     ],
-    [0, 100, 100, 180, 200, 200, 200, 390, 550, 725, 870, 1000, 1300, 1750]
+    [0, 0, 0, 0, 0, 100, 100, 390, 550, 725, 870, 1000, 1200, 1850]
   );
 
   const stiffZoom = useSpring(zoomIn, {
@@ -88,7 +88,7 @@ export default function Hero() {
   const springingAnother = useSpring(movingAnother, {
     stiffness: 300,
     damping: 90,
-    restDelta: 0.001,
+    // restDelta: 0.001,
   });
 
   const xSpring = useSpring(x, {
@@ -160,9 +160,9 @@ export default function Hero() {
       : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
   );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log("this is the latest value: ", latest);
-  // });
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("this is the latest value: ", latest);
+  });
   // Debounced scroll handler for better performance
   useEffect(() => {
     let lastTimestamp = 0;
