@@ -60,6 +60,7 @@ export const VideoLoader = ({
   // Use memoized styles to prevent unnecessary style calculations
   const motionStyles = useMemo(() => ({
     y,
+    scale: 1.01,
     visibility,
     willChange: 'transform, opacity'
   }), [y, visibility]);
@@ -71,7 +72,7 @@ export const VideoLoader = ({
       style={motionStyles}
     >
       <video
-        ref={videoRef}
+        // ref={videoRef}
         autoPlay
         muted
         playsInline

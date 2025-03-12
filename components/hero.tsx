@@ -23,7 +23,7 @@ export default function Hero() {
   const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
   const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
   const y = useTransform(scrollYProgress, [0, 0.01], ["0%", "-70%"]);
-  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["0%", "-35%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-35%"]);
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
@@ -42,11 +42,13 @@ export default function Hero() {
   const movingAnother = useTransform(
     scrollYProgress,
     [
-      0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083,
+      0, 0.005,0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083,
       0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.17,
     ],
     [
-      "0%",
+      "15%",
+      "-30%",
+      "-50%",
       "-60%",
       "-112%",
       "-140%",
@@ -104,7 +106,7 @@ export default function Hero() {
 
   // For the video component holder
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
-  const move = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-10%"]);
+  const move = useTransform(scrollYProgress, [0.1, 0.12], ["-9.5%", "-10%"]);
   // Springs for smoother animations
   const visibilitySpring = useSpring(visibility, {
     stiffness: 500,
@@ -113,7 +115,7 @@ export default function Hero() {
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
 
   //  for the menu bar
-  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["0%", "-9vh"]);
+  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["-9%", "-9vh"]);
   const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
   const backgroundColor = useTransform(
     scrollYProgress,
@@ -192,7 +194,7 @@ export default function Hero() {
         movingStiff.set("-9vh");
         scale.set(0.3);
         y.set("-70%");
-        yIndex.set("-35%");
+        // yIndex.set("-35%");
       }
     };
     const handleScroll = () => {
@@ -225,7 +227,7 @@ export default function Hero() {
     stiffZoom,
     xSpring,
     y,
-    yIndex,
+    // yIndex,
   ]);
   // Separate effect for body overflow to avoid unnecessary renders
   useEffect(() => {
@@ -250,7 +252,7 @@ export default function Hero() {
           <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-50 top-0 relative
+              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-0 top-0 relative
                 ${
                   width <= 768 && height <= 679
                     ? "-mt-[20%]"
@@ -272,11 +274,11 @@ export default function Hero() {
             >
               {" "}
               <motion.div
-                style={{ y: yIndex, opacity: stiffOpacity }}
-                initial={{ y: -10 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.4, delay: 1 }}
-                className={`flex flex-col h-[25%] -mt-[28%] ${
+                style={{ opacity: stiffOpacity, y: yIndex }}
+                initial={{ y: -20 }}
+                animate={{ y: -10}}
+                transition={{ duration: 0.4, delay: 2 }}
+                className={`flex flex-col h-[25%] -mt-[40%] ${
                   width >= 1024 ? "w-5/6" : "w-5/6"
                 } items-center justify-center z-50`}
               >
@@ -335,7 +337,7 @@ export default function Hero() {
                 >
                   {" "}
                   <motion.div
-                    className={`z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-blue-500 ${
+                    className={`z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 ${
                       width <= 768 ? "top-2" : "top-2"
                     }`}
                     style={{

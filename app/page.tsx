@@ -35,7 +35,7 @@ export default function Page() {
           } h-full flex justify-center overflow-hidden relative`}
         >
           <motion.div
-            className={`bg-cover h-[20vh] bg-center fixed top-[8.5vh] flex justify-self-center -translate-x-1/2 bg-no-repeat transition-all z-[1000] ${
+            className={`bg-cover h-[20vh] bg-center fixed top-[8.5vh] flex justify-self-center -translate-x-1/2 bg-no-repeat transition-all z-[100] ${
               width >= 1440
                 ? "w-[12vw]"
                 : width >= 1024

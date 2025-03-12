@@ -1,7 +1,7 @@
 "use client";
 
 import { useWindowSize } from "@uidotdev/usehooks";
-import { useScroll, motion, useTransform, useSpring } from "framer-motion";
+import { useScroll, motion, useTransform } from "framer-motion";
 import { Flame } from "lucide-react";
 import { memo, useMemo } from "react";
 
@@ -77,29 +77,29 @@ const DirectionAwareScrollComponent = () => {
   const y = useTransform(scrollYProgress, [0, 0.005], ["0%", "-100%"]);
 
   // Memoize spring configuration
-  const springConfig = useMemo(
-    () => ({
-      stiffness: 400,
-      damping: 90,
-    }),
-    []
-  );
+  // const springConfig = useMemo(
+  //   () => ({
+  //     stiffness: 400,
+  //     damping: 90,
+  //   }),
+  //   []
+  // );
 
-  const ySpring = useSpring(y, springConfig);
+  // const ySpring = useSpring(y, springConfig);
 
   // Memoize container style to prevent object recreation on render
   const containerStyle = useMemo(
     () => ({
-      y: ySpring,
+      y,
       willChange: "transform",
       translateZ: 0, // Hardware acceleration
     }),
-    [ySpring]
+    []
   );
 
   return (
     <motion.div
-      className="w-screen h-[9.5vh] fixed top-0 z-30 overflow-hidden"
+      className="w-screen h-[9.5vh] fixed top-0 z-[1000] overflow-hidden bg-[#BFBFBF]"
       style={containerStyle}
       // Using document scroll tracking, so no ref needed
       initial={false}
