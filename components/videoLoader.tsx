@@ -72,7 +72,7 @@ export const VideoLoader = ({
       style={motionStyles}
     >
       <video
-        // ref={videoRef}
+        ref={videoRef}
         autoPlay
         muted
         playsInline
