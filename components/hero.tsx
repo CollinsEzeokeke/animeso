@@ -8,7 +8,6 @@ import {
   useSpring,
   useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
-import { Monitor, Plus, Search, Settings } from "lucide-react";
 import { useRef } from "react";
 import { useScaleStore } from "@/hooks/store/store";
 // import ScrollOverlay from "./ScrollOverlay";
@@ -17,28 +16,24 @@ import { useScaleStore } from "@/hooks/store/store";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { setNowState } = useScaleStore();
-  // const { setIsLocked, isLocked } = useStore();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
   const { width, height } = useWindowSize();
-  // const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
-  // const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
-  // const y = useTransform(scrollYProgress, [0, 0.01], ["0%", "-70%"]);
-  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-35%"]);
+  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
   const zoomIn = useTransform(
     scrollYProgress,
     [
-      0.012, 0.02, 0.028, 0.036, 0.044, 0.052, 0.06, 0.068, 0.076, 0.084, 0.092,
-      0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17,
+      0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 
+      0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.163, 0.17
     ],
     [
       1.2, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50,
-      55, 60,
+      55, 60
     ]
   );
 
@@ -51,17 +46,17 @@ export default function Hero() {
     ],
     [
       "15%",
-      "-20%",
-      "-20%",
-      "-60%",
-      "-112%", //this is the value at 0.027
-      "-130%", // this is the value at 0.035
-      "-140%", // this is the value at 0.043
-      "-150%", // this is the value at 0.051
-      "-180%", // this is the value at 0.059
-      "-200%", // this is the value at 0.067
-      "-240%", // this is the value at 0.075
-      "-310%", // this is the value at 0.083
+      "-10%",
+      "-10%",
+      "-10%",
+      "-50%", //this is the value at 0.027
+      "-85%", // this is the value at 0.035
+      "-99%", // this is the value at 0.043
+      "-110%", // this is the value at 0.051
+      "-125%", // this is the value at 0.059
+      "-160%", // this is the value at 0.067
+      "-190%", // this is the value at 0.075
+      "-220%", // this is the value at 0.083
       "-480%", // this is the value at 0.091
       "-680%", // this is the value at 0.099
       "-880%", // this is the value at 0.107
@@ -77,33 +72,35 @@ export default function Hero() {
   );
   const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
   // console.log(typeof(myScale))
-  const x = useTransform(
-    scrollYProgress,
-    [
-      0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099, 0.107,
-      0.115, 0.123, 0.131, 0.17,
-    ],
-    [0, 0, 0, 0, 0, 100, 100, 390, 550, 725, 870, 1000, 1200, 1850]
-  );
+  // const x = useTransform(
+  //   scrollYProgress,
+  //   [
+  //     0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099, 0.107,
+  //     0.115, 0.123, 0.131, 0.17,
+  //   ],
+  //   [0, 0, 0, 0, 0, 10, 100, 390, 550, 725, 870, 1000, 1200, 1850]
+  // );
 
-  const stiffZoom = useSpring(zoomIn, {
-    stiffness: 300,
-    damping: 90,
-    restDelta: 0.001,
-  });
-  const springingAnother = useSpring(movingAnother, {
-    stiffness: 300,
-    damping: 90,
-    // restDelta: 0.001,
-  });
+  const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]);
 
-  const xSpring = useSpring(x, {
-    stiffness: 500,
-    damping: 90,
-    restDelta: 0.01,
-  });
+  // const stiffZoom = useSpring(zoomIn, {
+  //   stiffness: 300,
+  //   damping: 90,
+  //   restDelta: 0.001,
+  // });
+  // const springingAnother = useSpring(movingAnother, {
+  //   stiffness: 300,
+  //   damping: 90,
+  //   // restDelta: 0.001,
+  // });
+
+  // const xSpring = useSpring(x, {
+  //   stiffness: 500,
+  //   damping: 90,
+  //   restDelta: 0.01,
+  // });
   // Opacity for texts on top
-  const reduceOpacity = useTransform(scrollYProgress, [0.29, 0.295], [1, 0]);
+  const reduceOpacity = useTransform(scrollYProgress, [0, 0.01, 0.02], [1, 0.5, 0]);
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
     damping: 60,
@@ -121,19 +118,11 @@ export default function Hero() {
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
 
   //  for the menu bar
-  const moving = useTransform(scrollYProgress, [0.1, 0.12], ["-9%", "-9vh"]);
-  const movingStiff = useSpring(moving, { stiffness: 500, damping: 90 });
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.085, 0.09],
     ["rgb(96, 165, 250)", "transparent"]
   );
-  const containerBgOpacity = useTransform(
-    scrollYProgress,
-    [0.185, 0.19],
-    [1, 0]
-  );
-
   //  folder changes
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
@@ -143,28 +132,26 @@ export default function Hero() {
     [0.155, 0.16],
     ["24px", "40px"]
   );
+  // const videoWidthTransform = useTransform(scrollYProgress, [0.01, 0.02], [90, 1000]);
+  
+
   // Add width transform that changes from w-8 (32px) to w-10 (40px)
-  const widthTransform = useTransform(
-    scrollYProgress,
-    [0.155, 0.16],
-    ["32px", "40px"]
-  );
+  // const widthTransform = useTransform(
+  //   scrollYProgress,
+  //   [0.155, 0.16],
+  //   ["32px", "40px"]
+  // );
   const opacityTransform = useTransform(
     scrollYProgress,
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
-  // Background color transform for the menu bar
-  const bgColorTransform = useTransform(
-    containerBgOpacity,
-    (opacity) => `rgba(255, 255, 255, ${opacity})`
-  );
   // Box shadow transform
-  const boxShadowTransform = useTransform(containerBgOpacity, (opacity) =>
-    opacity === 0
-      ? "none"
-      : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
-  );
+  // const boxShadowTransform = useTransform(containerBgOpacity, (opacity) =>
+  //   opacity === 0
+  //     ? "none"
+  //     : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
+  // );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     console.log("this is the latest value: ", latest);
@@ -173,78 +160,6 @@ export default function Hero() {
     console.log("this is the latest scale value: ", latest);
     setNowState(latest)
   });
-
-  // Debounced scroll handler for better performance
-  // useEffect(() => {
-  //   let lastTimestamp = 0;
-  //   let animationFrameId: number | null = null;
-  //   let isScrollHandlerActive = true;
-  //   // Throttling function to limit execution rate
-  //   const throttledScrollHandler = (currentTimestamp: number) => {
-  //     // Execute at most once every 16ms (~ 60fps)
-  //     if (currentTimestamp - lastTimestamp < 16) {
-  //       return;
-  //     }
-  //     lastTimestamp = currentTimestamp;
-  //     const value = scrollYProgress.get();
-  //     // Only update locked state when threshold is crossed
-  //     if (value >= 0.18 && !isLocked) {
-  //       setIsLocked(true);
-  //     } else if (value < 0.16 && isLocked) {
-  //       setIsLocked(false);
-  //     }
-  //     // Optimize by only setting final values when animation is complete
-  //     if (value >= 0.16 && value < 0.19) {
-  //       // Lock all motion values at final positions - prevents further calculations
-  //       springingAnother.set("-2300%");
-  //       stiffZoom.set(60);
-  //       xSpring.set(1715);
-  //       moveUp.set("-10%");
-  //       movingStiff.set("-9vh");
-  //       scale.set(0.3);
-  //       y.set("-70%");
-  //       // yIndex.set("-35%");
-  //     }
-  //   };
-  //   const handleScroll = () => {
-  //     if (!isScrollHandlerActive) return;
-  //     if (animationFrameId) {
-  //       cancelAnimationFrame(animationFrameId);
-  //     }
-  //     // Use requestAnimationFrame to sync with browser render cycle
-  //     animationFrameId = requestAnimationFrame((timestamp) => {
-  //       throttledScrollHandler(timestamp);
-  //     });
-  //   };
-  //   const unsubscribe = scrollYProgress.on("change", handleScroll);
-  //   return () => {
-  //     isScrollHandlerActive = false;
-  //     if (animationFrameId) {
-  //       cancelAnimationFrame(animationFrameId);
-  //     }
-  //     unsubscribe();
-  //   };
-  // }, [
-  //   isLocked,
-  //   moveUp,
-  //   movingStiff,
-  //   scale,
-  //   scrollYProgress,
-  //   setIsLocked,
-  //   springingAnother,
-  //   stiffZoom,
-  //   xSpring,
-  //   y,
-  //   // yIndex,
-  // ]);
-  // Separate effect for body overflow to avoid unnecessary renders
-  // useEffect(() => {
-  //   if (isLocked) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "auto";
-  //   }
-  // }, [isLocked]);
 
   if (!width) return null;
   if (!height) return null;
@@ -274,9 +189,13 @@ export default function Hero() {
                     : ""
                 }`}
               style={{
-                y: springingAnother,
-                scale: stiffZoom,
-                x: xSpring,
+                y: movingAnother,
+                scale: zoomIn,
+                marginLeft,
+                transformOrigin: "center",
+                // x: xSpring,
+                // width: 10000,
+                height: 400,
                 willChange: "transform", // Hardware acceleration hint
               }}
               ref={containerRef}
@@ -326,80 +245,8 @@ export default function Hero() {
                   All-in-done.
                 </p>
               </motion.div>
-              <VideoLoader visibility={visibilitySpring} y={moveUp} />
+              <VideoLoader visibility={visibilitySpring} y={moveUp} opacityTransform={opacityTransform} backgroundColor={backgroundColor} blackBarSpring={blackBarSpring} heightTransform={heightTransform} />
               {/* New wrapper div for bottom placement */}
-              <div
-                className={`absolute bottom-0 left-0 w-full pointer-events-none ${
-                  width <= 768
-                    ? "flex items-center bg-amber-950 h-[45vh]"
-                    : "h-[90vh]"
-                }`}
-              >
-                {" "}
-                {/* Full container overlay */}
-                <div
-                  className={`relative w-full flex ${
-                    width <= 768
-                      ? "bg-red-500 justify-center items-center h-full"
-                      : "items-end justify-center h-full"
-                  }`}
-                >
-                  {" "}
-                  <motion.div
-                    className={`z-50 w-48 min-h-[50px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 ${
-                      width <= 768 ? "top-2" : "top-2"
-                    }`}
-                    style={{
-                      y: movingStiff,
-                      backgroundColor: bgColorTransform,
-                      boxShadow: boxShadowTransform,
-                      willChange: "transform, background-color, box-shadow",
-                    }}
-                  >
-                    {/* Search Icon */}
-                    <Search className="w-5 h-5 mx-1 text-gray-700" />
-
-                    {/* Line Separator */}
-                    <div className="w-px h-6 bg-gray-300 mx-2"></div>
-
-                    {/* Folder Replacement */}
-                    <motion.div className="relative mr-0">
-                      <motion.div
-                        className="w-8 h-6 mx-0 rounded flex items-center justify-center font-semibold text-sm"
-                        style={{
-                          backgroundColor,
-                          opacity: blackBarSpring,
-                        }}
-                      >
-                        25℃
-                      </motion.div>
-                      <motion.div
-                        className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat bg-black"
-                        style={{
-                          // backgroundImage: "url('/firstShow.png')",
-                          height: heightTransform,
-                          width: widthTransform,
-                          opacity: opacityTransform,
-                          willChange: "opacity, width, height",
-                        }}
-                      />
-                      {/* <ScrollOverlay /> */}
-                      {/* </motion.div> */}
-                    </motion.div>
-                    {/* Plus Icon */}
-                    <Plus className="w-5 h-5 mx-1 text-gray-700" />
-
-                    {/* Line Separator */}
-                    <div className="w-px h-6 bg-gray-300 mx-2"></div>
-
-                    {/* Monitor Icon */}
-                    <Monitor className="w-5 h-5 mx-1 text-gray-700" />
-
-                    {/* Settings Icon */}
-                    <Settings className="w-5 h-5 mx-2 text-gray-700" />
-                  </motion.div>
-                </div>
-              </div>
             </motion.div>
 
             {/* makes contents unclickable */}
