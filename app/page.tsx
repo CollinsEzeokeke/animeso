@@ -11,6 +11,8 @@ import SecondScrollOverlay from "@/components/SecondScrollOverlay";
 import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
 import ActionButtons from "@/components/ActionButtons";
 
+// import Home from "@/components/TobeReviewed";
+
 export default function Page() {
   const { width, height } = useWindowSize();
   const { scrollYProgress } = useScroll();
@@ -80,3 +82,19 @@ export default function Page() {
     </Geiger>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+// export default function Page() {
+//   return(
+//     <Home />
+//   )
+// }

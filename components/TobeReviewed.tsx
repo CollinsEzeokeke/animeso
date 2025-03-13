@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Home() {
   const { scrollYProgress } = useScroll();
   return (
-    <div className="bg-blue-500 mb-[100vh]">
+    <div className="bg-blue-500 mb-[100vh] overflow-x-auto">
       <motion.div
         // id="scroll"
         style={{
@@ -19,6 +19,7 @@ export default function Home() {
         }}
       />
       <div className="h-[150vh] bg-red-400 mt-[150vh]" />
+      {/* compass Svg */}
       <span className="absolute right-1 bottom-1 top-auto bg-white shadow-compass rounded-[8px] p-1">
         <span className="block group-hover:-rotate-3 transition-transform duration-300 ease-[cubic-bezier(0.18,0.89,0.32,1.27)]">
           <svg
