@@ -25,7 +25,7 @@ export default function StackedDesktops({
             loop
             playsInline
           />
-          <div className="absolute bottom-0 z-[60] h-[18%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
+          <div className="absolute bottom-0 z-[60] h-[5%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
             <Image
               src="/stamponvideo.webp"
               alt="mailTodos"
