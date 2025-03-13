@@ -27,42 +27,42 @@ export const VideoLoader = ({
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canScroll, setCanScroll] = useState(false);
-  const [currentWidth, setCurrentWidth] = useState(0);
-  const [baseWidth, setBaseWidth] = useState(0);
+  // const [currentWidth, setCurrentWidth] = useState(0);
+  // const [baseWidth, setBaseWidth] = useState(0);
 
-  // Measure the initial width of the container
-  useEffect(() => {
-    setTimeout(() => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setBaseWidth(width);
-        setCurrentWidth(width);
-      }
-    }, 1); // Even a 0ms timeout pushes execution to after paint
-  }, []);
+  // // Measure the initial width of the container
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (containerRef.current) {
+  //       const width = containerRef.current.offsetWidth;
+  //       setBaseWidth(width);
+  //       setCurrentWidth(width);
+  //     }
+  //   }, 1); // Even a 0ms timeout pushes execution to after paint
+  // }, []);
 
-  useEffect(() => {
-    const updateContainerWidth = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setBaseWidth(width);
-        setCurrentWidth(width);
+  // useEffect(() => {
+  //   const updateContainerWidth = () => {
+  //     if (containerRef.current) {
+  //       const width = containerRef.current.offsetWidth;
+  //       setBaseWidth(width);
+  //       setCurrentWidth(width);
         
-  console.log("this is the base width coming from the useEffect", baseWidth);
-  console.log("this is the current width coming from the useEffect", currentWidth);
-      }
-    };
+  // console.log("this is the base width coming from the useEffect", baseWidth);
+  // console.log("this is the current width coming from the useEffect", currentWidth);
+  //     }
+  //   };
 
-    // Initial measurement with timeout
-    setTimeout(updateContainerWidth, 0);
+  //   // Initial measurement with timeout
+  //   setTimeout(updateContainerWidth, 0);
 
-    // Update on resize
-    window.addEventListener("resize", updateContainerWidth);
-    return () => window.removeEventListener("resize", updateContainerWidth);
-  }, [baseWidth, currentWidth]);
+  //   // Update on resize
+  //   window.addEventListener("resize", updateContainerWidth);
+  //   return () => window.removeEventListener("resize", updateContainerWidth);
+  // }, [baseWidth, currentWidth]);
 
-  console.log("this is the base width", baseWidth);
-  console.log("this is the current width", currentWidth);
+  // console.log("this is the base width", baseWidth);
+  // console.log("this is the current width", currentWidth);
   // Video event handlers
   useEffect(() => {
     // Skip unnecessary work if video ref isn't available

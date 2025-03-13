@@ -8,7 +8,7 @@ import {
   useSpring,
   useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScaleStore } from "@/hooks/store/store";
 // import ScrollOverlay from "./ScrollOverlay";
 // import { useStore } from "@/hooks/store/store";
@@ -22,6 +22,52 @@ export default function Hero() {
   });
   const { width, height } = useWindowSize();
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
+
+
+
+
+
+
+  const [currentWidth, setCurrentWidth] = useState(0);
+  const [baseWidth, setBaseWidth] = useState(0);
+
+  // Measure the initial width of the container
+  useEffect(() => {
+    setTimeout(() => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setBaseWidth(width);
+        setCurrentWidth(width);
+      }
+    }, 1); // Even a 0ms timeout pushes execution to after paint
+  }, []);
+
+  useEffect(() => {
+    const updateContainerWidth = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setBaseWidth(width);
+        setCurrentWidth(width);
+        
+  console.log("this is the base width coming from the useEffect from hero ", baseWidth);
+  console.log("this is the current width coming from the useEffect from hero", currentWidth);
+      }
+    };
+
+    // Initial measurement with timeout
+    setTimeout(updateContainerWidth, 0);
+
+    // Update on resize
+    window.addEventListener("resize", updateContainerWidth);
+    return () => window.removeEventListener("resize", updateContainerWidth);
+  }, [baseWidth, currentWidth]);
+
+  console.log("this is the base width from hero.tsx", baseWidth);
+  console.log("this is the current width from hero.tsx", currentWidth);
+
+
+
+
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
