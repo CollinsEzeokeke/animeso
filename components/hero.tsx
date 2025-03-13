@@ -67,39 +67,11 @@ export default function Hero() {
       "-1850%", // this is the value at 0.147
       "-2050%", // this is the Value at 0.155
       "-2300%", // this is the value at 0.17
-      // "-2500%", // Keep same value at 0.17
     ]
   );
   const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
-  // console.log(typeof(myScale))
-  // const x = useTransform(
-  //   scrollYProgress,
-  //   [
-  //     0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099, 0.107,
-  //     0.115, 0.123, 0.131, 0.17,
-  //   ],
-  //   [0, 0, 0, 0, 0, 10, 100, 390, 550, 725, 870, 1000, 1200, 1850]
-  // );
-
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]);
-
-  // const stiffZoom = useSpring(zoomIn, {
-  //   stiffness: 300,
-  //   damping: 90,
-  //   restDelta: 0.001,
-  // });
-  // const springingAnother = useSpring(movingAnother, {
-  //   stiffness: 300,
-  //   damping: 90,
-  //   // restDelta: 0.001,
-  // });
-
-  // const xSpring = useSpring(x, {
-  //   stiffness: 500,
-  //   damping: 90,
-  //   restDelta: 0.01,
-  // });
-  // Opacity for texts on top
+  // opacity for the text
   const reduceOpacity = useTransform(scrollYProgress, [0, 0.01, 0.02], [1, 0.5, 0]);
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
@@ -132,26 +104,12 @@ export default function Hero() {
     [0.155, 0.16],
     ["24px", "40px"]
   );
-  // const videoWidthTransform = useTransform(scrollYProgress, [0.01, 0.02], [90, 1000]);
-  
 
-  // Add width transform that changes from w-8 (32px) to w-10 (40px)
-  // const widthTransform = useTransform(
-  //   scrollYProgress,
-  //   [0.155, 0.16],
-  //   ["32px", "40px"]
-  // );
   const opacityTransform = useTransform(
     scrollYProgress,
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
-  // Box shadow transform
-  // const boxShadowTransform = useTransform(containerBgOpacity, (opacity) =>
-  //   opacity === 0
-  //     ? "none"
-  //     : "var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)"
-  // );
   //  this is where the event listener for the scrollYProgress is set for checks and calculations
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     console.log("this is the latest value: ", latest);
@@ -170,7 +128,6 @@ export default function Hero() {
           className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center"
           style={{
             zIndex: 10,
-            // marginTop: "9.5vh", // Add margin for header space
           }}
         >
           <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
@@ -193,8 +150,6 @@ export default function Hero() {
                 scale: zoomIn,
                 marginLeft,
                 transformOrigin: "center",
-                // x: xSpring,
-                // width: 10000,
                 height: 400,
                 willChange: "transform", // Hardware acceleration hint
               }}
@@ -257,7 +212,3 @@ export default function Hero() {
     </>
   );
 }
-
-// lock the height at this point since it is where the background forms
-
-// 0.15961945031712474
