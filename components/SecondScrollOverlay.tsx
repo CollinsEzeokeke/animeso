@@ -53,7 +53,7 @@ export default function SecondScrollOverlay() {
 
   return (
     <div
-      className="h-[140vh] z-[60] relative mb-56"
+      className="h-[140vh] z-[60] relative mb-56 bg-black"
       ref={containerRef}
     >
       <motion.div

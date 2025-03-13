@@ -68,13 +68,11 @@ export default function Page() {
         </div>
 
         {/* Overlay content that animates on scroll */}
-        <div className="bg-black relative -mt-[10vh]">
-          <ScrollOverlay />
-          <SecondScrollOverlay />
-          <ThirdScrollOverlay />
-          <div className="h-screen"/>
-          <ActionButtons />
-        </div>
+        <ScrollOverlay />
+        <SecondScrollOverlay />
+        <ThirdScrollOverlay />
+        <div className="h-screen bg-pink-50" />
+        <ActionButtons />
 
         {/* Post-scroll content */}
         {/* {postScrollContent} */}
@@ -82,16 +80,6 @@ export default function Page() {
     </Geiger>
   );
 }
-
-
-
-
-
-
-
-
-
-
 
 // export default function Page() {
 //   return(

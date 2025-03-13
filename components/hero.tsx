@@ -9,20 +9,23 @@ import {
   useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
 import { Monitor, Plus, Search, Settings } from "lucide-react";
-import { useRef, useEffect } from "react";
-import { useStore } from "@/hooks/store/store";
+import { useRef } from "react";
+import { useScaleStore } from "@/hooks/store/store";
+// import ScrollOverlay from "./ScrollOverlay";
+// import { useStore } from "@/hooks/store/store";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { setIsLocked, isLocked } = useStore();
+  const { setNowState } = useScaleStore();
+  // const { setIsLocked, isLocked } = useStore();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
   const { width, height } = useWindowSize();
-  const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
-  const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
-  const y = useTransform(scrollYProgress, [0, 0.01], ["0%", "-70%"]);
+  // const rawScale = useTransform(scrollYProgress, [0, 0.05], [1.1, 0.3]);
+  // const scale = useSpring(rawScale, { stiffness: 400, damping: 90 });
+  // const y = useTransform(scrollYProgress, [0, 0.01], ["0%", "-70%"]);
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-35%"]);
 
   // this is where the basic animation configuration starts for the hero zoom effect
@@ -31,19 +34,20 @@ export default function Hero() {
     scrollYProgress,
     [
       0.012, 0.02, 0.028, 0.036, 0.044, 0.052, 0.06, 0.068, 0.076, 0.084, 0.092,
-      0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17
+      0.1, 0.108, 0.116, 0.124, 0.132, 0.14, 0.148, 0.156, 0.17,
     ],
     [
-      1.2, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55,
-      60
+      1.2, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50,
+      55, 60,
     ]
   );
 
   const movingAnother = useTransform(
     scrollYProgress,
     [
-      0, 0.005,0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083,
-      0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.17,
+      0, 0.005, 0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075,
+      0.083, 0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155,
+      0.17,
     ],
     [
       "15%",
@@ -67,10 +71,12 @@ export default function Hero() {
       "-1650%", // this is the value at 0.139
       "-1850%", // this is the value at 0.147
       "-2050%", // this is the Value at 0.155
-      "-2600%", // this is the value at 0.17
+      "-2300%", // this is the value at 0.17
       // "-2500%", // Keep same value at 0.17
     ]
   );
+  const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
+  // console.log(typeof(myScale))
   const x = useTransform(
     scrollYProgress,
     [
@@ -163,80 +169,83 @@ export default function Hero() {
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     console.log("this is the latest value: ", latest);
   });
+  useMotionValueEvent(myScale, "change", (latest) => {
+    console.log("this is the latest scale value: ", latest);
+    setNowState(latest)
+  });
+
   // Debounced scroll handler for better performance
-  useEffect(() => {
-    let lastTimestamp = 0;
-    let animationFrameId: number | null = null;
-    let isScrollHandlerActive = true;
-    // Throttling function to limit execution rate
-    const throttledScrollHandler = (currentTimestamp: number) => {
-      // Execute at most once every 16ms (~ 60fps)
-      if (currentTimestamp - lastTimestamp < 16) {
-        return;
-      }
-
-      lastTimestamp = currentTimestamp;
-      const value = scrollYProgress.get();
-      // Only update locked state when threshold is crossed
-      if (value >= 0.18 && !isLocked) {
-        setIsLocked(true);
-      } else if (value < 0.16 && isLocked) {
-        setIsLocked(false);
-      }
-
-      // Optimize by only setting final values when animation is complete
-      if (value >= 0.16 && value < 0.19) {
-        // Lock all motion values at final positions - prevents further calculations
-        springingAnother.set("-2300%");
-        stiffZoom.set(60);
-        xSpring.set(1715);
-        moveUp.set("-10%");
-        movingStiff.set("-9vh");
-        scale.set(0.3);
-        y.set("-70%");
-        // yIndex.set("-35%");
-      }
-    };
-    const handleScroll = () => {
-      if (!isScrollHandlerActive) return;
-
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      // Use requestAnimationFrame to sync with browser render cycle
-      animationFrameId = requestAnimationFrame((timestamp) => {
-        throttledScrollHandler(timestamp);
-      });
-    };
-    const unsubscribe = scrollYProgress.on("change", handleScroll);
-    return () => {
-      isScrollHandlerActive = false;
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      unsubscribe();
-    };
-  }, [
-    isLocked,
-    moveUp,
-    movingStiff,
-    scale,
-    scrollYProgress,
-    setIsLocked,
-    springingAnother,
-    stiffZoom,
-    xSpring,
-    y,
-    // yIndex,
-  ]);
+  // useEffect(() => {
+  //   let lastTimestamp = 0;
+  //   let animationFrameId: number | null = null;
+  //   let isScrollHandlerActive = true;
+  //   // Throttling function to limit execution rate
+  //   const throttledScrollHandler = (currentTimestamp: number) => {
+  //     // Execute at most once every 16ms (~ 60fps)
+  //     if (currentTimestamp - lastTimestamp < 16) {
+  //       return;
+  //     }
+  //     lastTimestamp = currentTimestamp;
+  //     const value = scrollYProgress.get();
+  //     // Only update locked state when threshold is crossed
+  //     if (value >= 0.18 && !isLocked) {
+  //       setIsLocked(true);
+  //     } else if (value < 0.16 && isLocked) {
+  //       setIsLocked(false);
+  //     }
+  //     // Optimize by only setting final values when animation is complete
+  //     if (value >= 0.16 && value < 0.19) {
+  //       // Lock all motion values at final positions - prevents further calculations
+  //       springingAnother.set("-2300%");
+  //       stiffZoom.set(60);
+  //       xSpring.set(1715);
+  //       moveUp.set("-10%");
+  //       movingStiff.set("-9vh");
+  //       scale.set(0.3);
+  //       y.set("-70%");
+  //       // yIndex.set("-35%");
+  //     }
+  //   };
+  //   const handleScroll = () => {
+  //     if (!isScrollHandlerActive) return;
+  //     if (animationFrameId) {
+  //       cancelAnimationFrame(animationFrameId);
+  //     }
+  //     // Use requestAnimationFrame to sync with browser render cycle
+  //     animationFrameId = requestAnimationFrame((timestamp) => {
+  //       throttledScrollHandler(timestamp);
+  //     });
+  //   };
+  //   const unsubscribe = scrollYProgress.on("change", handleScroll);
+  //   return () => {
+  //     isScrollHandlerActive = false;
+  //     if (animationFrameId) {
+  //       cancelAnimationFrame(animationFrameId);
+  //     }
+  //     unsubscribe();
+  //   };
+  // }, [
+  //   isLocked,
+  //   moveUp,
+  //   movingStiff,
+  //   scale,
+  //   scrollYProgress,
+  //   setIsLocked,
+  //   springingAnother,
+  //   stiffZoom,
+  //   xSpring,
+  //   y,
+  //   // yIndex,
+  // ]);
   // Separate effect for body overflow to avoid unnecessary renders
-  useEffect(() => {
-    if (isLocked) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [isLocked]);
+  // useEffect(() => {
+  //   if (isLocked) {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "auto";
+  //   }
+  // }, [isLocked]);
+
   if (!width) return null;
   if (!height) return null;
   return (
@@ -276,7 +285,7 @@ export default function Hero() {
               <motion.div
                 style={{ opacity: stiffOpacity, y: yIndex }}
                 initial={{ y: -20 }}
-                animate={{ y: -10}}
+                animate={{ y: -10 }}
                 transition={{ duration: 0.4, delay: 2 }}
                 className={`flex flex-col h-[25%] -mt-[40%] ${
                   width >= 1024 ? "w-5/6" : "w-5/6"
@@ -361,7 +370,9 @@ export default function Hero() {
                           backgroundColor,
                           opacity: blackBarSpring,
                         }}
-                      >25℃</motion.div>
+                      >
+                        25℃
+                      </motion.div>
                       <motion.div
                         className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat bg-black"
                         style={{
@@ -372,6 +383,8 @@ export default function Hero() {
                           willChange: "opacity, width, height",
                         }}
                       />
+                      {/* <ScrollOverlay /> */}
+                      {/* </motion.div> */}
                     </motion.div>
                     {/* Plus Icon */}
                     <Plus className="w-5 h-5 mx-1 text-gray-700" />
