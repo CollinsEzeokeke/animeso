@@ -13,6 +13,8 @@ export const VideoLoader = ({
   backgroundColor,
   blackBarSpring,
   heightTransform,
+  zoomingE,
+  marging
 }: // videoWidthTransform,
 {
   y: MotionValue<string>;
@@ -21,6 +23,8 @@ export const VideoLoader = ({
   backgroundColor: MotionValue<string>;
   blackBarSpring: MotionValue<number>;
   heightTransform: MotionValue<string>;
+  zoomingE: number;
+  marging: MotionValue<number>
   // videoWidthTransform: MotionValue<string>;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -112,11 +116,12 @@ export const VideoLoader = ({
       scale: 1.01,
       visibility,
       willChange: "transform, opacity",
+      width: zoomingE,
       // width: 1000, // from 0.01 to 0.02
-      // marginLeft: 100,
+      marginLeft: marging,
       // width: videoWidthTransform,
     }),
-    [y, visibility]
+    [y, visibility, zoomingE, marging]
   );
 
   const { width } = useWindowSize();
@@ -135,11 +140,7 @@ export const VideoLoader = ({
         muted
         playsInline
         className="h-full w-full object-obtain"
-        preload="auto"
-        // style={{
-        //   width: videoWidthTransform,
-        //   // marginLeft: 100,
-        // }}
+        preload="auto" 
       >
         <source src="/minor.mp4" type="video/mp4" />
       </motion.video>

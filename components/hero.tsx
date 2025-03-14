@@ -16,77 +16,50 @@ import { useScaleStore } from "@/hooks/store/store";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { setNowState } = useScaleStore();
+  const [zoomIng, setZoomIng] = useState(0);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
   const { width, height } = useWindowSize();
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
-
-
-
-
-
-
+  const widthCheckRef = useRef<HTMLDivElement>(null);
+  const [isLatest, setIsLatest ] = useState(0);
   const [currentWidth, setCurrentWidth] = useState(0);
   const [baseWidth, setBaseWidth] = useState(0);
 
   // Measure the initial width of the container
   useEffect(() => {
     setTimeout(() => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
+      if (widthCheckRef.current) {
+        const width = widthCheckRef.current.offsetWidth;
         setBaseWidth(width);
         setCurrentWidth(width);
       }
     }, 1); // Even a 0ms timeout pushes execution to after paint
   }, []);
 
-  useEffect(() => {
-    const updateContainerWidth = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setBaseWidth(width);
-        setCurrentWidth(width);
-        
-  console.log("this is the base width coming from the useEffect from hero ", baseWidth);
-  console.log("this is the current width coming from the useEffect from hero", currentWidth);
-      }
-    };
-
-    // Initial measurement with timeout
-    setTimeout(updateContainerWidth, 0);
-
-    // Update on resize
-    window.addEventListener("resize", updateContainerWidth);
-    return () => window.removeEventListener("resize", updateContainerWidth);
-  }, [baseWidth, currentWidth]);
-
   console.log("this is the base width from hero.tsx", baseWidth);
   console.log("this is the current width from hero.tsx", currentWidth);
-
-
-
-
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
   const zoomIn = useTransform(
     scrollYProgress,
     [
-      0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075, 0.083, 0.091, 
-      0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.163, 0.17
+      0.019, 0.027, 0.067, 0.075, 0.083, 0.091,
+      0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.163, 0.17,
     ],
     [
-      1.2, 2.5, 3.5, 4.1, 4.5, 5, 6, 7, 8, 10, 15, 20, 25, 30, 35, 40, 45, 50,
-      55, 60
+      1.2, 5, 7, 7.5, 8, 12, 15, 20, 25, 30, 35, 40, 45, 50,
+      55, 60,
     ]
   );
 
   const movingAnother = useTransform(
     scrollYProgress,
     [
-      0, 0.005, 0.011, 0.019, 0.027, 0.035, 0.043, 0.051, 0.059, 0.067, 0.075,
+      0, 0.005, 0.011, 0.019, 0.027, 0.059, 0.067, 0.075,
       0.083, 0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155,
       0.17,
     ],
@@ -95,30 +68,32 @@ export default function Hero() {
       "-10%",
       "-10%",
       "-10%",
-      "-50%", //this is the value at 0.027
-      "-85%", // this is the value at 0.035
-      "-99%", // this is the value at 0.043
-      "-110%", // this is the value at 0.051
-      "-125%", // this is the value at 0.059
-      "-160%", // this is the value at 0.067
-      "-190%", // this is the value at 0.075
-      "-220%", // this is the value at 0.083
-      "-480%", // this is the value at 0.091
-      "-680%", // this is the value at 0.099
-      "-880%", // this is the value at 0.107
-      "-1080%", // this is the value at 0.115
-      "-1250%", // this is the value at 0.123
-      "-1460%", //this is the value at 0.131
-      "-1650%", // this is the value at 0.139
+      "-155%", //this is the value at 0.027
+      "-200%", // this is the value at 0.059
+      "-211%", // this is the value at 0.067
+      "-228%", // this is the value at 0.075
+      "-245%", // this is the value at 0.083
+      "-395%", // this is the value at 0.091
+      "-514.5%", // this is the value at 0.099
+      "-712%", // this is the value at 0.107
+      "-905%", // this is the value at 0.115
+      "-1100%", // this is the value at 0.123
+      "-1255%", //this is the value at 0.131
+      "-1525%", // this is the value at 0.139
       "-1850%", // this is the value at 0.147
       "-2050%", // this is the Value at 0.155
       "-2300%", // this is the value at 0.17
     ]
   );
+  const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20])
   const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]);
   // opacity for the text
-  const reduceOpacity = useTransform(scrollYProgress, [0, 0.01, 0.02], [1, 0.5, 0]);
+  const reduceOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.01, 0.02],
+    [1, 0.5, 0]
+  );
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
     damping: 60,
@@ -156,14 +131,24 @@ export default function Hero() {
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
-  //  this is where the event listener for the scrollYProgress is set for checks and calculations
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     console.log("this is the latest value: ", latest);
   });
   useMotionValueEvent(myScale, "change", (latest) => {
     console.log("this is the latest scale value: ", latest);
-    setNowState(latest)
+    setNowState(latest);
   });
+  useMotionValueEvent(zoomIn, "change", (latest) => {
+    // console.log("this is the latest zoom value: ", latest);
+    if(latest != 0 ) {
+      setIsLatest(20)
+    }
+    if (latest === 4.8) {
+      setZoomIng(4.8);
+    }
+    // setZoomIng(latest);
+  });
+  const zoomingE = baseWidth + zoomIng + isLatest;
 
   if (!width) return null;
   if (!height) return null;
@@ -176,10 +161,13 @@ export default function Hero() {
             zIndex: 10,
           }}
         >
-          <motion.div className="flex justify-center absolute pt-0 top-[4vh] w-full h-screen">
+          <motion.div
+            className="flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen"
+            ref={widthCheckRef}
+          >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-[65vw] flex items-center justify-center z-0 top-0 relative
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative
                 ${
                   width <= 768 && height <= 679
                     ? "-mt-[20%]"
@@ -246,7 +234,16 @@ export default function Hero() {
                   All-in-done.
                 </p>
               </motion.div>
-              <VideoLoader visibility={visibilitySpring} y={moveUp} opacityTransform={opacityTransform} backgroundColor={backgroundColor} blackBarSpring={blackBarSpring} heightTransform={heightTransform} />
+              <VideoLoader
+                visibility={visibilitySpring}
+                zoomingE={zoomingE}
+                y={moveUp}
+                opacityTransform={opacityTransform}
+                backgroundColor={backgroundColor}
+                blackBarSpring={blackBarSpring}
+                heightTransform={heightTransform}
+                marging={marging}
+              />
               {/* New wrapper div for bottom placement */}
             </motion.div>
 
