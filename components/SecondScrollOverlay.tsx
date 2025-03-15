@@ -21,8 +21,6 @@ export default function SecondScrollOverlay() {
 
   const { setCurrentProgression } = useProgressor();
 
-  //  equal division into three main points and equal at the same time from 0.99 to 0.66
-  // is: 0.99 to 0.825 to 0.66
 
   const orangeHeight = useTransform(
     scrollYProgress,

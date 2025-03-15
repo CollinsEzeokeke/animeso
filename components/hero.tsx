@@ -10,8 +10,6 @@ import {
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
 import { useEffect, useRef, useState } from "react";
 import { useScaleStore } from "@/hooks/store/store";
-// import ScrollOverlay from "./ScrollOverlay";
-// import { useStore } from "@/hooks/store/store";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,7 +23,6 @@ export default function Hero() {
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
   const widthCheckRef = useRef<HTMLDivElement>(null);
   const [isLatest, setIsLatest] = useState(0);
-  // const [currentWidth, setCurrentWidth] = useState(0);
   const [baseWidth, setBaseWidth] = useState(0);
 
   // Measure the initial width of the container
@@ -34,13 +31,9 @@ export default function Hero() {
       if (widthCheckRef.current) {
         const width = widthCheckRef.current.offsetWidth;
         setBaseWidth(width);
-        // setCurrentWidth(width);
       }
     }, 1); // Even a 0ms timeout pushes execution to after paint
   }, []);
-
-  // console.log("this is the base width from hero.tsx", baseWidth);
-  // console.log("this is the current width from hero.tsx", currentWidth);
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
@@ -128,18 +121,7 @@ export default function Hero() {
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log("this is the latest value: ", latest);
-  //   fetch("/api/log-scroll", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ scrollProgress: latest }),
-  //   });
-  // });
   useMotionValueEvent(myScale, "change", (latest) => {
-    // console.log("this is the latest scale value: ", latest);
     setNowState(latest);
   });
   useMotionValueEvent(zoomIn, "change", (latest) => {
@@ -147,10 +129,7 @@ export default function Hero() {
       setIsLatest(20);
     }
     setZoomIng(Math.min(latest, 5.6));
-    // console.log("this is the latest zoom value: ", latest);
-    // You can also track if we've reached the cap
   });
-  console.log("this is the zoomIng value: ", zoomIng);
   const zoomingE = baseWidth + zoomIng + isLatest;
 
   if (!width) return null;

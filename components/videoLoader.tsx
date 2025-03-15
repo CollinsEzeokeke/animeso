@@ -14,7 +14,7 @@ export const VideoLoader = ({
   blackBarSpring,
   heightTransform,
   zoomingE,
-  marging
+  marging,
 }: // videoWidthTransform,
 {
   y: MotionValue<string>;
@@ -24,50 +24,13 @@ export const VideoLoader = ({
   blackBarSpring: MotionValue<number>;
   heightTransform: MotionValue<string>;
   zoomingE: number;
-  marging: MotionValue<number>
+  marging: MotionValue<number>;
   // videoWidthTransform: MotionValue<string>;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canScroll, setCanScroll] = useState(false);
-  // const [currentWidth, setCurrentWidth] = useState(0);
-  // const [baseWidth, setBaseWidth] = useState(0);
-
-  // // Measure the initial width of the container
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (containerRef.current) {
-  //       const width = containerRef.current.offsetWidth;
-  //       setBaseWidth(width);
-  //       setCurrentWidth(width);
-  //     }
-  //   }, 1); // Even a 0ms timeout pushes execution to after paint
-  // }, []);
-
-  // useEffect(() => {
-  //   const updateContainerWidth = () => {
-  //     if (containerRef.current) {
-  //       const width = containerRef.current.offsetWidth;
-  //       setBaseWidth(width);
-  //       setCurrentWidth(width);
-        
-  // console.log("this is the base width coming from the useEffect", baseWidth);
-  // console.log("this is the current width coming from the useEffect", currentWidth);
-  //     }
-  //   };
-
-  //   // Initial measurement with timeout
-  //   setTimeout(updateContainerWidth, 0);
-
-  //   // Update on resize
-  //   window.addEventListener("resize", updateContainerWidth);
-  //   return () => window.removeEventListener("resize", updateContainerWidth);
-  // }, [baseWidth, currentWidth]);
-
-  // console.log("this is the base width", baseWidth);
-  // console.log("this is the current width", currentWidth);
-  // Video event handlers
   useEffect(() => {
     // Skip unnecessary work if video ref isn't available
     if (!videoRef.current) return;
@@ -140,7 +103,7 @@ export const VideoLoader = ({
         muted
         playsInline
         className="h-full w-full object-obtain"
-        preload="auto" 
+        preload="auto"
       >
         <source src="/minor.mp4" type="video/mp4" />
       </motion.video>
@@ -164,12 +127,6 @@ export const VideoLoader = ({
             className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-blue-500 ${
               width <= 768 ? "top-2" : "top-2"
             }`}
-            style={
-              {
-                // marginLeft: 30, // from 0.04 to 0.08
-                // width: 400,
-              }
-            }
           >
             {/* Search Icon */}
             <Search className="w-5 h-5 mx-1 text-gray-700" />
@@ -191,15 +148,11 @@ export const VideoLoader = ({
               <motion.div
                 className="w-8 mx-0 rounded absolute top-0 left-0 bg-center bg-cover bg-no-repeat bg-black"
                 style={{
-                  // backgroundImage: "url('/firstShow.png')",
                   height: heightTransform,
-                  // width: widthTransform,
                   opacity: opacityTransform,
                   willChange: "opacity, width, height",
                 }}
               />
-              {/* <ScrollOverlay /> */}
-              {/* </motion.div> */}
             </motion.div>
             {/* Plus Icon */}
             <Plus className="w-5 h-5 mx-1 text-gray-700" />

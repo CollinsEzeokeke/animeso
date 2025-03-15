@@ -136,9 +136,6 @@ export default function ThirdScrollOverlay() {
         }
          `}
       >
-        {/* ${
-            isFixed ? "fixed top-[13vh] h-[30vh]" : "relative"
-          }  */}
         <motion.div
           className={`w-[45%] -mt-20 z-0`}
           style={{ y: yValue }}

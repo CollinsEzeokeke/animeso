@@ -20,8 +20,6 @@ export default function Desktop({ className, style = {}, children }: DesktopProp
         backfaceVisibility: "hidden",
         transform:
           "perspective(1500px) rotateX(17.5deg) rotateY(0deg) rotateZ(0deg) translateZ(30px)",
-          // backgroundColor: "red",
-          // "",
         ...style,
       }}
     >
