@@ -70,8 +70,6 @@ export default function Hero() {
       "-228%", // this is the value at 0.075
       "-245%", // this is the value at 0.083
       "-395%", // this is the value at 0.091
-      // "-514.5%", // this is the value at 0.099
-      // "-712%", // this is the value at 0.107
       "-500%", // this is the value at 0.099
       "-695%", // this is the value at 0.107
       "-885%", // this is the value at 0.115
