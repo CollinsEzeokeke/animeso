@@ -85,7 +85,8 @@ export default function Hero() {
   );
   const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
   const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
-  const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]);
+  // const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]); //intended to make the zooming push towards the right direction without being detected by zooming controls
+   // const marginRight = useTransform(scrollYProgress, [0.1, 0.2], [0, -40]);
   // opacity for the text
   const reduceOpacity = useTransform(
     scrollYProgress,
@@ -186,7 +187,9 @@ export default function Hero() {
               style={{
                 y: movingAnother,
                 scale: zoomIn,
-                marginLeft,
+                // marginLeft,
+                // marginLeft: -210,
+                // marginRight: ,
                 transformOrigin: "center",
                 height: 400,
                 willChange: "transform", // Hardware acceleration hint

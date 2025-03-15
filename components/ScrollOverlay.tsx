@@ -10,7 +10,7 @@ export default function ScrollOverlay() {
   return (
     <motion.section
       style={{ scale: nowScale }}
-      className="relative top-0 left-0 w-full h-full pointer-events-none z-[60] overflow-y-auto"
+      className="relative top-0 left-0 w-full h-screen pointer-events-none z-[60] overflow-y-auto bg-red-500"
     >
       {/* <div className="" /> */}
       <div className="absolute inset-0 flex items-center justify-center">
