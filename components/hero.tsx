@@ -75,7 +75,7 @@ export default function Hero() {
     ]
   );
   const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
-  const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
+  const myScale = useTransform(scrollYProgress, [0.005, 0.2], [0, 1]);
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]); //intended to make the zooming push towards the right direction without being detected by zooming controls
   //  const marginRight = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]);
   // opacity for the text
@@ -121,6 +121,16 @@ export default function Hero() {
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log("this is the latest value: ", latest);
+  //   fetch("/api/log-scroll", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ scrollProgress: latest }),
+  //   });
+  // });
   useMotionValueEvent(myScale, "change", (latest) => {
     setNowState(latest);
   });
