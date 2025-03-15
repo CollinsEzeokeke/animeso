@@ -8,7 +8,7 @@ import {
   useSpring,
   useMotionValueEvent,
 } from "framer-motion"; // add if you wish to track the scrollYProgress then uncomment line 156
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useScaleStore } from "@/hooks/store/store";
 
 export default function Hero() {
@@ -20,23 +20,29 @@ export default function Hero() {
     offset: ["start start", "end end"],
   });
   const { width, height } = useWindowSize();
-  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
   const widthCheckRef = useRef<HTMLDivElement>(null);
   const [isLatest, setIsLatest] = useState(0);
   const [baseWidth, setBaseWidth] = useState(0);
 
-  // Measure the initial width of the container
+  // Measure the initial width of the container - optimized with useCallback
   useEffect(() => {
-    setTimeout(() => {
+    const measureWidth = () => {
       if (widthCheckRef.current) {
-        const width = widthCheckRef.current.offsetWidth;
-        setBaseWidth(width);
+        setBaseWidth(widthCheckRef.current.offsetWidth);
       }
-    }, 1); // Even a 0ms timeout pushes execution to after paint
+    };
+    
+    // Use requestAnimationFrame for better timing
+    const timeoutId = setTimeout(() => {
+      requestAnimationFrame(measureWidth);
+    }, 1);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
-  // this is where the basic animation configuration starts for the hero zoom effect
-
+  // Create all transform values directly (not inside useMemo callbacks)
+  const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
+  
   const zoomIn = useTransform(
     scrollYProgress,
     [
@@ -74,76 +80,94 @@ export default function Hero() {
       "-2300%", // this is the value at 0.17
     ]
   );
+
   const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
   const myScale = useTransform(scrollYProgress, [0.005, 0.2], [0, 1]);
-  const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]); //intended to make the zooming push towards the right direction without being detected by zooming controls
-  //  const marginRight = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]);
-  // opacity for the text
-  const reduceOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.01, 0.02],
-    [1, 0.5, 0]
-  );
+  const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]);
+  const reduceOpacity = useTransform(scrollYProgress, [0, 0.01, 0.02], [1, 0.5, 0]);
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
     damping: 60,
   });
-  // end of basic animation configuration for the hero zoom effect
 
-  // For the video component holder
+  // Video component holder transforms
   const visibility = useTransform(scrollYProgress, [0.155, 0.16], [1, 0]);
   const move = useTransform(scrollYProgress, [0.1, 0.12], ["-9.5%", "-10%"]);
-  // Springs for smoother animations
   const visibilitySpring = useSpring(visibility, {
     stiffness: 500,
     damping: 50,
   });
   const moveUp = useSpring(move, { stiffness: 400, damping: 90 });
 
-  //  for the menu bar
+  // Menu bar transforms
   const backgroundColor = useTransform(
     scrollYProgress,
     [0.085, 0.09],
     ["rgb(96, 165, 250)", "transparent"]
   );
-  //  folder changes
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
-  // Pre-calculate transforms for height, width  and opacity
-  const heightTransform = useTransform(
-    scrollYProgress,
-    [0.155, 0.16],
-    ["24px", "40px"]
-  );
+  const heightTransform = useTransform(scrollYProgress, [0.155, 0.16], ["24px", "40px"]);
+  const opacityTransform = useTransform(scrollYProgress, [0.085, 0.09, 0.185, 0.4], [0, 1, 1, 1]);
 
-  const opacityTransform = useTransform(
-    scrollYProgress,
-    [0.085, 0.09, 0.185, 0.4],
-    [0, 1, 1, 1]
-  );
-  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
-  //   console.log("this is the latest value: ", latest);
-  //   fetch("/api/log-scroll", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ scrollProgress: latest }),
-  //   });
-  // });
-  useMotionValueEvent(myScale, "change", (latest) => {
+  // Use memoized callbacks for event handlers
+  const handleScaleChange = useCallback((latest: number) => {
     setNowState(latest);
-  });
-  useMotionValueEvent(zoomIn, "change", (latest) => {
-    if (latest != 0) {
+  }, [setNowState]);
+
+  const handleZoomChange = useCallback((latest: number) => {
+    if (latest !== 0) {
       setIsLatest(20);
     }
     setZoomIng(Math.min(latest, 5.6));
-  });
-  const zoomingE = baseWidth + zoomIng + isLatest;
+  }, []);
 
-  if (!width) return null;
-  if (!height) return null;
+  // Setup motion value event listeners
+  useMotionValueEvent(myScale, "change", handleScaleChange);
+  useMotionValueEvent(zoomIn, "change", handleZoomChange);
+
+  // Memoize the zoom calculation to avoid recalculations
+  const zoomingE = useMemo(() => 
+    baseWidth + zoomIng + isLatest,
+    [baseWidth, zoomIng, isLatest]
+  );
+
+  // Calculate responsive classes with safe null checks
+  const containerClass = useMemo(() => {
+    if (!width || !height) return "";
+    
+    if (width <= 768 && height <= 679) return "-mt-[20%]";
+    if (width <= 596 && height <= 679) return "w-5/6";
+    if (width <= 470 && height <= 679) return "w-5/6";
+    if (width <= 425 && height <= 679) return "w-5/6";
+    return "";
+  }, [width, height]);
+
+  const titleSizeClass = useMemo(() => {
+    if (!width) return "";
+    
+    if (width >= 1024) return "text-5xl";
+    if (width >= 768) return "text-4xl";
+    if (width >= 596) return "text-3xl";
+    if (width === 470) return "text-2xl";
+    if (width >= 426) return "text-2xl";
+    return "";
+  }, [width]);
+
+  const subtitleSizeClass = useMemo(() => {
+    if (!width) return "";
+    
+    if (width >= 1024) return "text-5xl";
+    if (width >= 768) return "text-[2.5rem]";
+    if (width >= 596) return "text-3xl";
+    if (width === 470) return "text-2xl";
+    if (width >= 425) return "text-2xl";
+    return "";
+  }, [width]);
+
+  // Early return optimization
+  if (!width || !height) return null;
+
   return (
     <>
       <div className="overflow-x-hidden">
@@ -159,18 +183,7 @@ export default function Hero() {
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative
-                ${
-                  width <= 768 && height <= 679
-                    ? "-mt-[20%]"
-                    : width <= 596 && height <= 679
-                    ? "w-5/6"
-                    : width <= 470 && height <= 679
-                    ? "w-5/6"
-                    : width <= 425 && height <= 679
-                    ? "w-5/6"
-                    : ""
-                }`}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
               style={{
                 y: movingAnother,
                 scale: zoomIn,
@@ -188,40 +201,16 @@ export default function Hero() {
                 animate={{ y: -10 }}
                 transition={{ duration: 0.4, delay: 2 }}
                 className={`flex flex-col h-[25%] -mt-[40%] ${
-                  width >= 1024 ? "w-5/6" : "w-5/6"
+                  width && width >= 1024 ? "w-5/6" : "w-5/6"
                 } items-center justify-center z-50`}
               >
                 <h1
-                  className={`text-white font-sans ${
-                    width >= 1024
-                      ? "text-5xl"
-                      : width >= 768
-                      ? "text-4xl"
-                      : width >= 596
-                      ? "text-3xl"
-                      : width === 470
-                      ? "text-2xl"
-                      : width >= 426
-                      ? "text-2xl"
-                      : ""
-                  } font-[650] mb-2`}
+                  className={`text-white font-sans ${titleSizeClass} font-[650] mb-2`}
                 >
                   Todos, email, calendar.
                 </h1>
                 <p
-                  className={`font-sans font-semibold text-gray-50 ${
-                    width >= 1024
-                      ? "text-5xl"
-                      : width >= 768
-                      ? "text-[2.5rem]"
-                      : width >= 596
-                      ? "text-3xl"
-                      : width === 470
-                      ? "text-2xl"
-                      : width >= 425
-                      ? "text-2xl"
-                      : ""
-                  }`}
+                  className={`font-sans font-semibold text-gray-50 ${subtitleSizeClass}`}
                 >
                   All-in-done.
                 </p>
@@ -236,10 +225,8 @@ export default function Hero() {
                 heightTransform={heightTransform}
                 marging={marging}
               />
-              {/* New wrapper div for bottom placement */}
+              {/* makes contents unclickable */}
             </motion.div>
-
-            {/* makes contents unclickable */}
             <div className="h-[100vh] w-[65vw] z-50 absolute bg-none" />
           </motion.div>
         </motion.div>

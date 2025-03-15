@@ -31,6 +31,7 @@ export const VideoLoader = ({
   const containerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [canScroll, setCanScroll] = useState(false);
+  
   useEffect(() => {
     // Skip unnecessary work if video ref isn't available
     if (!videoRef.current) return;
@@ -88,7 +89,24 @@ export const VideoLoader = ({
   );
 
   const { width } = useWindowSize();
-  if (!width) return;
+  
+  // Memoize conditional classes to avoid recalculation
+  const overlayClass = useMemo(() => {
+    if (!width) return "h-[90vh]";
+    return width <= 768 ? "flex items-center bg-amber-950 h-[45vh]" : "h-[90vh]";
+  }, [width]);
+  
+  const containerClass = useMemo(() => {
+    if (!width) return "items-end justify-center h-full";
+    return width <= 768 ? "bg-red-500 justify-center items-center h-full" : "items-end justify-center h-full";
+  }, [width]);
+  
+  const topPositionClass = useMemo(() => {
+    if (!width) return "top-2";
+    return width <= 768 ? "top-2" : "top-2";
+  }, [width]);
+
+  if (!width) return null;
 
   // Apply CSS containment for better performance isolation
   return (
@@ -109,24 +127,16 @@ export const VideoLoader = ({
       </motion.video>
 
       <div
-        className={`absolute bottom-14 left-0 w-full pointer-events-none ${
-          width <= 768 ? "flex items-center bg-amber-950 h-[45vh]" : "h-[90vh]"
-        }`}
+        className={`absolute bottom-14 left-0 w-full pointer-events-none ${overlayClass}`}
       >
         {" "}
         {/* Full container overlay */}
         <div
-          className={`relative w-full flex ${
-            width <= 768
-              ? "bg-red-500 justify-center items-center h-full"
-              : "items-end justify-center h-full"
-          }`}
+          className={`relative w-full flex ${containerClass}`}
         >
           {" "}
           <motion.div
-            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-white ${
-              width <= 768 ? "top-2" : "top-2"
-            }`}
+            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-white ${topPositionClass}`}
           >
             {/* Search Icon */}
             <Search className="w-5 h-5 mx-1 text-gray-700" />
