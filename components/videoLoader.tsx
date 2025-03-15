@@ -124,7 +124,7 @@ export const VideoLoader = ({
         >
           {" "}
           <motion.div
-            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-blue-500 ${
+            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-white ${
               width <= 768 ? "top-2" : "top-2"
             }`}
           >
