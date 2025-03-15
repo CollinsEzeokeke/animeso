@@ -24,8 +24,8 @@ export default function Hero() {
   const { width, height } = useWindowSize();
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
   const widthCheckRef = useRef<HTMLDivElement>(null);
-  const [isLatest, setIsLatest ] = useState(0);
-  const [currentWidth, setCurrentWidth] = useState(0);
+  const [isLatest, setIsLatest] = useState(0);
+  // const [currentWidth, setCurrentWidth] = useState(0);
   const [baseWidth, setBaseWidth] = useState(0);
 
   // Measure the initial width of the container
@@ -34,34 +34,30 @@ export default function Hero() {
       if (widthCheckRef.current) {
         const width = widthCheckRef.current.offsetWidth;
         setBaseWidth(width);
-        setCurrentWidth(width);
+        // setCurrentWidth(width);
       }
     }, 1); // Even a 0ms timeout pushes execution to after paint
   }, []);
 
-  console.log("this is the base width from hero.tsx", baseWidth);
-  console.log("this is the current width from hero.tsx", currentWidth);
+  // console.log("this is the base width from hero.tsx", baseWidth);
+  // console.log("this is the current width from hero.tsx", currentWidth);
 
   // this is where the basic animation configuration starts for the hero zoom effect
 
   const zoomIn = useTransform(
     scrollYProgress,
     [
-      0.019, 0.027, 0.067, 0.075, 0.083, 0.091,
-      0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.163, 0.17,
+      0.019, 0.027, 0.067, 0.075, 0.083, 0.091, 0.099, 0.107, 0.115, 0.123,
+      0.131, 0.139, 0.147, 0.155, 0.163, 0.17,
     ],
-    [
-      1.2, 5, 7, 7.5, 8, 12, 15, 20, 25, 30, 35, 40, 45, 50,
-      55, 60,
-    ]
+    [1.2, 5, 7, 7.5, 8, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
   );
 
   const movingAnother = useTransform(
     scrollYProgress,
     [
-      0, 0.005, 0.011, 0.019, 0.027, 0.059, 0.067, 0.075,
-      0.083, 0.091, 0.099, 0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155,
-      0.17,
+      0, 0.005, 0.011, 0.019, 0.027, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099,
+      0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.17,
     ],
     [
       "15%",
@@ -74,18 +70,20 @@ export default function Hero() {
       "-228%", // this is the value at 0.075
       "-245%", // this is the value at 0.083
       "-395%", // this is the value at 0.091
-      "-514.5%", // this is the value at 0.099
-      "-712%", // this is the value at 0.107
-      "-905%", // this is the value at 0.115
-      "-1100%", // this is the value at 0.123
-      "-1255%", //this is the value at 0.131
-      "-1525%", // this is the value at 0.139
-      "-1850%", // this is the value at 0.147
-      "-2050%", // this is the Value at 0.155
+      // "-514.5%", // this is the value at 0.099
+      // "-712%", // this is the value at 0.107
+      "-500%", // this is the value at 0.099
+      "-695%", // this is the value at 0.107
+      "-885%", // this is the value at 0.115
+      "-1075%", // this is the value at 0.123
+      "-1270%", //this is the value at 0.131
+      "-1460%", // this is the value at 0.139
+      "-1650%", // this is the value at 0.147
+      "-1850%", // this is the Value at 0.155
       "-2300%", // this is the value at 0.17
     ]
   );
-  const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20])
+  const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
   const myScale = useTransform(scrollYProgress, [0.131, 0.142], [0, 1]);
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, 40]);
   // opacity for the text
@@ -131,23 +129,29 @@ export default function Hero() {
     [0.085, 0.09, 0.185, 0.4],
     [0, 1, 1, 1]
   );
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("this is the latest value: ", latest);
-  });
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log("this is the latest value: ", latest);
+  //   fetch("/api/log-scroll", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ scrollProgress: latest }),
+  //   });
+  // });
   useMotionValueEvent(myScale, "change", (latest) => {
-    console.log("this is the latest scale value: ", latest);
+    // console.log("this is the latest scale value: ", latest);
     setNowState(latest);
   });
   useMotionValueEvent(zoomIn, "change", (latest) => {
+    if (latest != 0) {
+      setIsLatest(20);
+    }
+    setZoomIng(Math.min(latest, 5.6));
     // console.log("this is the latest zoom value: ", latest);
-    if(latest != 0 ) {
-      setIsLatest(20)
-    }
-    if (latest === 4.8) {
-      setZoomIng(4.8);
-    }
-    // setZoomIng(latest);
+    // You can also track if we've reached the cap
   });
+  console.log("this is the zoomIng value: ", zoomIng);
   const zoomingE = baseWidth + zoomIng + isLatest;
 
   if (!width) return null;
