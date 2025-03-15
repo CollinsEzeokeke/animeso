@@ -5,7 +5,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo, useCallback } from "react";
 import StackedDesktops from "./stackedDesktops";
 import { useThirdScrollOverlay } from "@/hooks/store/store";
 import Image from "next/image";
@@ -23,15 +23,16 @@ export default function ThirdScrollOverlay() {
     offset: ["end start", "start start"], // From when container enters view to when it leaves
   });
 
+  // Create transform directly
   const orangeHeight = useTransform(
     scrollYProgress,
     [0.99, 0.4], // Input range (from higher to lower scroll value)
     ["15vh", "134.5vh"] // Output range (from lower to higher height)
   );
-  // Monitor scroll progress and set fixed state
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // console.log("this is the latest value: ", latest);
-    // equal distances 0.40 ───── 0.5967 ───── 0.7933 ───── 0.99
+
+  // Memoize the scroll event handler for better performance
+  const handleScrollProgressChange = useCallback((latest: number) => {
+    // Handle fixed state calculation
     if (latest > 0.99 || latest <= 0.4) {
       setIsFixed(false);
     } else {
@@ -41,25 +42,49 @@ export default function ThirdScrollOverlay() {
     // Use threshold-based checks instead of exact equality
     const threshold = 0.01; // Adjust this value as needed
 
+    // Optimize with else-if to avoid unnecessary state updates
     if (Math.abs(latest - 0.99) < threshold) {
       setThirdScrollProgress(0.99);
       setYValue(140);
-    }
-    if (Math.abs(latest - 0.7933) < threshold) {
+    } 
+    else if (Math.abs(latest - 0.7933) < threshold) {
       setThirdScrollProgress(0.7933);
       setYValue(140);
-    }
-    if (Math.abs(latest - 0.5967) < threshold) {
+    } 
+    else if (Math.abs(latest - 0.5967) < threshold) {
       setThirdScrollProgress(0.5967);
       setYValue(50);
-    }
-    if (Math.abs(latest - 0.4) < threshold) {
+    } 
+    else if (Math.abs(latest - 0.4) < threshold) {
       setThirdScrollProgress(0.4);
       setYValue(20);
     }
-  });
+  }, [setThirdScrollProgress]);
 
-  const renderImageLeft = () => {
+  // Set up the scroll event listener
+  useMotionValueEvent(scrollYProgress, "change", handleScrollProgressChange);
+
+  // Memoize the container class
+  const containerClassName = useMemo(() => {
+    return `h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${
+      isFixed
+        ? "fixed top-[13vh] left-1/2 -translate-x-1/2"
+        : "relative mx-auto"
+    }`;
+  }, [isFixed]);
+
+  // Memoize the text content class names based on thirdScrollProgress
+  const textClasses = useMemo(() => {
+    return {
+      firstText: thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]",
+      secondText: thirdScrollProgress >= 0.7933 && thirdScrollProgress !== 0.99 ? "text-white" : "text-[#a4a1a195]",
+      thirdText: thirdScrollProgress >= 0.5967 && thirdScrollProgress !== 0.7933 && thirdScrollProgress !== 0.99 ? "text-white" : "text-[#a4a1a195]",
+      fourthText: thirdScrollProgress >= 0.4 && thirdScrollProgress !== 0.5967 && thirdScrollProgress !== 0.7933 && thirdScrollProgress !== 0.99 ? "text-white" : "text-[#a4a1a195]"
+    };
+  }, [thirdScrollProgress]);
+
+  // Memoize the left image render function
+  const renderImageLeft = useCallback(() => {
     if (thirdScrollProgress >= 0.99) {
       return (
         <div className="w-[15%] h-[50%] flex items-center justify-end"></div>
@@ -73,6 +98,7 @@ export default function ThirdScrollOverlay() {
             width={800}
             height={800}
             className="-translate-x-3"
+            priority={true}
           />
         </div>
       );
@@ -85,6 +111,7 @@ export default function ThirdScrollOverlay() {
             width={800}
             height={700}
             className="-translate-x-5"
+            priority={true}
           />
         </div>
       );
@@ -94,8 +121,10 @@ export default function ThirdScrollOverlay() {
       // Default nothing if not in the right range
       return " ";
     }
-  };
-  const renderImageRight = () => {
+  }, [thirdScrollProgress]);
+
+  // Memoize the right image render function
+  const renderImageRight = useCallback(() => {
     if (thirdScrollProgress >= 0.99) {
       return "";
     } else if (thirdScrollProgress >= 0.7933) {
@@ -106,6 +135,7 @@ export default function ThirdScrollOverlay() {
           width={150}
           height={150}
           className="translate-x-5"
+          priority={true}
         />
       );
     } else if (thirdScrollProgress >= 0.5967) {
@@ -117,7 +147,7 @@ export default function ThirdScrollOverlay() {
       // Default nothing if not in the right range
       return " ";
     }
-  };
+  }, [thirdScrollProgress]);
 
   return (
     <div
@@ -125,47 +155,48 @@ export default function ThirdScrollOverlay() {
       ref={containerRef}
     >
       <motion.div
-        className=" flex items-center  justify-center text-white"
-        style={{ height: orangeHeight }}
+        className="flex items-center justify-center text-white"
+        style={{ 
+          height: orangeHeight,
+          willChange: "height" // Hardware acceleration hint
+        }}
       />
       <motion.div
-        className={`h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${
-          isFixed
-            ? "fixed top-[13vh] left-1/2 -translate-x-1/2"
-            : "relative mx-auto"
-        }
-         `}
+        className={containerClassName}
       >
         <motion.div
-          className={`w-[45%] -mt-20 z-0`}
-          style={{ y: yValue }}
+          className="w-[45%] -mt-20 z-0"
+          style={{ 
+            y: yValue,
+            willChange: "transform" // Hardware acceleration hint
+          }}
         >
-          <span className="flex flex-col gap-2 space-y-0 items-start justify-around ">
+          <span className="flex flex-col gap-2 space-y-0 items-start justify-around">
             <span className="text-3xl font-semibold flex flex-col justify-around h-[10%] gap-2 pt-0">
-              <span className={`${thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
+              <span className={textClasses.firstText}>
                 Emails are closer than ever to your todos
               </span>
-              <span className={`${thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]"} w-full`}>
+              <span className={`${textClasses.firstText} w-full`}>
                 <span>and calendar.</span>
-                <span className={`${thirdScrollProgress >= 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}> No need to break up with</span>
+                <span className={textClasses.secondText}> No need to break up with</span>
               </span>
             </span>
 
-            <span className="text-3xl font-semibold  mt-0">
+            <span className="text-3xl font-semibold mt-0">
               {" "}
-              <span className={`${thirdScrollProgress >= 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}> your apps, just connect them. </span>
-              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Like to</span>
+              <span className={textClasses.secondText}> your apps, just connect them. </span>
+              <span className={textClasses.thirdText}>Like to</span>
             </span>
-            <span className={`text-3xl font-semibold ${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>
+            <span className={`text-3xl font-semibold ${textClasses.thirdText}`}>
               {" "}
               miss meetings? Not with Amie in the
             </span>
-            <span className=" text-3xl font-semibold">
-              <span className={`${thirdScrollProgress >= 0.5967 && thirdScrollProgress != 0.7933  && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>menubar. </span>
-              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>Share your free slots with</span>
+            <span className="text-3xl font-semibold">
+              <span className={textClasses.thirdText}>menubar. </span>
+              <span className={textClasses.fourthText}>Share your free slots with</span>
             </span>
             <span className="text-3xl font-semibold justify-self-start">
-              <span className={`${thirdScrollProgress >= 0.4 && thirdScrollProgress != 0.5967 && thirdScrollProgress != 0.7933 && thirdScrollProgress != 0.99 ? "text-white" : "text-[#a4a1a195]"}`}>anyone you like.</span>
+              <span className={textClasses.fourthText}>anyone you like.</span>
             </span>
           </span>
         </motion.div>

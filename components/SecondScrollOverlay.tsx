@@ -5,7 +5,7 @@ import {
   motion,
   useTransform,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo, useCallback } from "react";
 import PhoneTiltWork from "./phoneTiltWork";
 import { useProgressor } from "@/hooks/store/store";
 
@@ -21,14 +21,16 @@ export default function SecondScrollOverlay() {
 
   const { setCurrentProgression } = useProgressor();
 
-
+  // Create transform directly (not inside useMemo)
   const orangeHeight = useTransform(
     scrollYProgress,
     [0.99, 0.66], // Input range (from higher to lower scroll value)
     ["15vh", "63.5vh"] // Output range (from lower to higher height)
   );
-  // Monitor scroll progress and set fixed state
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+
+  // Memoize the scroll event handler for better performance
+  const handleScrollProgressChange = useCallback((latest: number) => {
+    // Handle fixed state calculation
     if (latest > 0.99 || latest <= 0.66) {
       setIsFixed(false);
     } else {
@@ -38,16 +40,29 @@ export default function SecondScrollOverlay() {
     // Use threshold-based checks instead of exact equality
     const threshold = 0.01; // Adjust this value as needed
 
+    // Optimize state updates by checking if we actually need to update
     if (Math.abs(latest - 0.99) < threshold) {
       setCurrentProgression(0.99);
     }
-    if (Math.abs(latest - 0.825) < threshold) {
+    else if (Math.abs(latest - 0.825) < threshold) {
       setCurrentProgression(0.825);
     }
-    if (Math.abs(latest - 0.66) < threshold) {
+    else if (Math.abs(latest - 0.66) < threshold) {
       setCurrentProgression(0.66);
     }
-  });
+  }, [setCurrentProgression]);
+
+  // Set up the scroll event listener
+  useMotionValueEvent(scrollYProgress, "change", handleScrollProgressChange);
+
+  // Memoize the class string to avoid recalculation on every render
+  const phoneContainerClassName = useMemo(() => {
+    return `h-[80vh] w-[80%] z-[1000] ${
+      isFixed
+        ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
+        : "relative mx-auto"
+    }`;
+  }, [isFixed]);
 
   return (
     <div
@@ -55,16 +70,14 @@ export default function SecondScrollOverlay() {
       ref={containerRef}
     >
       <motion.div
-        className=" flex items-center bg-inherit justify-center text-white"
-        style={{ height: orangeHeight }}
+        className="flex items-center bg-inherit justify-center text-white"
+        style={{ 
+          height: orangeHeight,
+          willChange: "height" // Hardware acceleration hint
+        }}
       />
       <motion.div
-        className={`h-[80vh] w-[80%] z-[1000] ${
-          isFixed
-            ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
-            : "relative mx-auto"
-        }
-         `}
+        className={phoneContainerClassName}
       >
         <PhoneTiltWork />
       </motion.div>
