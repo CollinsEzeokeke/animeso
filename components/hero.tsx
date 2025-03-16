@@ -77,8 +77,8 @@ export default function Hero() {
       "-1270%", //this is the value at 0.131
       "-1460%", // this is the value at 0.139
       "-1650%", // this is the value at 0.147
-      "-1850%", // this is the Value at 0.155
-      "-2300%", // this is the value at 0.17
+      "-1830%", // this is the Value at 0.155
+      "-2295%", // this is the value at 0.17
     ]
   );
 
@@ -127,11 +127,21 @@ export default function Hero() {
       setIsPosition("0")
     }
   }, []);
+  const handleScrollChange = useCallback((latest: number) => {
+    fetch("/api/log-scroll", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ scrollProgress: latest }),
+    });
+  }, []);
 
   // Setup motion value event listeners
   useMotionValueEvent(myScale, "change", handleScaleChange);
   useMotionValueEvent(zoomIn, "change", handleZoomChange);
   useMotionValueEvent(movingAnother, "change", handleMovingAnotherChange)
+  useMotionValueEvent(scrollYProgress, "change", handleScrollChange)
   // Memoize the zoom calculation to avoid recalculations
   const zoomingE = useMemo(() => {
     if (isPosition === "0") {
@@ -188,7 +198,7 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center  `}
+          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center`}
           style={{
             zIndex: 10,
           }}
@@ -199,7 +209,7 @@ export default function Hero() {
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass} bg-red-500 `}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
               style={{
                 y: movingAnother,
                 scale: zoomIn,

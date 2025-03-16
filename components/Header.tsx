@@ -15,7 +15,8 @@ const UpdateButton = memo(({ width }: { width: number | null }) => {
     if (!width) return `${baseClasses} hidden`;
     if (width < 768) return `${baseClasses} hidden`;
     if (width === 768) return `${baseClasses} w-[25%] -mt-2`;
-    if (width >= 1024) return `${baseClasses} w-[15%] -mt-4`;
+    if (width >= 1024 && width <= 1397) return `${baseClasses} w-[15%] -mt-4`;
+    if (width >= 1024) return `${baseClasses} w-[15%] -mt-2`;
     if (width === 1440) return `${baseClasses} w-[12%]`;
 
     return baseClasses;
