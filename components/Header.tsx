@@ -65,7 +65,7 @@ const NavButtons = memo(() => (
 NavButtons.displayName = "NavButtons";
 
 const DirectionAwareScrollComponent = () => {
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
 
   // Use the default page scroll tracking when no target is specified
   const { scrollYProgress } = useScroll({
@@ -75,17 +75,6 @@ const DirectionAwareScrollComponent = () => {
 
   // Fix the Hook error by calling useTransform directly in the component
   const y = useTransform(scrollYProgress, [0, 0.005], ["0%", "-100%"]);
-
-  // Memoize spring configuration
-  // const springConfig = useMemo(
-  //   () => ({
-  //     stiffness: 400,
-  //     damping: 90,
-  //   }),
-  //   []
-  // );
-
-  // const ySpring = useSpring(y, springConfig);
 
   // Memoize container style to prevent object recreation on render
   const containerStyle = useMemo(
@@ -97,9 +86,15 @@ const DirectionAwareScrollComponent = () => {
     [y]
   );
 
+  const headerResponsive = useMemo(() => {
+    if (!width || !height) return "";
+    if (width <= 1394 && height <= 697) return "h-[10vh]";
+    return "h-[9.5vh]";
+  }, [width, height]);
+
   return (
     <motion.div
-      className="w-screen h-[9.5vh] fixed top-0 z-[1000] overflow-hidden bg-[#BFBFBF]"
+      className={`w-screen fixed top-0 z-[1000] overflow-hidden bg-[#BFBFBF] ${headerResponsive} `}
       style={containerStyle}
       // Using document scroll tracking, so no ref needed
       initial={false}

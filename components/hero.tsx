@@ -165,6 +165,12 @@ export default function Hero() {
     return "";
   }, [width]);
 
+  const containerPullDown = useMemo(() => {
+    if (!width || !height) return "";
+    if (width <= 1394 && height <= 697) return "mt-[10vh]";
+    return "";
+  }, [width, height]);
+
   // Early return optimization
   if (!width || !height) return null;
 
@@ -172,18 +178,18 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className="h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center"
+          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center  `}
           style={{
             zIndex: 10,
           }}
         >
           <motion.div
-            className="flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen"
+            className={`flex justify-center absolute pt-0 top-[-4vh] w-[65vw] h-screen ${containerPullDown}`}
             ref={widthCheckRef}
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass} bg-red-500 `}
               style={{
                 y: movingAnother,
                 scale: zoomIn,
@@ -224,6 +230,7 @@ export default function Hero() {
                 blackBarSpring={blackBarSpring}
                 heightTransform={heightTransform}
                 marging={marging}
+                
               />
               {/* makes contents unclickable */}
             </motion.div>

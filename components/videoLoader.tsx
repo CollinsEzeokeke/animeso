@@ -88,7 +88,7 @@ export const VideoLoader = ({
     [y, visibility, zoomingE, marging]
   );
 
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
   
   // Memoize conditional classes to avoid recalculation
   const overlayClass = useMemo(() => {
@@ -106,12 +106,18 @@ export const VideoLoader = ({
     return width <= 768 ? "top-2" : "top-2";
   }, [width]);
 
+  const Containerresponsive = useMemo(() => {
+    if (!width || !height) return "";
+    if (width <= 1394 && height <= 697) return "top-[10%]";
+    return "top-[5%]";
+  }, [width, height]);
+
   if (!width) return null;
 
   // Apply CSS containment for better performance isolation
   return (
     <motion.div
-      className="absolute z-10 inset-0 h-full top-[5%] w-full contain-paint"
+      className={`absolute z-10 inset-0 h-full w-full contain-paint ${Containerresponsive}`}
       style={motionStyles}
       ref={containerRef}
     >

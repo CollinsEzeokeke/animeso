@@ -41,7 +41,7 @@ export default function Page() {
               width >= 1440
                 ? "w-[12vw]"
                 : width >= 1024
-                ? "w-[20vw]"
+                ? "w-[15vw]"
                 : width >= 768
                 ? "w-[25vw] h-28"
                 : width >= 600
