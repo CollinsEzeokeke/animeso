@@ -15,7 +15,7 @@ const UpdateButton = memo(({ width }: { width: number | null }) => {
     if (!width) return `${baseClasses} hidden`;
     if (width < 768) return `${baseClasses} hidden`;
     if (width === 768) return `${baseClasses} w-[25%] -mt-2`;
-    if (width === 1024) return `${baseClasses} w-[20%] -mt-2`;
+    if (width >= 1024) return `${baseClasses} w-[15%] -mt-4`;
     if (width === 1440) return `${baseClasses} w-[12%]`;
 
     return baseClasses;
@@ -39,28 +39,35 @@ const UpdateButton = memo(({ width }: { width: number | null }) => {
 UpdateButton.displayName = "UpdateButton";
 
 // Memoize nav buttons to prevent unnecessary re-renders
-const NavButtons = memo(() => (
-  <div className="fixed right-0 top-7 pr-6 md:pr-10 flex font-medium gap-6">
-    <div className="text-base text-black">
-      <a
-        href="https://calendar.amie.so/login"
-        className="hover:opacity transition-opacity"
-      >
-        <span className="bg-gradient-to-br animate-backgroundAnimate from-black/60 to-black/30 inline-block text-transparent bg-clip-text">
-          Sign in
-        </span>
-      </a>
+const NavButtons = memo(({ width }: { width: number | null }) => {
+  if (!width) return;
+  return (
+    <div
+      className={`fixed right-0 pr-6 md:pr-10 flex font-medium gap-6 ${
+        width <= 1397 ? "top-5" : "top-7"
+      }`}
+    >
+      <div className="text-base text-black">
+        <a
+          href="https://calendar.amie.so/login"
+          className="hover:opacity transition-opacity"
+        >
+          <span className="bg-gradient-to-br animate-backgroundAnimate from-black/60 to-black/30 inline-block text-transparent bg-clip-text">
+            Sign in
+          </span>
+        </a>
+      </div>
+      <div className="text-base">
+        <a
+          href="https://calendar.amie.so/login"
+          className="hover:opacity-80 transition-opacity bg-black text-white px-4 py-2 rounded-md"
+        >
+          Get started
+        </a>
+      </div>
     </div>
-    <div className="text-base">
-      <a
-        href="https://calendar.amie.so/login"
-        className="hover:opacity-80 transition-opacity bg-black text-white px-4 py-2 rounded-md"
-      >
-        Get started
-      </a>
-    </div>
-  </div>
-));
+  );
+});
 
 NavButtons.displayName = "NavButtons";
 
@@ -88,7 +95,7 @@ const DirectionAwareScrollComponent = () => {
 
   const headerResponsive = useMemo(() => {
     if (!width || !height) return "";
-    if (width <= 1394 && height <= 697) return "h-[10vh]";
+    if (width <= 1394 && height <= 697) return "h-[9.5vh] ";
     return "h-[9.5vh]";
   }, [width, height]);
 
@@ -106,7 +113,7 @@ const DirectionAwareScrollComponent = () => {
         layoutDependency={false}
       >
         <UpdateButton width={width} />
-        <NavButtons />
+        <NavButtons width={width}/>
       </motion.nav>
     </motion.div>
   );

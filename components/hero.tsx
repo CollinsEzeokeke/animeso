@@ -22,6 +22,7 @@ export default function Hero() {
   const { width, height } = useWindowSize();
   const widthCheckRef = useRef<HTMLDivElement>(null);
   const [isLatest, setIsLatest] = useState(0);
+  const [isPosition, setIsPosition]= useState("")
   const [baseWidth, setBaseWidth] = useState(0);
 
   // Measure the initial width of the container - optimized with useCallback
@@ -121,15 +122,24 @@ export default function Hero() {
     }
     setZoomIng(Math.min(latest, 5.6));
   }, []);
+  const handleMovingAnotherChange = useCallback((latest: string) => {
+    if (latest === "0") {
+      setIsPosition("0")
+    }
+  }, []);
 
   // Setup motion value event listeners
   useMotionValueEvent(myScale, "change", handleScaleChange);
   useMotionValueEvent(zoomIn, "change", handleZoomChange);
-
+  useMotionValueEvent(movingAnother, "change", handleMovingAnotherChange)
   // Memoize the zoom calculation to avoid recalculations
-  const zoomingE = useMemo(() => 
-    baseWidth + zoomIng + isLatest,
-    [baseWidth, zoomIng, isLatest]
+  const zoomingE = useMemo(() => {
+    if (isPosition === "0") {
+      return baseWidth
+    }
+    return baseWidth + zoomIng + isLatest
+  },
+    [baseWidth, zoomIng, isLatest, isPosition]
   );
 
   // Calculate responsive classes with safe null checks
@@ -207,9 +217,13 @@ export default function Hero() {
                 animate={{ y: -10 }}
                 transition={{ duration: 0.4, delay: 2 }}
                 className={`flex flex-col h-[25%] -mt-[40%] ${
-                  width && width >= 1024 ? "w-5/6" : "w-5/6"
-                } items-center justify-center z-50`}
+                  width >= 1024 ? "w-5/6" : "w-5/6"
+                } 
+                ${width <= 1397 && width != 1024 ? "-mt-[30%] ml-6" : "-mt-[40%]" }
+                items-center justify-center z-50`}
               >
+                {/* ${width <= 1397 ? "-mt-[30%]" : "-mt-[40%]" } */}
+
                 <h1
                   className={`text-white font-sans ${titleSizeClass} font-[650] mb-2`}
                 >
