@@ -2,6 +2,7 @@ import { useThirdScrollOverlay } from "@/hooks/store/store";
 import Desktop from "./desktop";
 import Image from "next/image";
 import { useMemo, useCallback } from "react";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 interface StackedDevicesProps {
   count?: number;
@@ -14,17 +15,27 @@ export default function StackedDesktops({
   className = "",
 }: StackedDevicesProps) {
   const { thirdScrollProgress } = useThirdScrollOverlay();
+  const { height, width } = useWindowSize();
 
+  
+  const responsiveScaling = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "scaleX(1.065)";
+    }
+    return "scaleX(1) scaleY(1.03)";
+  }, [height, width]);
   // Common video props to avoid duplication
   const commonVideoProps = useMemo(
     () => ({
-      className: "w-full h-full object-contain translate-y-3 scale-y-full",
+      className: "w-full h-full object-contain translate-y-2 scale-y-full",
       autoPlay: true,
       muted: true,
       loop: true,
       playsInline: true,
+      style: { transform: `${responsiveScaling} ` }, // Stretch horizontally by 20%
     }),
-    []
+    [responsiveScaling]
   );
 
   // Memoize the video render function
@@ -55,7 +66,27 @@ export default function StackedDesktops({
       return <video src="/three.mp4" {...commonVideoProps} />;
     }
   }, [thirdScrollProgress, commonVideoProps]);
-
+  const responsiveHeight = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "h-[70vh]";
+    }
+    return "h-[55vh]";
+  }, [height, width]);
+  const responsiveHeightOther = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "h-[70.5vh]";
+    }
+    return "h-[55.5vh]";
+  }, [height, width]);
+  const responsiveVideo = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "w-[50vw]";
+    }
+    return "w-[45vw]";
+  }, [height, width]);
   // Memoize the array creation
   const deviceArray = useMemo(
     () =>
@@ -69,9 +100,9 @@ export default function StackedDesktops({
         };
 
         // Memoize the device class name
-        const deviceClassName = `shadow-xl ${
+        const deviceClassName = `shadow-xl ${responsiveVideo} ${
           index === 1 ? "border-none" : "border-none border-4"
-        } ${index === 1 ? " h-[55vh]" : "h-[55.5vh]"} ${
+        } ${index === 1 ? `${responsiveHeight}` : `${responsiveHeightOther}`} ${
           index === 1 ? "bg-transparent" : "bg-white"
         } ${index === 0 && "bg-transparent"}`;
 
@@ -82,25 +113,32 @@ export default function StackedDesktops({
           shouldRenderVideo: index === 1,
         };
       }),
-    [count]
+    [count, responsiveHeight, responsiveHeightOther, responsiveVideo]
   );
 
+  const responsive = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "-translate-y-20  -translate-x-20";
+    }
+    return "-translate-x-11";
+  }, [height, width]);
   // Memoize the container class name
   const containerClassName = useMemo(
-    () => `relative h-[70%] w-[50%] -translate-x-11 ${className}`,
-    [className]
+    () => `relative h-[70%] w-[50%] ${className} ${responsive}`,
+    [className, responsive]
   );
 
   return (
-    <div className={containerClassName}>
+    <div className={`${containerClassName}`}>
       {deviceArray.map(
         ({ index, deviceStyle, deviceClassName, shouldRenderVideo }) => (
-          <div key={index} className="absolute h-full" style={deviceStyle}>
+          <div key={index} className="absolute h-full " style={deviceStyle}>
             <Desktop className={deviceClassName}>
               {shouldRenderVideo && (
                 <>
                   {/* Conditionally render videos based on thirdScrollProgress */}
-                  <div className="relative w-[45vw] h-full overflow-hidden">
+                  <div className={`relative ${responsiveVideo} h-full overflow-hidden`}>
                     {renderVideo()}
                   </div>
                 </>

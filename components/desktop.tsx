@@ -11,7 +11,7 @@ export default function Desktop({ className, style = {}, children }: DesktopProp
   // Memoize the class name to prevent recalculation on each render
   const combinedClassName = useMemo(() => 
     cn(
-      "relative w-[45vw] h-[200vh] rounded-[40px] shadow-device",
+      "relative h-[200vh] rounded-[40px] shadow-device",
       "flex flex-col items-center z-[60]",
       "device-3d",
       className

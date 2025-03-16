@@ -14,7 +14,7 @@ export default function WeatherLocation() {
             width={70}
             className="rounded-lg"
           />
-          <span className="absolute top-[51vh] translate-x-0 bg-white shadow-compass rounded-[8px] p-1">
+          <span className="absolute top-[48.75vh] translate-x-0 bg-white shadow-compass rounded-[8px] p-1">
             <span className="block group-hover:-rotate-3 transition-transform duration-300 ease-[cubic-bezier(0.18,0.89,0.32,1.27)]">
               <svg
                 width="24"

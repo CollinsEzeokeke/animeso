@@ -22,8 +22,8 @@ export default function DailyStatus() {
   }, []);
 
   return (
-    <div className="animate-fade-in delay-100">
-      <h1 className="text-6xl font-semibold tracking-wide mb-8 text-slate-50">
+    <div className="w-full">
+      <h1 className="text-6xl font-semibold tracking-wide mb-3 text-slate-50/85">
         Happy {currentDay}!
       </h1>
       <p className="text-6xl font-bold text-slate-100 flex items-center justify-center">
@@ -38,7 +38,7 @@ export default function DailyStatus() {
           />
         </IconBox>{" "}
         {currentTime}
-        <span className="text-slate-50/90 pl-2 text-6xl"> and</span>{" "}
+        <span className="text-slate-50/90 pl-2 text-6xl ml-2"> and</span>{" "}
         <IconBox className="mx-3">
           <Image
             src="/cloud-high.png"

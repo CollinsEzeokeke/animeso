@@ -5,7 +5,7 @@ import CardTwo from "./CardTwo";
 
 export default function NotificationSummary() {
   return (
-    <div className="animate-fade-in delay-300 mt-12">
+    <div className="animate-fade-in delay-300 pt-5">
       <p className="text-6xl font-bold text-white/90 flex flex-wrap items-center justify-center">
         <span className="text-slate-50/90">You got</span>
         <motion.div
@@ -28,30 +28,4 @@ export default function NotificationSummary() {
       </p>
     </div>
   );
-}
-
-{
-  /* <div
-            className="h-full bg-white rounded-sm p-[6px] box-border shadow-[1px_0px_2px_rgba(0,0,0,0.2),0_9px_18px_rgba(0,0,0,0.3)]"
-            style={{ transform: "translateZ(20px)" }}
-          >
-            <div className="flex gap-[2px] items-center">
-              <Image
-                src="/avatar.png"
-                fill
-                alt="avatar"
-                className="rounded-full size-3"
-              />
-              <div className="flex-grow flex gap-[2px] flex-col">
-                <div className="rounded-full bg-black opacity-25 h-[5px]"></div>
-                <div className="rounded-full bg-black opacity-10 h-[3px]"></div>
-              </div>
-            </div>
-            <div className="mt-[6px] flex flex-col gap-[3px]">
-              <div className="rounded-[2px] bg-black opacity-15 h-[20px]"></div>
-              <div className="rounded-full bg-black opacity-10 h-[3px]"></div>
-              <div className="rounded-full bg-black opacity-10 h-[3px]"></div>
-              <div className="bg-white absolute inset-x-[6px] bottom-[4px] h-[8px] shadow-[0_0.5px_2px_rgba(0,0,0,0.1),0_1px_4px_rgba(0,0,0,0.15)] rounded-[2px]"></div>
-            </div>
-          </div> */
 }

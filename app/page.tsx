@@ -73,9 +73,6 @@ export default function Page() {
         <ThirdScrollOverlay />
         <div className="h-screen bg-pink-50" />
         <ActionButtons />
-
-        {/* Post-scroll content */}
-        {/* {postScrollContent} */}
       </div>
     </Geiger>
   );

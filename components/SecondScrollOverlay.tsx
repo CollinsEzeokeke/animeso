@@ -8,7 +8,7 @@ import {
 import { useRef, useState, useMemo, useCallback } from "react";
 import PhoneTiltWork from "./phoneTiltWork";
 import { useProgressor } from "@/hooks/store/store";
-
+import { useWindowSize } from "@uidotdev/usehooks";
 export default function SecondScrollOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
@@ -20,6 +20,7 @@ export default function SecondScrollOverlay() {
   });
 
   const { setCurrentProgression } = useProgressor();
+  const { height, width } = useWindowSize();
 
   // Create transform directly (not inside useMemo)
   const orangeHeight = useTransform(
@@ -63,10 +64,17 @@ export default function SecondScrollOverlay() {
         : "relative mx-auto"
     }`;
   }, [isFixed]);
-
+  const responsive = useMemo(() => {
+    if(!height || !width) return;
+    if(width > 768 && width <= 1397 && width != 1440) {
+     return "mb-[9.5rem]"
+    }
+    return "mb-60"
+   }, [height, width])
   return (
     <div
-      className="h-[140vh] z-[60] relative mb-56 bg-black"
+    // mb-60
+      className={`h-[200vh] z-[60] relative bg-black ${responsive}`}
       ref={containerRef}
     >
       <motion.div

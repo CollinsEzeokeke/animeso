@@ -17,12 +17,12 @@ export default function ScrollOverlay() {
     >
       {/* <div className="" /> */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[70vw] h-full relative">
+        <div className="w-[75vw] h-full relative">
           {/* Content container with animation */}
           <motion.div className="absolute inset-0 flex items-center justify-center">
             {/* the contents go into this place */}
             {/* max-w-3xl */}
-            <div className=" w-full text-center space-y-6 z-10">
+            <div className=" w-full text-center space-y-5 z-10">
               <DailyStatus />
               <WeatherLocation />
               <NotificationSummary />
