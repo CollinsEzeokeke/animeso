@@ -73,11 +73,11 @@ export default function Hero() {
       "-500%", // this is the value at 0.099
       "-695%", // this is the value at 0.107
       "-885%", // this is the value at 0.115
-      "-1075%", // this is the value at 0.123
-      "-1270%", //this is the value at 0.131
-      "-1460%", // this is the value at 0.139
-      "-1650%", // this is the value at 0.147
-      "-1830%", // this is the Value at 0.155
+      "-1070%", // this is the value at 0.123
+      "-1260%", //this is the value at 0.131
+      "-1440%", // this is the value at 0.139
+      "-1620%", // this is the value at 0.147
+      "-1820%", // this is the Value at 0.155
       "-2295%", // this is the value at 0.17
     ]
   );
@@ -211,7 +211,7 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-0 justify-center`}
+          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center`}
           style={{
             zIndex: 10,
           }}
@@ -244,10 +244,10 @@ export default function Hero() {
                 } 
                 ${
                   width <= 1397 && width != 1024
-                    ? "-mt-[29%] ml-6"
-                    : "-mt-[38%]"
+                    ? "-mt-[29%] ml-6 items-center justify-center z-50"
+                    : "-mt-[38%] items-center justify-center z-50"
                 }
-                items-center justify-center z-50`}
+                `}
               >
                 {/* ${width <= 1397 ? "-mt-[30%]" : "-mt-[40%]" } */}
 
