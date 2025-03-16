@@ -22,7 +22,7 @@ export default function Hero() {
   const { width, height } = useWindowSize();
   const widthCheckRef = useRef<HTMLDivElement>(null);
   const [isLatest, setIsLatest] = useState(0);
-  const [isPosition, setIsPosition]= useState("")
+  const [isPosition, setIsPosition] = useState("");
   const [baseWidth, setBaseWidth] = useState(0);
 
   // Measure the initial width of the container - optimized with useCallback
@@ -32,18 +32,18 @@ export default function Hero() {
         setBaseWidth(widthCheckRef.current.offsetWidth);
       }
     };
-    
+
     // Use requestAnimationFrame for better timing
     const timeoutId = setTimeout(() => {
       requestAnimationFrame(measureWidth);
     }, 1);
-    
+
     return () => clearTimeout(timeoutId);
   }, []);
 
   // Create all transform values directly (not inside useMemo callbacks)
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
-  
+
   const zoomIn = useTransform(
     scrollYProgress,
     [
@@ -85,7 +85,11 @@ export default function Hero() {
   const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
   const myScale = useTransform(scrollYProgress, [0.005, 0.2], [0, 1]);
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]);
-  const reduceOpacity = useTransform(scrollYProgress, [0, 0.01, 0.02], [1, 0.5, 0]);
+  const reduceOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.01, 0.02],
+    [1, 0.5, 0]
+  );
   const stiffOpacity = useSpring(reduceOpacity, {
     stiffness: 500,
     damping: 60,
@@ -108,13 +112,24 @@ export default function Hero() {
   );
   const blackBar = useTransform(scrollYProgress, [0.185, 0.19], [1, 1]);
   const blackBarSpring = useSpring(blackBar, { stiffness: 500, damping: 50 });
-  const heightTransform = useTransform(scrollYProgress, [0.155, 0.16], ["24px", "40px"]);
-  const opacityTransform = useTransform(scrollYProgress, [0.085, 0.09, 0.185, 0.4], [0, 1, 1, 1]);
+  const heightTransform = useTransform(
+    scrollYProgress,
+    [0.155, 0.16],
+    ["24px", "40px"]
+  );
+  const opacityTransform = useTransform(
+    scrollYProgress,
+    [0.085, 0.09, 0.185, 0.4],
+    [0, 1, 1, 1]
+  );
 
   // Use memoized callbacks for event handlers
-  const handleScaleChange = useCallback((latest: number) => {
-    setNowState(latest);
-  }, [setNowState]);
+  const handleScaleChange = useCallback(
+    (latest: number) => {
+      setNowState(latest);
+    },
+    [setNowState]
+  );
 
   const handleZoomChange = useCallback((latest: number) => {
     if (latest !== 0) {
@@ -124,38 +139,36 @@ export default function Hero() {
   }, []);
   const handleMovingAnotherChange = useCallback((latest: string) => {
     if (latest === "0") {
-      setIsPosition("0")
+      setIsPosition("0");
     }
   }, []);
-  const handleScrollChange = useCallback((latest: number) => {
-    fetch("/api/log-scroll", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ scrollProgress: latest }),
-    });
-  }, []);
+  // const handleScrollChange = useCallback((latest: number) => {
+  //   fetch("/api/log-scroll", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ scrollProgress: latest }),
+  //   });
+  // }, []);
 
   // Setup motion value event listeners
   useMotionValueEvent(myScale, "change", handleScaleChange);
   useMotionValueEvent(zoomIn, "change", handleZoomChange);
-  useMotionValueEvent(movingAnother, "change", handleMovingAnotherChange)
-  useMotionValueEvent(scrollYProgress, "change", handleScrollChange)
+  useMotionValueEvent(movingAnother, "change", handleMovingAnotherChange);
+  // useMotionValueEvent(scrollYProgress, "change", handleScrollChange)
   // Memoize the zoom calculation to avoid recalculations
   const zoomingE = useMemo(() => {
     if (isPosition === "0") {
-      return baseWidth
+      return baseWidth;
     }
-    return baseWidth + zoomIng + isLatest
-  },
-    [baseWidth, zoomIng, isLatest, isPosition]
-  );
+    return baseWidth + zoomIng + isLatest;
+  }, [baseWidth, zoomIng, isLatest, isPosition]);
 
   // Calculate responsive classes with safe null checks
   const containerClass = useMemo(() => {
     if (!width || !height) return "";
-    
+
     if (width <= 768 && height <= 679) return "-mt-[20%]";
     if (width <= 596 && height <= 679) return "w-5/6";
     if (width <= 470 && height <= 679) return "w-5/6";
@@ -165,7 +178,7 @@ export default function Hero() {
 
   const titleSizeClass = useMemo(() => {
     if (!width) return "";
-    
+
     if (width >= 1024) return "text-5xl";
     if (width >= 768) return "text-4xl";
     if (width >= 596) return "text-3xl";
@@ -176,7 +189,7 @@ export default function Hero() {
 
   const subtitleSizeClass = useMemo(() => {
     if (!width) return "";
-    
+
     if (width >= 1024) return "text-5xl";
     if (width >= 768) return "text-[2.5rem]";
     if (width >= 596) return "text-3xl";
@@ -229,7 +242,11 @@ export default function Hero() {
                 className={`flex flex-col h-[25%] -mt-[40%] ${
                   width >= 1024 ? "w-5/6" : "w-5/6"
                 } 
-                ${width <= 1397 && width != 1024 ? "-mt-[30%] ml-6" : "-mt-[40%]" }
+                ${
+                  width <= 1397 && width != 1024
+                    ? "-mt-[29%] ml-6"
+                    : "-mt-[40%]"
+                }
                 items-center justify-center z-50`}
               >
                 {/* ${width <= 1397 ? "-mt-[30%]" : "-mt-[40%]" } */}
@@ -254,7 +271,6 @@ export default function Hero() {
                 blackBarSpring={blackBarSpring}
                 heightTransform={heightTransform}
                 marging={marging}
-                
               />
               {/* makes contents unclickable */}
             </motion.div>
