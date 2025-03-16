@@ -244,7 +244,7 @@ export default function Hero() {
                 } 
                 ${
                   width <= 1397 && width != 1024
-                    ? "-mt-[29%] ml-6 items-center justify-center z-50"
+                    ? "-mt-[29%] ml-6 items-center justify-end z-50"
                     : "-mt-[38%] items-center justify-center z-50"
                 }
                 `}

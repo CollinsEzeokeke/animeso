@@ -27,9 +27,6 @@ export default function ScrollOverlay() {
               <WeatherLocation />
               <NotificationSummary />
             </div>
-
-            {/* ActionButtons component is now rendered outside this container and fixed at the bottom */}
-            {/* <ActionButtons /> */}
           </motion.div>
         </div>
       </div>

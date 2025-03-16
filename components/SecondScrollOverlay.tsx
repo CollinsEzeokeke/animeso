@@ -26,7 +26,7 @@ export default function SecondScrollOverlay() {
   const orangeHeight = useTransform(
     scrollYProgress,
     [0.99, 0.66], // Input range (from higher to lower scroll value)
-    ["15vh", "63.5vh"] // Output range (from lower to higher height)
+    ["15vh", "83.5vh"] // Output range (from lower to higher height)
   );
 
   // Memoize the scroll event handler for better performance
