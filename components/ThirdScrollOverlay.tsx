@@ -65,13 +65,13 @@ export default function ThirdScrollOverlay() {
 
   // Set up the scroll event listener
   useMotionValueEvent(scrollYProgress, "change", handleScrollProgressChange);
-const responsive3 = useMemo(() => {
-  if(!height || !width) return;
-  if(width > 768 && width <= 1397 && width != 1440) {
-   return "-mt-20"
-  }
-  return ""
-}, [height, width])
+  const responsive3 = useMemo(() => {
+    if (!height || !width) return;
+    if (width > 768 && width <= 1397 && width != 1440) {
+      return "-mt-20";
+    }
+    return "";
+  }, [height, width]);
   // Memoize the container class
   const containerClassName = useMemo(() => {
     return `h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${responsive3} ${
@@ -138,8 +138,17 @@ const responsive3 = useMemo(() => {
           />
         </div>
       );
-    } else if (thirdScrollProgress >= 0.44) {
-      return "";
+    } else if (thirdScrollProgress >= 0.4) {
+      return (
+        <div className="w-[10vw] h-[50%] flex items-start justify-start bg-red-500">
+          <div className="bg-blue-500 w-full h-[70%]">
+            <div className="bg-white w-[80%] h-[25%] rounded-xl flex flex-col items-center rotate-12 px-6">
+              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">Mon</div>
+              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">12</div>
+            </div>
+          </div>
+        </div>
+      );
     } else {
       // Default nothing if not in the right range
       return " ";
@@ -165,7 +174,11 @@ const responsive3 = useMemo(() => {
       return " ";
     } else if (thirdScrollProgress >= 0.4) {
       // side calendar stuff
-      return <></>;
+      return (
+        <div className="bg-blue-500">
+          lkdsakjdfksajkdfjkadsjfk;ljaksdfjkajdsfkjasdkfjkasfkldksa
+        </div>
+      );
     } else {
       // Default nothing if not in the right range
       return " ";
@@ -252,11 +265,13 @@ const responsive3 = useMemo(() => {
 
         <StackedDesktops />
         <div
-          className={`h-full flex justify-evenly w-full absolute -z-10 ${responsive2}`}
+          className={`h-full flex justify-evenly w-full absolute -z-10 bg-green-500 ${responsive2}`}
         >
           {/* periodic image on the left */}
           {renderImageLeft()}
-          <div className={`h-[50%] flex items-center justify-end ${responsive4}`}>
+          <div
+            className={`h-[50%] flex items-center justify-end bg-purple-500 ${responsive4}`}
+          >
             {/* periodic image on the right */}
             {renderImageRight()}
           </div>

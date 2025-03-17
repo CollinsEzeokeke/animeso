@@ -21,6 +21,10 @@ export default function Hero() {
   });
   const { width, height } = useWindowSize();
   const widthCheckRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [IsHeight, setIsHeight] = useState(height || 0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [IsWidth, setIsWidth] = useState(width || 0);
   const [isLatest, setIsLatest] = useState(0);
   const [isPosition, setIsPosition] = useState("");
   const [baseWidth, setBaseWidth] = useState(0);
@@ -52,7 +56,6 @@ export default function Hero() {
     ],
     [1.2, 5, 7, 7.5, 8, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
   );
-
   const movingAnother = useTransform(
     scrollYProgress,
     [
@@ -70,7 +73,7 @@ export default function Hero() {
       "-228%", // this is the value at 0.075
       "-245%", // this is the value at 0.083
       "-395%", // this is the value at 0.091
-      "-500%", // this is the value at 0.099
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "40%" : "500%"}`, // this is the value at 0.099
       "-695%", // this is the value at 0.107
       "-885%", // this is the value at 0.115
       "-1070%", // this is the value at 0.123
@@ -78,7 +81,7 @@ export default function Hero() {
       "-1440%", // this is the value at 0.139
       "-1620%", // this is the value at 0.147
       "-1820%", // this is the Value at 0.155
-      "-2295%", // this is the value at 0.17
+      "-2280%", // this is the value at 0.17
     ]
   );
 
@@ -152,6 +155,16 @@ export default function Hero() {
   //   });
   // }, []);
 
+  // useEffect(() => {
+  //   fetch("/api/log-scroll", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ width: width, height: height  }),
+  //   });
+  // }, [width, height]);
+
   // Setup motion value event listeners
   useMotionValueEvent(myScale, "change", handleScaleChange);
   useMotionValueEvent(zoomIn, "change", handleZoomChange);
@@ -201,6 +214,7 @@ export default function Hero() {
   const containerPullDown = useMemo(() => {
     if (!width || !height) return "";
     if (width <= 1394 && height <= 697) return "mt-[10vh]";
+    if (width <= 1600 && height <= 800) return "mt-[12vh]";
     return "";
   }, [width, height]);
 
@@ -211,18 +225,18 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center`}
+          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center bg-red-500`}
           style={{
             zIndex: 10,
           }}
         >
           <motion.div
-            className={`flex justify-center absolute pt-0 top-[-4vh] w-[65vw] h-screen ${containerPullDown}`}
+            className={`flex justify-center absolute pt-0 top-[-2vh] w-[65vw] h-screen ${containerPullDown} bg-pink-300`}
             ref={widthCheckRef}
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass} bg-blue-500`}
               style={{
                 y: movingAnother,
                 scale: zoomIn,
@@ -243,7 +257,7 @@ export default function Hero() {
                   width >= 1024 ? "w-5/6" : "w-5/6"
                 } 
                 ${
-                  width <= 1397 && width != 1024
+                  width <= 1397 && width != 1024 && height <= 1000 
                     ? "-mt-[29%] ml-6 items-center justify-end z-50"
                     : "-mt-[38%] items-center justify-center z-50"
                 }
