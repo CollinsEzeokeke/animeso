@@ -140,11 +140,15 @@ export default function ThirdScrollOverlay() {
       );
     } else if (thirdScrollProgress >= 0.4) {
       return (
-        <div className="w-[10vw] h-[50%] flex items-start justify-start bg-red-500">
-          <div className="bg-blue-500 w-full h-[70%]">
-            <div className="bg-white w-[80%] h-[25%] rounded-xl flex flex-col items-center rotate-12 px-6">
+        <div className="w-[12vw] h-[50%] flex items-start justify-start">
+          <div className="w-full h-[70%] flex flex-col justify-center">
+            <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center rotate-12 px-10  shadow-md shadow-black/25">
               <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">Mon</div>
               <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">12</div>
+            </div>
+            <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center -rotate-12 px-10  shadow-md shadow-black/25">
+              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">Tue</div>
+              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">13</div>
             </div>
           </div>
         </div>
@@ -175,8 +179,22 @@ export default function ThirdScrollOverlay() {
     } else if (thirdScrollProgress >= 0.4) {
       // side calendar stuff
       return (
-        <div className="bg-blue-500">
-          lkdsakjdfksajkdfjkadsjfk;ljaksdfjkajdsfkjasdkfjkasfkldksa
+        <div className="h-full w-full flex justify-end items-end">
+          <div className="w-1/2 h-[70%] flex flex-col items-end justify-end relative -translate-x-2">
+          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 shadow-md shadow-black/25 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Wed</div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">14</div>
+            </div>
+          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end rotate-6 relative z-0 pl-0 shadow-md shadow-black/25 -mt-2 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Thu</div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">15</div>
+            </div>
+          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 mt-3 shadow-md shadow-black/25 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Fri</div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">16</div>
+            </div>
+
+          </div>
         </div>
       );
     } else {
@@ -184,6 +202,7 @@ export default function ThirdScrollOverlay() {
       return " ";
     }
   }, [thirdScrollProgress]);
+  
   const responsive = useMemo(() => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {
@@ -265,12 +284,12 @@ export default function ThirdScrollOverlay() {
 
         <StackedDesktops />
         <div
-          className={`h-full flex justify-evenly w-full absolute -z-10 bg-green-500 ${responsive2}`}
+          className={`h-full flex justify-evenly w-full absolute -z-10 ${responsive2}`}
         >
           {/* periodic image on the left */}
           {renderImageLeft()}
           <div
-            className={`h-[50%] flex items-center justify-end bg-purple-500 ${responsive4}`}
+            className={`h-[50%] flex items-center justify-end  ${responsive4}`}
           >
             {/* periodic image on the right */}
             {renderImageRight()}

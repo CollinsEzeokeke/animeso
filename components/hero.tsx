@@ -73,7 +73,7 @@ export default function Hero() {
       "-228%", // this is the value at 0.075
       "-245%", // this is the value at 0.083
       "-395%", // this is the value at 0.091
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "40%" : "500%"}`, // this is the value at 0.099
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "400%" : "500%"}`, // this is the value at 0.099
       "-695%", // this is the value at 0.107
       "-885%", // this is the value at 0.115
       "-1070%", // this is the value at 0.123
@@ -225,18 +225,18 @@ export default function Hero() {
     <>
       <div className="overflow-x-hidden">
         <motion.div
-          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center bg-red-500`}
+          className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center`}
           style={{
             zIndex: 10,
           }}
         >
           <motion.div
-            className={`flex justify-center absolute pt-0 top-[-2vh] w-[65vw] h-screen ${containerPullDown} bg-pink-300`}
+            className={`flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen ${containerPullDown}`}
             ref={widthCheckRef}
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass} bg-blue-500`}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
               style={{
                 y: movingAnother,
                 scale: zoomIn,
@@ -253,13 +253,13 @@ export default function Hero() {
                 initial={{ y: -20 }}
                 animate={{ y: -10 }}
                 transition={{ duration: 0.4, delay: 2 }}
-                className={`flex flex-col h-[25%] -mt-[40%] ${
+                className={`flex flex-col h-[25%]  ${
                   width >= 1024 ? "w-5/6" : "w-5/6"
                 } 
                 ${
                   width <= 1397 && width != 1024 && height <= 1000 
                     ? "-mt-[29%] ml-6 items-center justify-end z-50"
-                    : "-mt-[38%] items-center justify-center z-50"
+                    : "-mt-[42%] items-center justify-center z-50"
                 }
                 `}
               >
