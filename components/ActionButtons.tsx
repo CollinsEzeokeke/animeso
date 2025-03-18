@@ -1,11 +1,14 @@
 "use client";
 import { Play, Download, DollarSign } from "lucide-react";
-import { motion, useTransform, useSpring, useScroll } from "framer-motion";
+import { motion, useTransform, useSpring, useScroll, useMotionValueEvent } from "framer-motion";
 
 export default function ActionButtons() {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0.12, 0.45], ["0", "1"]);
   const opacitySpring = useSpring(opacity, { stiffness: 500, damping: 20 });
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log("scrollYProgress is :", latest);
+  });
   return (
     <motion.div
       className="fixed bottom-0 left-0 z-[100] right-0 flex items-center justify-center space-x-4 py-6 bg-gradient-to-t bg-transparent"
