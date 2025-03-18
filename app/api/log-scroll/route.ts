@@ -4,7 +4,10 @@ import path from 'path';
 
 export async function POST(request: Request) {
   try {
-    const { width, height } = await request.json();
+    // check of height and width are in the request
+    // const { width, height } = await request.json();
+    // check for scroll progress
+    const { scrollProgress } = await request.json();
     
     // Create logs directory if it doesn't exist
     const logsDir = path.join(process.cwd(), 'logs');
@@ -14,7 +17,7 @@ export async function POST(request: Request) {
 
     // Append to log file
     const logFile = path.join(logsDir, 'scroll-progress.log');
-    fs.appendFileSync(logFile, `This is your latest width and height: ${new Date().toISOString()}: ${width}, ${height}\n`);
+    fs.appendFileSync(logFile, `The scrollProgress on Y is : ${new Date().toISOString()}: ${scrollProgress}\n`);
 
     return NextResponse.json({ success: true });
   } catch (error) {

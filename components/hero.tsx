@@ -18,7 +18,7 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
-    axis: "y",
+    axis: "x",
     // layoutEffect: false,
   });
   const { width, height } = useWindowSize();
@@ -177,7 +177,9 @@ export default function Hero() {
   useMotionValueEvent(movingAnother, "change", (latest) => {
     handleMovingAnotherChange(latest);
   });
-  // useMotionValueEvent(scrollYProgress, "change", handleScrollChange)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    handleScrollChange(latest);
+  })
   // Memoize the zoom calculation to avoid recalculations
   const zoomingE = useMemo(() => {
     if (isPosition === "0") {
@@ -220,8 +222,8 @@ export default function Hero() {
 
   const containerPullDown = () => {
     if (width <= 1394 && height <= 697) return "mt-[10vh]";
-    if (width <= 1600 && height <= 800) return "mt-[12vh]";
-    return "";
+    if (width <= 1600 && height <= 800) return "mt-[12vh] top-[-4vh]";
+    return "top-[2vh]";
   }
 
   // Early return optimization
@@ -238,7 +240,7 @@ export default function Hero() {
           }}
         >
           <motion.div
-            className={`flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen ${containerPullDown()}`}
+            className={`flex justify-center absolute pt-0 w-[65vw] h-screen ${containerPullDown()}`}
             ref={widthCheckRef}
           >
             {/* this part has all the different styles and animations  */}
