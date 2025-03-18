@@ -177,9 +177,9 @@ export default function Hero() {
   useMotionValueEvent(movingAnother, "change", (latest) => {
     handleMovingAnotherChange(latest);
   });
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    handleScrollChange(latest);
-  })
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   handleScrollChange(latest);
+  // })
   // Memoize the zoom calculation to avoid recalculations
   const zoomingE = useMemo(() => {
     if (isPosition === "0") {
