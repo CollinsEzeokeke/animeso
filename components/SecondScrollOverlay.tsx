@@ -5,7 +5,7 @@ import {
   motion,
   useTransform,
 } from "framer-motion";
-import { useRef, useState, useMemo, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import PhoneTiltWork from "./phoneTiltWork";
 import { useProgressor } from "@/hooks/store/store";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -57,24 +57,24 @@ export default function SecondScrollOverlay() {
   useMotionValueEvent(scrollYProgress, "change", handleScrollProgressChange);
 
   // Memoize the class string to avoid recalculation on every render
-  const phoneContainerClassName = useMemo(() => {
+  const phoneContainerClassName = () => {
     return `h-[80vh] w-[80%] z-[1000] ${
       isFixed
         ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
         : "relative mx-auto"
     }`;
-  }, [isFixed]);
-  const responsive = useMemo(() => {
+  }
+  const responsive = () => {
     if(!height || !width) return;
     if(width > 768 && width <= 1397 && width != 1440) {
      return "mb-[9.5rem]"
     }
     return "mb-60"
-   }, [height, width])
+   }
   return (
     <div
     // mb-60
-      className={`h-[200vh] z-[60] relative bg-black ${responsive}`}
+      className={`h-[200vh] z-[60] relative bg-black ${responsive()}`}
       ref={containerRef}
     >
       <motion.div
@@ -85,7 +85,7 @@ export default function SecondScrollOverlay() {
         }}
       />
       <motion.div
-        className={phoneContainerClassName}
+        className={phoneContainerClassName()}
       >
         <PhoneTiltWork />
       </motion.div>

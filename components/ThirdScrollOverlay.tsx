@@ -5,7 +5,7 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { useRef, useState, useMemo, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import StackedDesktops from "./stackedDesktops";
 import { useThirdScrollOverlay } from "@/hooks/store/store";
 import Image from "next/image";
@@ -64,25 +64,27 @@ export default function ThirdScrollOverlay() {
   );
 
   // Set up the scroll event listener
-  useMotionValueEvent(scrollYProgress, "change", handleScrollProgressChange);
-  const responsive3 = useMemo(() => {
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    handleScrollProgressChange(latest);
+  });
+  const responsive3 = () => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {
       return "-mt-20";
     }
     return "";
-  }, [height, width]);
+  }
   // Memoize the container class
-  const containerClassName = useMemo(() => {
-    return `h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${responsive3} ${
+  const containerClassName = () => {
+    return `h-[80vh] w-[80%] z-[60] flex flex-col items-center justify-start ${responsive3()} ${
       isFixed
         ? "fixed top-[13vh] left-1/2 -translate-x-1/2"
         : "relative mx-auto"
     }`;
-  }, [isFixed, responsive3]);
+  }
 
   // Memoize the text content class names based on thirdScrollProgress
-  const textClasses = useMemo(() => {
+  const textClasses = () => {
     return {
       firstText:
         thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]",
@@ -104,7 +106,7 @@ export default function ThirdScrollOverlay() {
           ? "text-white"
           : "text-[#a4a1a195]",
     };
-  }, [thirdScrollProgress]);
+  }
 
   // Memoize the left image render function
   const renderImageLeft = useCallback(() => {
@@ -143,12 +145,20 @@ export default function ThirdScrollOverlay() {
         <div className="w-[12vw] h-[50%] flex items-start justify-start">
           <div className="w-full h-[70%] flex flex-col justify-center">
             <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center rotate-12 px-10  shadow-md shadow-black/25">
-              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">Mon</div>
-              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">12</div>
+              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                Mon
+              </div>
+              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
+                12
+              </div>
             </div>
             <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center -rotate-12 px-10  shadow-md shadow-black/25">
-              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">Tue</div>
-              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">13</div>
+              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                Tue
+              </div>
+              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
+                13
+              </div>
             </div>
           </div>
         </div>
@@ -181,19 +191,30 @@ export default function ThirdScrollOverlay() {
       return (
         <div className="h-full w-full flex justify-end items-end">
           <div className="w-1/2 h-[70%] flex flex-col items-end justify-end relative -translate-x-2">
-          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 shadow-md shadow-black/25 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Wed</div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">14</div>
+            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 shadow-md shadow-black/25 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                Wed
+              </div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                14
+              </div>
             </div>
-          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end rotate-6 relative z-0 pl-0 shadow-md shadow-black/25 -mt-2 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Thu</div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">15</div>
+            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end rotate-6 relative z-0 pl-0 shadow-md shadow-black/25 -mt-2 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                Thu
+              </div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                15
+              </div>
             </div>
-          <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 mt-3 shadow-md shadow-black/25 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">Fri</div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">16</div>
+            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 mt-3 shadow-md shadow-black/25 ">
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                Fri
+              </div>
+              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                16
+              </div>
             </div>
-
           </div>
         </div>
       );
@@ -202,28 +223,28 @@ export default function ThirdScrollOverlay() {
       return " ";
     }
   }, [thirdScrollProgress]);
-  
-  const responsive = useMemo(() => {
+
+  const responsive = () => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {
       return "w-[54.5%] -mt-20  h-full";
     }
     return "w-[45%] -mt-20";
-  }, [height, width]);
-  const responsive2 = useMemo(() => {
+  };
+  const responsive2 = () => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {
       return "items-end";
     }
     return "items-center";
-  }, [height, width]);
-  const responsive4 = useMemo(() => {
+  };
+  const responsive4 = () => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {
       return "w-[50%]";
     }
     return "w-[40%]";
-  }, [height, width]);
+  };
   return (
     <div
       className="h-[240vh] bg-black -mt-[25vh] z-[60] relative"
@@ -236,9 +257,9 @@ export default function ThirdScrollOverlay() {
           willChange: "height", // Hardware acceleration hint
         }}
       />
-      <motion.div className={containerClassName}>
+      <motion.div className={containerClassName()}>
         <motion.div
-          className={`z-0 ${responsive}`}
+          className={`z-0 ${responsive()}`}
           style={{
             y: yValue,
             willChange: "transform", // Hardware acceleration hint
@@ -246,12 +267,12 @@ export default function ThirdScrollOverlay() {
         >
           <span className="flex flex-col gap-2 space-y-0 items-start justify-around ">
             <span className="text-3xl font-semibold flex flex-col justify-around h-[10%] gap-2 pt-0">
-              <span className={textClasses.firstText}>
+              <span className={textClasses().firstText}>
                 Emails are closer than ever to your todos
               </span>
-              <span className={`${textClasses.firstText} w-full`}>
+              <span className={`${textClasses().firstText} w-full`}>
                 <span>and calendar.</span>
-                <span className={textClasses.secondText}>
+                <span className={textClasses().secondText}>
                   {" "}
                   No need to break up with
                 </span>
@@ -260,36 +281,36 @@ export default function ThirdScrollOverlay() {
 
             <span className="text-3xl font-semibold mt-0">
               {" "}
-              <span className={textClasses.secondText}>
+              <span className={textClasses().secondText}>
                 {" "}
                 your apps, just connect them.{" "}
               </span>
-              <span className={textClasses.thirdText}>Like to</span>
+              <span className={textClasses().thirdText}>Like to</span>
             </span>
-            <span className={`text-3xl font-semibold ${textClasses.thirdText}`}>
+            <span className={`text-3xl font-semibold ${textClasses().thirdText}`}>
               {" "}
               miss meetings? Not with Amie in the
             </span>
             <span className="text-3xl font-semibold">
-              <span className={textClasses.thirdText}>menubar. </span>
-              <span className={textClasses.fourthText}>
+              <span className={textClasses().thirdText}>menubar. </span>
+              <span className={textClasses().fourthText}>
                 Share your free slots with
               </span>
             </span>
             <span className="text-3xl font-semibold justify-self-start">
-              <span className={textClasses.fourthText}>anyone you like.</span>
+              <span className={textClasses().fourthText}>anyone you like.</span>
             </span>
           </span>
         </motion.div>
 
         <StackedDesktops />
         <div
-          className={`h-full flex justify-evenly w-full absolute -z-10 ${responsive2}`}
+          className={`h-full flex justify-evenly w-full absolute -z-10 ${responsive2()}`}
         >
           {/* periodic image on the left */}
           {renderImageLeft()}
           <div
-            className={`h-[50%] flex items-center justify-end  ${responsive4}`}
+            className={`h-[50%] flex items-center justify-end  ${responsive4()}`}
           >
             {/* periodic image on the right */}
             {renderImageRight()}

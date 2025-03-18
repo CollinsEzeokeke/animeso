@@ -12,6 +12,7 @@ export default function ScrollOverlay() {
       style={{
         scale: nowScale,
         transformOrigin: "center",
+        willChange: "scale",
       }}
       className="relative -top-0 left-0 w-full h-screen pointer-events-none z-[60] overflow-y-auto bg-black"
     >
