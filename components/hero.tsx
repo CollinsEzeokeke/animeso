@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { VideoLoader } from "./videoLoader";
 import {
@@ -18,16 +18,16 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+    axis: "y",
+    // layoutEffect: false,
   });
   const { width, height } = useWindowSize();
   const widthCheckRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [IsHeight, setIsHeight] = useState(height || 0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [IsWidth, setIsWidth] = useState(width || 0);
   const [isLatest, setIsLatest] = useState(0);
   const [isPosition, setIsPosition] = useState("");
   const [baseWidth, setBaseWidth] = useState(0);
+  const IsWidth = width || 0;
+  const IsHeight = height || 0;
 
   // Measure the initial width of the container - optimized with useCallback
   useEffect(() => {
@@ -40,12 +40,11 @@ export default function Hero() {
     // Use requestAnimationFrame for better timing
     const timeoutId = setTimeout(() => {
       requestAnimationFrame(measureWidth);
-    }, 1);
+    }, 0.1);
 
     return () => clearTimeout(timeoutId);
   }, []);
 
-  // Create all transform values directly (not inside useMemo callbacks)
   const yIndex = useTransform(scrollYProgress, [0, 0.01], ["-10%", "-10%"]);
 
   const zoomIn = useTransform(
@@ -166,9 +165,18 @@ export default function Hero() {
   // }, [width, height]);
 
   // Setup motion value event listeners
-  useMotionValueEvent(myScale, "change", handleScaleChange);
-  useMotionValueEvent(zoomIn, "change", handleZoomChange);
-  useMotionValueEvent(movingAnother, "change", handleMovingAnotherChange);
+  
+  // Cleanup motion values
+
+  useMotionValueEvent(myScale, "change", (latest) => {
+    handleScaleChange(latest);
+  });
+  useMotionValueEvent(zoomIn, "change", (latest) => {
+    handleZoomChange(latest);
+  });
+  useMotionValueEvent(movingAnother, "change", (latest) => {
+    handleMovingAnotherChange(latest);
+  });
   // useMotionValueEvent(scrollYProgress, "change", handleScrollChange)
   // Memoize the zoom calculation to avoid recalculations
   const zoomingE = useMemo(() => {
@@ -178,51 +186,50 @@ export default function Hero() {
     return baseWidth + zoomIng + isLatest;
   }, [baseWidth, zoomIng, isLatest, isPosition]);
 
-  // Calculate responsive classes with safe null checks
-  const containerClass = useMemo(() => {
-    if (!width || !height) return "";
 
+
+
+  if (!width || !height) return null;
+
+  // Calculate responsive classes with safe null checks
+  const containerClass = () => {
     if (width <= 768 && height <= 679) return "-mt-[20%]";
     if (width <= 596 && height <= 679) return "w-5/6";
     if (width <= 470 && height <= 679) return "w-5/6";
     if (width <= 425 && height <= 679) return "w-5/6";
     return "";
-  }, [width, height]);
+  };
 
-  const titleSizeClass = useMemo(() => {
-    if (!width) return "";
-
+  const titleSizeClass = () => {
     if (width >= 1024) return "text-5xl";
     if (width >= 768) return "text-4xl";
     if (width >= 596) return "text-3xl";
     if (width === 470) return "text-2xl";
     if (width >= 426) return "text-2xl";
-    return "";
-  }, [width]);
+    return "text-5xl";
+  };
 
-  const subtitleSizeClass = useMemo(() => {
-    if (!width) return "";
-
+  const subtitleSizeClass = () => {
     if (width >= 1024) return "text-5xl";
     if (width >= 768) return "text-[2.5rem]";
     if (width >= 596) return "text-3xl";
     if (width === 470) return "text-2xl";
     if (width >= 425) return "text-2xl";
     return "";
-  }, [width]);
+  }
 
-  const containerPullDown = useMemo(() => {
-    if (!width || !height) return "";
+  const containerPullDown = () => {
     if (width <= 1394 && height <= 697) return "mt-[10vh]";
     if (width <= 1600 && height <= 800) return "mt-[12vh]";
     return "";
-  }, [width, height]);
+  }
 
   // Early return optimization
-  if (!width || !height) return null;
 
   return (
     <>
+     <AnimatePresence mode="wait">
+     {width && height && (
       <div className="overflow-x-hidden">
         <motion.div
           className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center`}
@@ -231,12 +238,12 @@ export default function Hero() {
           }}
         >
           <motion.div
-            className={`flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen ${containerPullDown}`}
+            className={`flex justify-center absolute pt-0 top-[4vh] w-[65vw] h-screen ${containerPullDown()}`}
             ref={widthCheckRef}
           >
             {/* this part has all the different styles and animations  */}
             <motion.div
-              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass}`}
+              className={`bg-transparent min-h-[100vh] w-full flex items-center justify-center z-0 top-0 relative ${containerClass()}`}
               style={{
                 y: movingAnother,
                 scale: zoomIn,
@@ -266,12 +273,12 @@ export default function Hero() {
                 {/* ${width <= 1397 ? "-mt-[30%]" : "-mt-[40%]" } */}
 
                 <h1
-                  className={`text-white font-sans ${titleSizeClass} font-[650] mb-2`}
+                  className={`text-white font-sans ${titleSizeClass()} font-[650] mb-2`}
                 >
                   Todos, email, calendar.
                 </h1>
                 <p
-                  className={`font-sans font-semibold text-gray-50 ${subtitleSizeClass}`}
+                  className={`font-sans font-semibold text-gray-50 ${subtitleSizeClass()}`}
                 >
                   All-in-done.
                 </p>
@@ -292,6 +299,8 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
+      )}
+      </AnimatePresence>
     </>
   );
 }
