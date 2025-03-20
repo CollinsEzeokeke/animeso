@@ -168,15 +168,15 @@ export default function Hero() {
   //   });
   // }, []);
 
-  useEffect(() => {
-    fetch("/api/log-scroll", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ width: width, height: height  }),
-    });
-  }, [width, height]);
+  // useEffect(() => {
+  //   fetch("/api/log-scroll", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ width: width, height: height  }),
+  //   });
+  // }, [width, height]);
 
   // Setup motion value event listeners
   
