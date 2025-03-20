@@ -94,7 +94,9 @@ export default function Hero() {
       // "-1820%", // this is the Value at 0.155
       `-${IsWidth <= 1394 && IsHeight <= 697 ? "1820%" : IsWidth <= 1600 && IsHeight <= 800 ? "1750%" : "1800%"}`, // this is the Value at 0.155
       // "-1750%", // this is the Value at 0.155
-      "-2280%", // this is the value at 0.17
+      // "-2200%", // this is the value at 0.17
+      `-${IsHeight <= 900 ? "2200%" : "2280%"}`
+      // "-2280%", // this is the value at 0.17
     ]
   );
 
