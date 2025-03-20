@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import IconBox from "./IconBox";
 import { format } from "date-fns";
 import Image from "next/image";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export default function DailyStatus() {
   const [currentDay, setCurrentDay] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  const {width, height} = useWindowSize()
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -20,15 +22,15 @@ export default function DailyStatus() {
 
     return () => clearInterval(interval);
   }, []);
-
+if (!width || !height) return "";
   return (
-    <div className="w-full bg-blue-400">
-      <h1 className="text-6xl font-semibold tracking-wide mb-3 text-slate-50/85">
+    <div className="w-full">
+      <h1 className={`${width <= 1343 ? "text-5xl" : "text-6xl"} font-semibold tracking-wide mb-3 text-slate-50/85`}>
         Happy {currentDay}!
       </h1>
-      <p className="text-6xl font-bold text-slate-100 flex items-center justify-center bg-red-300 w-full">
-        <span className="text-slate-50/90 text-6xl bg-blue-500"> It&apos;s </span>
-        <IconBox className="mx-0 h-28 w-32 bg-orange-500">
+      <p className={`${width <= 1343 ? "text-5xl" : "text-6xl"} font-bold text-slate-100 flex items-center justify-center w-full`}>
+        <span className={`text-slate-50/90 ${width <= 1343 ? "text-5xl" : "text-6xl"} `}> It&apos;s </span>
+        <IconBox className="mx-0 h-28 w-32">
           <Image
             src="/feature-pomodoro.webp"
             width={100}
@@ -37,9 +39,9 @@ export default function DailyStatus() {
             alt="clock"
           />
         </IconBox>{" "}
-        <span className="bg-purple-500">{currentTime}</span>
-        <span className="text-slate-50/90 pl-2 text-6xl ml-2 bg-orange-500"> and</span>{" "}
-        <IconBox className="mx-3 bg-gray-500">
+        <span className="">{currentTime}</span>
+        <span className={`text-slate-50/90 pl-2 ${width <= 1343 ? "text-5xl" : "text-6xl"} ml-2`}> and</span>{" "}
+        <IconBox className="mx-3">
           <Image
             src="/cloud-high.png"
             alt="cloud-image"

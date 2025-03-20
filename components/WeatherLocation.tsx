@@ -8,7 +8,7 @@ export default function WeatherLocation() {
   const { width, height } = useWindowSize();
   if (!width || !height) return "";
   return (
-    <div className="animate-fade-in delay-200 text-6xl font-bold text-slate-100/90 flex flex-wrap items-center justify-center">
+    <div className={`animate-fade-in delay-200 ${width <= 1343 ? "text-5xl" : "text-6xl"} font-bold text-slate-100/90 flex flex-wrap items-center justify-center`}>
       <div className="flex items-center mx-1">
         <p className="px-2">in</p>
         <IconBox className="mx-3">

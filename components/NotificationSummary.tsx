@@ -2,11 +2,14 @@ import IconBox from "./IconBox";
 import Card from "./Card";
 import { motion } from "framer-motion";
 import CardTwo from "./CardTwo";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export default function NotificationSummary() {
+  const { width } = useWindowSize();  
+  if (!width) return "";
   return (
-    <div className="animate-fade-in delay-300 pt-5">
-      <p className="text-6xl font-bold text-white/90 flex flex-wrap items-center justify-center">
+    <div className="animate-fade-in delay-300 pt-5 ">
+      <p className={`${width <= 1343 ? "text-5xl" : "text-6xl"} font-bold text-white/90 flex flex-wrap items-center justify-center`}>
         <span className="text-slate-50/90">You got</span>
         <motion.div
           whileHover={{ rotate: -12 }}
@@ -19,7 +22,7 @@ export default function NotificationSummary() {
         </motion.div>
         2 emails and have
       </p>
-      <p className="text-6xl font-bold text-white/90 flex flex-wrap items-center justify-center">
+      <p className={`${width <= 1343 ? "text-5xl" : "text-6xl"} font-bold text-white/90 flex flex-wrap items-center justify-center`}>
         <IconBox className="mx-3 w-32 relative">
           <div className="w-full h-16 bg-slate-400/50 rounded-xl -rotate-12 absolute top-1 left-0 z-10" />
           <CardTwo className="relative z-20"/>

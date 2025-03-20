@@ -23,7 +23,7 @@ export default function ScrollOverlay() {
           <motion.div className="absolute inset-0 flex items-center justify-center">
             {/* the contents go into this place */}
             {/* max-w-3xl */}
-            <div className=" w-full text-center space-y-5 z-10 bg-green-500">
+            <div className=" w-full text-center space-y-5 z-10">
               <DailyStatus />
               <WeatherLocation />
               <NotificationSummary />
