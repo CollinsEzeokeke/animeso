@@ -14,7 +14,7 @@ export default function ActionButtons() {
       className="fixed bottom-0 left-0 z-[100] right-0 flex items-center justify-center space-x-4 py-6 bg-gradient-to-t bg-transparent"
       style={{ opacity: opacitySpring }}
     >
-      <div className="w-[25%] h-[4.5vh] flex bg-[#4a4a4ab5] justify-center items-center rounded-md">
+      <div className="w-[25%] h-[4.5vh] flex bg-[#4a4a4ab5] justify-center items-center rounded-xl">
         <button className="glass-button flex items-center justify-evenly h-[80%] text-white text-base font-semibold w-[30%] -ml-0 hover:bg-[#4a4a4ab5]/50 rounded-md">
           <div className="bg-black h-[45%] w-[15%] flex items-center justify-center rounded-md -ml-2"><Play className="h-2 stroke-[8px]" /></div>
           <p className="">Watch film</p>

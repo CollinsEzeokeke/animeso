@@ -72,14 +72,28 @@ export default function Hero() {
       "-228%", // this is the value at 0.075
       "-245%", // this is the value at 0.083
       "-395%", // this is the value at 0.091
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "400%" : "500%"}`, // this is the value at 0.099
-      "-695%", // this is the value at 0.107
-      "-885%", // this is the value at 0.115
-      "-1070%", // this is the value at 0.123
-      "-1260%", //this is the value at 0.131
-      "-1440%", // this is the value at 0.139
-      "-1620%", // this is the value at 0.147
-      "-1820%", // this is the Value at 0.155
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "500%" : "500%"}`, // this is the value at 0.099
+      // "-695%", // this is the value at 0.107 
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "695%" : IsWidth <= 1600 && IsHeight <= 800 ? "680%" : "695%"}`, // this is the value at 0.107
+      // "-680%", // this is the value at 0.107
+      // "-885%", // this is the value at 0.115
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "885%" : IsWidth <= 1600 && IsHeight <= 800 ? "850%" : "885%"}`, // this is the value at 0.115
+      // "-850%", // this is the value at 0.115
+      // "-1070%", // this is the value at 0.123
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1070%" : IsWidth <= 1600 && IsHeight <= 800 ? "1020%" : "1070%"}`, // this is the value at 0.123
+      // "-1020%", // this is the value at 0.123
+      // "-1260%", //this is the value at 0.131
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1260%" : IsWidth <= 1600 && IsHeight <= 800 ? "1190%" : "1260%"}`, //this is the value at 0.131
+      // "-1190%", //this is the value at 0.131
+      // "-1440%", // this is the value at 0.139
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1440%" : IsWidth <= 1600 && IsHeight <= 800 ? "1370%" : "1440%"}`, // this is the value at 0.139
+      // "-1370%", // this is the value at 0.139
+      // "-1620%", // this is the value at 0.147
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1620%" : IsWidth <= 1600 && IsHeight <= 800 ? "1550%" : "1620%"}`, // this is the value at 0.147
+      // "-1550%", // this is the value at 0.147
+      // "-1820%", // this is the Value at 0.155
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1820%" : IsWidth <= 1600 && IsHeight <= 800 ? "1750%" : "1820%"}`, // this is the Value at 0.155
+      // "-1750%", // this is the Value at 0.155
       "-2280%", // this is the value at 0.17
     ]
   );
@@ -154,15 +168,15 @@ export default function Hero() {
   //   });
   // }, []);
 
-  // useEffect(() => {
-  //   fetch("/api/log-scroll", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ width: width, height: height  }),
-  //   });
-  // }, [width, height]);
+  useEffect(() => {
+    fetch("/api/log-scroll", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ width: width, height: height  }),
+    });
+  }, [width, height]);
 
   // Setup motion value event listeners
   
@@ -223,7 +237,7 @@ export default function Hero() {
   const containerPullDown = () => {
     if (width <= 1394 && height <= 697) return "mt-[10vh]";
     if (width <= 1600 && height <= 800) return "mt-[12vh] top-[-4vh]";
-    return "top-[2vh]";
+    // return "top-[2vh]";
   }
 
   // Early return optimization

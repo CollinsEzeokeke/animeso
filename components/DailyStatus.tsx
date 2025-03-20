@@ -22,13 +22,13 @@ export default function DailyStatus() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-blue-400">
       <h1 className="text-6xl font-semibold tracking-wide mb-3 text-slate-50/85">
         Happy {currentDay}!
       </h1>
-      <p className="text-6xl font-bold text-slate-100 flex items-center justify-center">
-        <span className="text-slate-50/90 text-6xl"> It&apos;s </span>
-        <IconBox className="mx-2">
+      <p className="text-6xl font-bold text-slate-100 flex items-center justify-center bg-red-300 w-full">
+        <span className="text-slate-50/90 text-6xl bg-blue-500"> It&apos;s </span>
+        <IconBox className="mx-0 h-28 w-32 bg-orange-500">
           <Image
             src="/feature-pomodoro.webp"
             width={100}
@@ -37,9 +37,9 @@ export default function DailyStatus() {
             alt="clock"
           />
         </IconBox>{" "}
-        {currentTime}
-        <span className="text-slate-50/90 pl-2 text-6xl ml-2"> and</span>{" "}
-        <IconBox className="mx-3">
+        <span className="bg-purple-500">{currentTime}</span>
+        <span className="text-slate-50/90 pl-2 text-6xl ml-2 bg-orange-500"> and</span>{" "}
+        <IconBox className="mx-3 bg-gray-500">
           <Image
             src="/cloud-high.png"
             alt="cloud-image"

@@ -1,7 +1,12 @@
+"use client";
+
 import IconBox from "./IconBox";
 import Image from "next/image";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export default function WeatherLocation() {
+  const { width, height } = useWindowSize();
+  if (!width || !height) return "";
   return (
     <div className="animate-fade-in delay-200 text-6xl font-bold text-slate-100/90 flex flex-wrap items-center justify-center">
       <div className="flex items-center mx-1">
@@ -14,7 +19,7 @@ export default function WeatherLocation() {
             width={70}
             className="rounded-lg"
           />
-          <span className="absolute top-[48.75vh] translate-x-0 bg-white shadow-compass rounded-[8px] p-1">
+          <span className={`absolute ${width > 1600 && height > 800 ?  "top-[48.75vh]" : "top-[47vh]"} ${width <= 1394 && height <= 697 && "top-[51.2vh]"}  translate-x-0 bg-white shadow-compass rounded-[8px] p-1`}>
             <span className="block group-hover:-rotate-3 transition-transform duration-300 ease-[cubic-bezier(0.18,0.89,0.32,1.27)]">
               <svg
                 width="24"
