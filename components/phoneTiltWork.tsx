@@ -34,14 +34,14 @@ export default function PhoneTiltWork() {
     <>
       {/* Main content */}
       <main className="relative z-10 w-full h-full flex flex-col items-center justify-start px-6 pt-10 pb-32">
-        <div className="w-full flex justify-evenly h-full ">
+        <div className="w-full flex justify-evenly h-full">
           {/* Left column - Text content */}
-          <div className="flex items-end justify-end w-[60%]">
+          <div className="flex items-end justify-end w-[50%]">
             <div
-              className={`flex flex-col items-center -space-y-1 pt-10 h-2/3  ${responsive()}`}
+              className={`flex flex-col items-start -space-y-1 pt-10 h-2/3  ${responsive()}`}
             >
               {/* Primary heading */}
-              <span className="flex items-start gap-0 w-full ">
+              <span className="flex items-start gap-0">
                 <span
                   className={`text-4xl font-semibold ${primaryTextClass()}`}
                 >

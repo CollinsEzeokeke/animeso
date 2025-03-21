@@ -10,7 +10,7 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import SecondScrollOverlay from "@/components/SecondScrollOverlay";
 import ThirdScrollOverlay from "@/components/ThirdScrollOverlay";
 import ActionButtons from "@/components/ActionButtons";
-
+import FourthScrollOverlay from "@/components/fourthScrollOverlay";
 // import Home from "@/components/TobeReviewed";
 
 export default function Page() {
@@ -71,6 +71,7 @@ export default function Page() {
         <ScrollOverlay />
         <SecondScrollOverlay />
         <ThirdScrollOverlay />
+        <FourthScrollOverlay />
         <div className="h-screen bg-pink-50" />
         <ActionButtons />
       </div>

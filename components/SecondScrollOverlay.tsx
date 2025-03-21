@@ -58,7 +58,7 @@ export default function SecondScrollOverlay() {
 
   // Memoize the class string to avoid recalculation on every render
   const phoneContainerClassName = () => {
-    return `h-[80vh] w-[90%] z-[1000] ${
+    return `h-[80vh] w-[80%] z-[1000] ${
       isFixed
         ? "fixed top-[14.5vh] left-1/2 -translate-x-1/2"
         : "relative mx-auto"
@@ -85,7 +85,7 @@ export default function SecondScrollOverlay() {
         }}
       />
       <motion.div
-        className={`${phoneContainerClassName()} `}
+        className={`${phoneContainerClassName()}`}
       >
         <PhoneTiltWork />
       </motion.div>
