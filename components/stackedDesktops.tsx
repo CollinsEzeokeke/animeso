@@ -40,32 +40,52 @@ export default function StackedDesktops({
 
   // Memoize the video render function
   const renderVideo = useCallback(() => {
-    if (thirdScrollProgress >= 0.99) {
-      return (
-        <div className="relative h-full w-full">
-          <video src="/mailTodos.mp4" {...commonVideoProps} />
-          <div className="absolute bottom-0 z-[60] h-[5%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
-            <Image
-              src="/stamponvideo.webp"
-              alt="mailTodos"
-              width={50}
-              height={50}
-              priority={true}
-            />
+    // Define a mapping of threshold values to their corresponding video components
+    const videoThresholds = [
+      {
+        threshold: 0.99,
+        render: () => (
+          <div className="relative h-full w-full">
+            <video src="/mailTodos.mp4" {...commonVideoProps} />
+            <div className="absolute bottom-0 z-[60] h-[5%] w-1/2 left-1/2 -translate-x-full flex items-center -translate-y-full">
+              <Image
+                src="/stamponvideo.webp"
+                alt="mailTodos"
+                width={50}
+                height={50}
+                priority={true}
+                className="h-auto w-auto"
+              />
+            </div>
           </div>
-        </div>
-      );
-    } else if (thirdScrollProgress >= 0.7933) {
-      return <video src="/three.mp4" {...commonVideoProps} />;
-    } else if (thirdScrollProgress >= 0.5967) {
-      return <video src="/two.mp4" {...commonVideoProps} />;
-    } else if (thirdScrollProgress >= 0.4) {
-      return <video src="/one.mp4" {...commonVideoProps} />;
-    } else {
-      // Default nothing if not in the right range
-      return <video src="/three.mp4" {...commonVideoProps} />;
-    }
+        )
+      },
+      {
+        threshold: 0.7933,
+        render: () => <video src="/three.mp4" {...commonVideoProps} />
+      },
+      {
+        threshold: 0.5967,
+        render: () => <video src="/two.mp4" {...commonVideoProps} />
+      },
+      {
+        threshold: 0.4,
+        render: () => <video src="/one.mp4" {...commonVideoProps} />
+      },
+      {
+        threshold: 0,
+        render: () => <video src="/three.mp4" {...commonVideoProps} />
+      }
+    ];
+    
+    // Find the first threshold entry where the scroll progress is >= the threshold value
+    const activeVideo = videoThresholds.find(entry => thirdScrollProgress >= entry.threshold);
+    
+    // Render the video component associated with the active threshold
+    return activeVideo ? activeVideo.render() : videoThresholds[videoThresholds.length - 1].render();
   }, [thirdScrollProgress, commonVideoProps]);
+
+  
   const responsiveHeight = useMemo(() => {
     if (!height || !width) return;
     if (width > 768 && width <= 1397 && width != 1440) {

@@ -51,8 +51,8 @@ export default function PhoneTiltWork() {
                   src="/email.svg"
                   width={100}
                   height={200}
-                  alt=" "
-                  className={`opacity-100 animate-fadeIn relative -mt-5 ${
+                  alt=""
+                  className={`opacity-100 animate-fadeIn relative -mt-5 h-auto w-auto ${
                     currentProgression === 0.99 ? "opacity-100" : "opacity-45"
                   }`}
                   style={{ animationDelay: "0.7s" }}

@@ -84,143 +84,183 @@ export default function ThirdScrollOverlay() {
   }
 
   // Memoize the text content class names based on thirdScrollProgress
-  const textClasses = () => {
+  const textClasses = useCallback(() => {
+    // Define a single mapping object for threshold values and their corresponding styles
+    const thresholds = [
+      { threshold: 0.99, styles: { first: "text-white", second: "text-[#a4a1a195]", third: "text-[#a4a1a195]", fourth: "text-[#a4a1a195]" } },
+      { threshold: 0.7933, styles: { first: "text-[#a4a1a195]", second: "text-white", third: "text-[#a4a1a195]", fourth: "text-[#a4a1a195]" } },
+      { threshold: 0.5967, styles: { first: "text-[#a4a1a195]", second: "text-[#a4a1a195]", third: "text-white", fourth: "text-[#a4a1a195]" } },
+      { threshold: 0.4, styles: { first: "text-[#a4a1a195]", second: "text-[#a4a1a195]", third: "text-[#a4a1a195]", fourth: "text-white" } },
+      { threshold: 0, styles: { first: "text-[#a4a1a195]", second: "text-[#a4a1a195]", third: "text-[#a4a1a195]", fourth: "text-[#a4a1a195]" } }
+    ];
+    
+    // Find the first threshold that's less than or equal to the current progress
+    const activeThreshold = thresholds.find(t => thirdScrollProgress >= t.threshold);
+    
+    // Return the styles for the active threshold (or default if none found)
     return {
-      firstText:
-        thirdScrollProgress >= 0.99 ? "text-white" : "text-[#a4a1a195]",
-      secondText:
-        thirdScrollProgress >= 0.7933 && thirdScrollProgress !== 0.99
-          ? "text-white"
-          : "text-[#a4a1a195]",
-      thirdText:
-        thirdScrollProgress >= 0.5967 &&
-        thirdScrollProgress !== 0.7933 &&
-        thirdScrollProgress !== 0.99
-          ? "text-white"
-          : "text-[#a4a1a195]",
-      fourthText:
-        thirdScrollProgress >= 0.4 &&
-        thirdScrollProgress !== 0.5967 &&
-        thirdScrollProgress !== 0.7933 &&
-        thirdScrollProgress !== 0.99
-          ? "text-white"
-          : "text-[#a4a1a195]",
+      firstText: activeThreshold?.styles.first || "text-[#a4a1a195]",
+      secondText: activeThreshold?.styles.second || "text-[#a4a1a195]",
+      thirdText: activeThreshold?.styles.third || "text-[#a4a1a195]",
+      fourthText: activeThreshold?.styles.fourth || "text-[#a4a1a195]"
     };
-  }
+  }, [thirdScrollProgress]);
 
   // Memoize the left image render function
   const renderImageLeft = useCallback(() => {
+    // Determine which case to use based on the progress value
+    let progressCase;
+    
     if (thirdScrollProgress >= 0.99) {
-      return (
-        <div className="w-[15%] h-[50%] flex items-center justify-end"></div>
-      );
+      progressCase = 1;
     } else if (thirdScrollProgress >= 0.7933) {
-      return (
-        <div className="w-[10%] h-[50%] flex items-center justify-start">
-          <Image
-            src="/feature-integrations-left.png"
-            alt="mailTodos"
-            width={800}
-            height={800}
-            className="-translate-x-3"
-            priority={true}
-          />
-        </div>
-      );
+      progressCase = 2;
     } else if (thirdScrollProgress >= 0.5967) {
-      return (
-        <div className="w-[25%] h-[50%] flex items-center justify-end">
-          <Image
-            src="/feature-bar-event.png"
-            alt="mailTodos"
-            width={800}
-            height={700}
-            className="-translate-x-5"
-            priority={true}
-          />
-        </div>
-      );
+      progressCase = 3;
     } else if (thirdScrollProgress >= 0.4) {
-      return (
-        <div className="w-[12vw] h-[50%] flex items-start justify-start">
-          <div className="w-full h-[70%] flex flex-col justify-center">
-            <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center rotate-12 px-10  shadow-md shadow-black/25">
-              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
-                Mon
+      progressCase = 4;
+    } else {
+      progressCase = 5;
+    }
+    
+    // Use switch case with the determined progressCase
+    switch (progressCase) {
+      case 1: // thirdScrollProgress >= 0.99
+        return (
+          <div className="w-[15%] h-[50%] flex items-center justify-end"></div>
+        );
+        
+      case 2: // thirdScrollProgress >= 0.7933
+        return (
+          <div className="w-[10%] h-[50%] flex items-center justify-start">
+            <Image
+              src="/feature-integrations-left.png"
+              alt="mailTodos"
+              width={800}
+              height={800}
+              className="-translate-x-3 h-auto w-auto"
+              priority={true}
+            />
+          </div>
+        );
+        
+      case 3: // thirdScrollProgress >= 0.5967
+        return (
+          <div className="w-[25%] h-[50%] flex items-center justify-end">
+            <Image
+              src="/feature-bar-event.png"
+              alt="mailTodos"
+              width={800}
+              height={700}
+              className="-translate-x-5 h-auto w-auto"
+              priority={true}
+            />
+          </div>
+        );
+        
+      case 4: // thirdScrollProgress >= 0.4
+        return (
+          <div className="w-[12vw] h-[50%] flex items-start justify-start">
+            <div className="w-full h-[70%] flex flex-col justify-center">
+              <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center rotate-12 px-10  shadow-md shadow-black/25">
+                <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                  Mon
+                </div>
+                <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
+                  12
+                </div>
               </div>
-              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
-                12
-              </div>
-            </div>
-            <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center -rotate-12 px-10  shadow-md shadow-black/25">
-              <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
-                Tue
-              </div>
-              <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
-                13
+              <div className="bg-white w-[80%] h-[25%] rounded-3xl flex flex-col items-center -rotate-12 px-10  shadow-md shadow-black/25">
+                <div className="w-full flex justify-start items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                  Tue
+                </div>
+                <div className="w-full flex justify-start items-center h-[50%] text-xl text-black font-bold px-3">
+                  13
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      // Default nothing if not in the right range
-      return " ";
+        );
+        
+      case 5: // default - below all thresholds
+      default:
+        return " ";
     }
   }, [thirdScrollProgress]);
 
   // Memoize the right image render function
   const renderImageRight = useCallback(() => {
+    // Determine which case to use based on the progress value
+    let progressCase;
+    
     if (thirdScrollProgress >= 0.99) {
-      return "";
+      progressCase = 1;
     } else if (thirdScrollProgress >= 0.7933) {
-      return (
-        <Image
-          src="/feature-integrations-right.png"
-          alt="mailTodos"
-          width={150}
-          height={150}
-          className="translate-x-5"
-          priority={true}
-        />
-      );
+      progressCase = 2;
     } else if (thirdScrollProgress >= 0.5967) {
-      return " ";
+      progressCase = 3;
     } else if (thirdScrollProgress >= 0.4) {
-      // side calendar stuff
-      return (
-        <div className="h-full w-full flex justify-end items-end">
-          <div className="w-1/2 h-[70%] flex flex-col items-end justify-end relative -translate-x-2">
-            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 shadow-md shadow-black/25 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
-                Wed
+      progressCase = 4;
+    } else {
+      progressCase = 5;
+    }
+    
+    // Use switch case with the determined progressCase
+    switch (progressCase) {
+      case 1: // thirdScrollProgress >= 0.99
+        return "";
+        
+      case 2: // thirdScrollProgress >= 0.7933
+        return (
+          <Image
+            src="/feature-integrations-right.png"
+            alt="mailTodos"
+            width={150}
+            height={150}
+            className="translate-x-5 h-auto w-auto"
+            priority={true}
+          />
+        );
+        
+      case 3: // thirdScrollProgress >= 0.5967
+        return " ";
+        
+      case 4: // thirdScrollProgress >= 0.4
+        // side calendar stuff
+        return (
+          <div className="h-full w-full flex justify-end items-end">
+            <div className="w-1/2 h-[70%] flex flex-col items-end justify-end relative -translate-x-2">
+              <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 shadow-md shadow-black/25 ">
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                  Wed
+                </div>
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                  14
+                </div>
               </div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
-                14
+              <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end rotate-6 relative z-0 pl-0 shadow-md shadow-black/25 -mt-2 ">
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                  Thu
+                </div>
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                  15
+                </div>
               </div>
-            </div>
-            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end rotate-6 relative z-0 pl-0 shadow-md shadow-black/25 -mt-2 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
-                Thu
-              </div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
-                15
-              </div>
-            </div>
-            <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 mt-3 shadow-md shadow-black/25 ">
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
-                Fri
-              </div>
-              <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
-                16
+              <div className="bg-white w-[70%] h-[25%] rounded-3xl flex flex-col items-end -rotate-6 -pl-3 relative z-10 mt-3 shadow-md shadow-black/25 ">
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-2xl text-gray-500/90 font-medium">
+                  Fri
+                </div>
+                <div className="w-1/2 flex justify-center items-center h-[50%] text-xl text-black font-bold">
+                  16
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      // Default nothing if not in the right range
-      return " ";
+        );
+        
+      case 5: // default - below all thresholds
+      default:
+        return " ";
     }
   }, [thirdScrollProgress]);
 
