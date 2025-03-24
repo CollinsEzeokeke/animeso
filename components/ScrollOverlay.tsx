@@ -14,7 +14,7 @@ export default function ScrollOverlay() {
         transformOrigin: "center",
         willChange: "scale",
       }}
-      className="relative -top-0 left-0 w-full h-screen pointer-events-none z-[60] overflow-y-auto bg-black p-[10vh]" 
+      className="relative -top-0 left-0 w-full min-h-screen pointer-events-none z-[60] overflow-y-auto bg-blue-500 pt-[100vh]" 
     >
       {/* <div className="" /> */}
       <div className="absolute inset-0 flex items-center justify-center">
