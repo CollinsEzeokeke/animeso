@@ -21,9 +21,9 @@ export default function FourthScrollOverlay() {
     { text: "FAQ", value: "faq" },
   ];
   return (
-    <div className="h-[150vh] bg-blue-500 -mt-[25vh]">
-      <div className="flex items-end w-full text-white bg-red-500 h-[100%]">
-        <div className="h-[60%] w-full bg-green-500 overflow-hidden">
+    <div className="h-[150vh] bg-black -mt-[25vh]">
+      <div className="flex items-end w-full text-white h-[100%]">
+        <div className="h-[60%] w-full overflow-hidden">
           <EnhancedSmoothCarousel cards={cards} dotLabels={dotLabels} />
         </div>
       </div>
