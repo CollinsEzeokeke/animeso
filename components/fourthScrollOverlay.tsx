@@ -8,7 +8,7 @@ export default function FourthScrollOverlay() {
     { id: "2", title: "Widgets" },
     { id: "3", title: "Multiple accounts" },
     { id: "4", title: "Pomodoro" },
-    // { id: "5", title: "Timezones" },
+    { id: "5", title: "Timezones" },
     // { id: "6", title: "Calendar" },
   ];
 
