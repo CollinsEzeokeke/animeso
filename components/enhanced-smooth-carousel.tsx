@@ -63,6 +63,9 @@ export default function EnhancedSmoothCarousel({
         <motion.div
           className="flex"
         >
+          <div className="flex items-center w-[50vw]">
+            this is some contents that would be shown and displayed before the main and major contents here so this should show first,......
+          </div>
           {cards.map((card, id) => (
             <motion.div
               key={id}
