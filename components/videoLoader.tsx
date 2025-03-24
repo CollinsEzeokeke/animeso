@@ -103,7 +103,7 @@ export const VideoLoader = ({
   
   const topPositionClass = useMemo(() => {
     if (!width) return "top-2";
-    return width <= 768 ? "top-2" : "top-2";
+    return width <= 1024 ? "-top-14" : "top-2";
   }, [width]);
 
   const Containerresponsive = useMemo(() => {
@@ -142,7 +142,10 @@ export const VideoLoader = ({
         >
           {" "}
           <motion.div
-            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-white ${topPositionClass}`}
+            className={`z-50 w-48 min-h-[40px] rounded-lg shadow-lg pointer-events-auto relative flex items-center justify-between px-2 bg-white 
+              ${topPositionClass}
+
+              `}
           >
             {/* Search Icon */}
             <Search className="w-5 h-5 mx-1 text-gray-700" />
