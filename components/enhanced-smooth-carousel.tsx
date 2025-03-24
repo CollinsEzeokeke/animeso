@@ -1,11 +1,7 @@
 "use client";
 
 import { useRef } from "react"; //useState, useEffect, useCallback
-import {
-  motion,
-  useScroll,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 // import Image from "next/image";
@@ -40,31 +36,53 @@ export default function EnhancedSmoothCarousel({
   useMotionValueEvent(scrollX, "change", (latest) => {
     console.log("scrollX", latest);
   });
-  const ImageReturn = ({cardId}: {cardId: number}) => {
-    switch(cardId) {
+  const ImageReturn = ({ cardId }: { cardId: number }) => {
+    switch (cardId) {
       case 0:
-        return <Image src="/avatar.png" width={100} height={100} alt="Image 1" />;
+        return (
+          <div className="w-[400px] h-[55vh] bg-black">
+            <Image src="/avatar.png" width={400} height={800} alt="Image 1" />
+          </div>
+        );
       case 1:
-        return <Image src="/firstShow.png" width={100} height={100} alt="Image 2" />;
+        return (
+          <div className="w-[400px] h-[55vh] bg-black">
+            <Image src="/avatar.png" width={400} height={800} alt="Image 1" />
+          </div>
+        );
       case 2:
-        return <Image src="/logo-shaded.png" width={100} height={100} alt="Image 3" />;
+        return (
+          <div className="w-[400px] h-[55vh] bg-black">
+            <Image src="/avatar.png" width={400} height={800} alt="Image 1" />
+          </div>
+        );
       case 3:
-        return <Image src="/stamponVideo.webp" width={100} height={100} alt="Image 4" />;
+        return (
+          <div className="w-[400px] h-[55vh] bg-black">
+            <Image src="/avatar.png" width={400} height={800} alt="Image 1" />
+          </div>
+        );
       default:
-        return <Image src="/cloud-high.png" width={100} height={100} alt="Default image" />;
+        return (
+          <div className="w-[400px] h-[55vh] bg-black">
+            <Image src="/avatar.png" width={400} height={800} alt="Image 1" />
+          </div>
+        );
     }
   };
   return (
     <div
-      className={cn("relative w-full overflow-hidden h-full bg-purple-500 flex justify-center items-center", className)}
+      className={cn(
+        "relative w-full overflow-hidden h-full bg-purple-500 flex justify-center items-center",
+        className
+      )}
       ref={targetContainer}
     >
       <div className="relative overflow-hidden bg-pink-200 h-[80%] w-full">
-        <motion.div
-          className="flex"
-        >
-          <div className="flex items-center w-[50vw]">
-            this is some contents that would be shown and displayed before the main and major contents here so this should show first,......
+        <motion.div className="flex">
+          <div className="flex items-center w-[50vw] px-4 bg-green-500">
+            this is some contents that would be shown and displayed before the
+            main and major contents here so this should show first,......
           </div>
           {cards.map((card, id) => (
             <motion.div
@@ -74,34 +92,14 @@ export default function EnhancedSmoothCarousel({
               <div className="bg-card rounded-xl p-6 h-full shadow-md bg-gray-500">
                 <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
                 <div className="text-muted-foreground">
-                  {/* Card content would go here */}
                   <p>Card content placeholder</p>
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  asdfjajdf;lkajsdkfjaksdfklajskdfjkajsdfkjkl
-                  {/* <Image src="" width={100} height={100} alt=""/> */}
-                  {ImageReturn({cardId: id})}
+                  {ImageReturn({ cardId: id })}
                 </div>
               </div>
             </motion.div>
           ))}
         </motion.div>
       </div>
-
 
       {/* Instructions for keyboard users */}
       <div className="sr-only">
