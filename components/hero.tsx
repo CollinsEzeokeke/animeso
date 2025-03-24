@@ -55,6 +55,52 @@ export default function Hero() {
     ],
     [1.2, 5, 7, 7.5, 8, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
   );
+  // const movingAnother = useTransform(
+  //   scrollYProgress,
+  //   [
+  //     0, 0.005, 0.011, 0.019, 0.027, 0.059, 0.067, 0.075, 0.083, 0.091, 0.099,
+  //     0.107, 0.115, 0.123, 0.131, 0.139, 0.147, 0.155, 0.17,
+  //   ],
+  //   [
+  //     "15%",
+  //     "-10%",
+  //     "-10%",
+  //     "-10%",
+  //     "-155%", //this is the value at 0.027
+  //     "-200%", // this is the value at 0.059
+  //     "-211%", // this is the value at 0.067
+  //     "-228%", // this is the value at 0.075
+  //     "-245%", // this is the value at 0.083
+  //     "-395%", // this is the value at 0.091
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "500%" : "500%"}`, // this is the value at 0.099
+  //     // "-695%", // this is the value at 0.107 
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "695%" : IsWidth <= 1600 && IsHeight <= 800 ? "680%" : "695%"}`, // this is the value at 0.107
+  //     // "-680%", // this is the value at 0.107
+  //     // "-885%", // this is the value at 0.115
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "885%" : IsWidth <= 1600 && IsHeight <= 800 ? "850%" : "885%"}`, // this is the value at 0.115
+  //     // "-850%", // this is the value at 0.115
+  //     // "-1070%", // this is the value at 0.123
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "1070%" : IsWidth <= 1600 && IsHeight <= 800 ? "1020%" : "1070%"}`, // this is the value at 0.123
+  //     // "-1020%", // this is the value at 0.123
+  //     // "-1260%", //this is the value at 0.131
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "1260%" : IsWidth <= 1600 && IsHeight <= 800 ? "1190%" : "1260%"}`, //this is the value at 0.131
+  //     // "-1190%", //this is the value at 0.131
+  //     // "-1440%", // this is the value at 0.139
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "1440%" : IsWidth <= 1600 && IsHeight <= 800 ? "1370%" : "1440%"}`, // this is the value at 0.139
+  //     // "-1370%", // this is the value at 0.139
+  //     // "-1620%", // this is the value at 0.147
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "1620%" : IsWidth <= 1600 && IsHeight <= 800 ? "1550%" : "1620%"}`, // this is the value at 0.147
+  //     // "-1550%", // this is the value at 0.147
+  //     // "-1820%", // this is the Value at 0.155
+  //     `-${IsWidth <= 1394 && IsHeight <= 697 ? "1820%" : IsWidth <= 1600 && IsHeight <= 800 ? "1750%" : "1820%"}`, // this is the Value at 0.155
+  //     // "-1750%", // this is the Value at 0.155
+  //     // "-2200%", // this is the value at 0.17
+  //     `-${IsHeight <= 900 ? "2200%" : "2295%"}`
+  //     // "-2280%", // this is the value at 0.17
+  //   ]
+  // );
+
+
   const movingAnother = useTransform(
     scrollYProgress,
     [
@@ -67,41 +113,38 @@ export default function Hero() {
       "-10%",
       "-10%",
       "-155%", //this is the value at 0.027
-      "-200%", // this is the value at 0.059
-      "-211%", // this is the value at 0.067
-      "-228%", // this is the value at 0.075
-      "-245%", // this is the value at 0.083
-      "-395%", // this is the value at 0.091
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "500%" : "500%"}`, // this is the value at 0.099
-      // "-695%", // this is the value at 0.107 
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "695%" : IsWidth <= 1600 && IsHeight <= 800 ? "680%" : "695%"}`, // this is the value at 0.107
-      // "-680%", // this is the value at 0.107
+      "-190%", // this is the value at 0.059
+      "-199%", // this is the value at 0.067
+      // "-200%", // this is the value at 0.067
+      "-210%", // this is the value at 0.075
+      // "-205%", // this is the value at 0.075
+      "-220%", // this is the value at 0.083
+      // "-220%", // this is the value at 0.083
+      "-375%", // this is the value at 0.091
+      // "-385%", // this is the value at 0.091
+      `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "400%" : "490%"}`, // this is the value at 0.099
+      // `-${IsWidth <= 1394 && IsHeight <= 697 ? "500%" : IsWidth <= 1600 && IsHeight <= 800 ? "400%" : "500%"}`, // this is the value at 0.099
+      "-680%", // this is the value at 0.107
+      // "-695%", // this is the value at 0.107
+      "-870%", // this is the value at 0.115
       // "-885%", // this is the value at 0.115
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "885%" : IsWidth <= 1600 && IsHeight <= 800 ? "850%" : "885%"}`, // this is the value at 0.115
-      // "-850%", // this is the value at 0.115
+      "-1035%", // this is the value at 0.123
       // "-1070%", // this is the value at 0.123
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1070%" : IsWidth <= 1600 && IsHeight <= 800 ? "1020%" : "1070%"}`, // this is the value at 0.123
-      // "-1020%", // this is the value at 0.123
+      "-1235%", //this is the value at 0.131
       // "-1260%", //this is the value at 0.131
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1260%" : IsWidth <= 1600 && IsHeight <= 800 ? "1190%" : "1260%"}`, //this is the value at 0.131
-      // "-1190%", //this is the value at 0.131
+      "-1415%", // this is the value at 0.139
       // "-1440%", // this is the value at 0.139
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1440%" : IsWidth <= 1600 && IsHeight <= 800 ? "1370%" : "1440%"}`, // this is the value at 0.139
-      // "-1370%", // this is the value at 0.139
-      // "-1620%", // this is the value at 0.147
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1620%" : IsWidth <= 1600 && IsHeight <= 800 ? "1550%" : "1620%"}`, // this is the value at 0.147
-      // "-1550%", // this is the value at 0.147
-      // "-1820%", // this is the Value at 0.155
-      `-${IsWidth <= 1394 && IsHeight <= 697 ? "1820%" : IsWidth <= 1600 && IsHeight <= 800 ? "1750%" : "1800%"}`, // this is the Value at 0.155
-      // "-1750%", // this is the Value at 0.155
-      // "-2200%", // this is the value at 0.17
-      `-${IsHeight <= 900 ? "2200%" : "2280%"}`
-      // "-2280%", // this is the value at 0.17
+      "-1620%", // this is the value at 0.147
+      "-1820%", // this is the Value at 0.155
+      "-2280%", // this is the value at 0.17
     ]
   );
 
+
+
+
   const marging = useTransform(scrollYProgress, [0.017, 0.045], [0, 20]);
-  const myScale = useTransform(scrollYProgress, [0.005, 0.2], [0, 1]);
+  const myScale = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
   const marginLeft = useTransform(scrollYProgress, [0.1, 0.2], [0, -210]);
   const reduceOpacity = useTransform(
     scrollYProgress,
