@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-=======
 // test for the 3D - object to be placed strategically on the website
->>>>>>> Stashed changes
 "use client";
 import AmieLogo from "@/components/animeLogo";
 
