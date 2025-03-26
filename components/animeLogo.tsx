@@ -20,6 +20,7 @@ function Scene() {
         target={[0, 0, 0]} // Orbit around model origin
         maxPolarAngle={Math.PI / 2} // Limit vertical rotation
       />
+
       {/* <PerspectiveCamera
         makeDefault
         fov={45}
@@ -27,6 +28,7 @@ function Scene() {
         near={0.1}
         far={10000}
       /> */}
+      
       <gridHelper args={[10, 20]} />
       <axesHelper args={[5]} />
       <PerspectiveCamera
