@@ -74,7 +74,7 @@ export default function SecondScrollOverlay() {
   return (
     <div
     // mb-60
-      className={`h-[200vh] z-[60] relative ${responsive()} bg-black`}
+      className={`h-[200vh] z-[60] relative ${responsive()} bg-black pointer-events-none`}
       ref={containerRef}
     >
       <motion.div

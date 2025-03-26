@@ -302,7 +302,7 @@ export default function Hero() {
     <>
      <AnimatePresence mode="wait">
      {width && height && (
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden pointer-events-none">
         <motion.div
           className={`h-[90vh] w-full overflow-x-hidden flex overflow-y-hidden mt-4 justify-center`}
           style={{

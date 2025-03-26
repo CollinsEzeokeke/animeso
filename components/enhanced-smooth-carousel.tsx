@@ -233,8 +233,24 @@ export default function EnhancedSmoothCarousel({
         );
       case 3:
         return (
-          <div className="w-[17vw] relaitve h-[40vh] bg-blue-500/45 z-0 flex items-center">
-            <Image src="/avatar.png" width={400} height={800} alt="" />
+          // <div className="w-[17vw] relaitve h-[40vh] bg-blue-500/45 z-0 flex items-center">
+          //   <Image src="/avatar.png" width={400} height={800} alt="" />
+          // </div>
+
+          <div className="w-[17vw] relaitve h-[40vh] z-0 flex flex-col justify-center translate-y-4 bg-green-500">
+            <div className="w-full h-1/2 rounded-2xl bg-white/90">
+              <div className="h-1/3 w-full flex justify-center pt-5">
+                <div className="h-[35%] rounded-sm w-[6%] bg-transparent mt-[0.3rem] border-[#CDCDCD] border-2" />
+                <div className=" w-auto px-2 flex flex-col items-start">
+                  <h2 className="text-black font-bold text-xl">
+                    Audit iOS interactions
+                  </h2>
+                  <p className="text-gray-500/70 text-lg font-bold">
+                    Add description
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         );
       case 4:
@@ -300,18 +316,18 @@ export default function EnhancedSmoothCarousel({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden h-full bg-purple-500 flex justify-center items-end",
+        "relative w-full overflow-hidden h-full flex justify-center items-end",
         className
       )}
     >
       <div
-        className="relative overflow-x-auto bg-pink-200 h-[80%] w-full scrollbar-hide"
+        className="relative overflow-x-auto h-[80%] w-full scrollbar-hide"
         ref={targetContainer}
       >
-        <motion.div className="flex bg-red-500 w-full">
-          <div className="flex-shrink-0 flex justify-center items-center w-[36vw] h-[51vh] bg-green-500">
-            <div className="w-[70%] h-full bg-blue-500 flex flex-col justify-between">
-              <div className="w-full h-[10%] bg-red-500">
+        <motion.div className="flex w-full">
+          <div className="flex-shrink-0 flex justify-center items-center w-[36vw] h-[51vh]">
+            <div className="w-[70%] h-full flex flex-col justify-between">
+              <div className="w-full h-[10%]">
                 <p className="flex flex-col text-4xl items-start justify-center font-bold">
                   <span className="text-white/85">
                     Amie has all the features.
@@ -320,7 +336,7 @@ export default function EnhancedSmoothCarousel({
                 </p>
               </div>
 
-              <div className="h-[15%] bg-red-500">
+              <div className="h-[15%]">
                 <p className="flex flex-col text-3xl font-bold items-start justify-start">
                   <span className="text-white/85">Available on</span>
                   <span className="text-white/60">Mac, iOS and Web.</span>
@@ -331,7 +347,10 @@ export default function EnhancedSmoothCarousel({
           {cards.map((card, id) => (
             <motion.div
               key={id}
-              className={cn("px-4 bg-blue-500 h-full w-full", card.className)}
+              className={cn(
+                "px-4 h-full w-full pointer-events-none",
+                card.className
+              )}
             >
               <BgReturn cardId={id}>
                 {TopReturn({ cardId: id, cardTitle: card.title })}
@@ -361,32 +380,31 @@ export default function EnhancedSmoothCarousel({
         ))}
       </div> */}
 
+      <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 flex justify-between items-center w-[10%]">
+        {cards.map((_, index) => (
+          <motion.button
+            key={index}
+            onClick={() => scrollToIndex(index)}
+            className={`transition-all duration-300 ${
+              activeIndex === index
+                ? "bg-gray-700/80 text-white text-xs font-bold rounded-xl py-1 px-3 flex justify-center items-center"
+                : "bg-white/60 rounded-full w-3 h-3"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          >
+            {activeIndex === index && index === 0 ? <div>Scheduling</div> : ""}
+            {activeIndex === index && index === 1 ? <div>Widgets</div> : ""}
+            {activeIndex === index && index === 2 ? <div>Accounts</div> : ""}
+            {activeIndex === index && index === 3 ? <div>Pomodoro</div> : ""}
+            {activeIndex === index && index === 4 ? <div>Timezones</div> : ""}
+          </motion.button>
+        ))}
+      </div>
 
-<div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 flex justify-between items-center w-[10%]">
-  {cards.map((_, index) => (
-    <motion.button
-      key={index}
-      onClick={() => scrollToIndex(index)}
-      className={`transition-all duration-300 ${
-        activeIndex === index 
-          ? "bg-gray-700/80 text-white text-xs font-bold rounded-xl py-1 px-3 flex justify-center items-center" 
-          : "bg-white/60 rounded-full w-3 h-3"
-      }`}
-      aria-label={`Go to slide ${index + 1}`}
-    >
-      {activeIndex === index && index === 0 ? (<div>Scheduling</div>) : ""}
-      {activeIndex === index && index === 1 ? (<div>Widgets</div>) : ""}
-      {activeIndex === index && index === 2 ? (<div>Accounts</div>) : ""}
-      {activeIndex === index && index === 3 ? (<div>Pomodoro</div>) : ""}
-      {activeIndex === index && index === 4 ? (<div>Timezones</div>) : ""}
-    </motion.button>
-  ))}
-</div>
-
-{/* 
+      {/* 
     <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 w-[7%]">
           {/* Dot indicators on the line */}
-          {/* {cards.map((_, index) => (
+      {/* {cards.map((_, index) => (
             <motion.button
               key={index}
               onClick={() => scrollToIndex(index)}

@@ -287,7 +287,7 @@ export default function ThirdScrollOverlay() {
   };
   return (
     <div
-      className="h-[240vh] bg-black -mt-[25vh] z-[60] relative"
+      className="h-[240vh] bg-black -mt-[25vh] z-[60] relative pointer-events-none"
       ref={containerRef}
     >
       <motion.div
