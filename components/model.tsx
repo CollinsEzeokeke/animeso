@@ -33,12 +33,6 @@ export function Model(props: JSX.IntrinsicElements['group']) {
         position={[-5, 5, 5]}
         near={0.1}
         far={1000}
-        // makeDefault={false}
-        // far={10000}
-        // near={0.005}
-        // fov={25.274}
-        // position={[-3272.813, 354.03, 3975.498]}
-        // rotation={[-0.13, -0.467, -0.059]}
       />
       <directionalLight
         intensity={10}
@@ -46,8 +40,6 @@ export function Model(props: JSX.IntrinsicElements['group']) {
         rotation={[-0.818, 1.364, 0.667]}
       />
       <mesh
-        // castShadow
-        // receiveShadow
         geometry={nodes['0309e78c-2629-4355-a846-1ae0fa7398ce'].geometry}
         material={commonColor}
         position={[37.231, 45.131, -273.383]}
@@ -55,21 +47,15 @@ export function Model(props: JSX.IntrinsicElements['group']) {
         scale={2.246}
       />
       <mesh
-        // castShadow
-        // receiveShadow
         geometry={nodes['bba32a21-ebb4-473c-84be-2c3413e60b2e'].geometry}
         material={commonColor}
-        // material={nodes['bba32a21-ebb4-473c-84be-2c3413e60b2e'].material}
         position={[37.231, 45.131, -273.383]}
         rotation={[-0.06, 0.104, 0.006]}
         scale={2.246}
       />
       <mesh
-        // castShadow
-        // receiveShadow
         geometry={nodes['693666d9-ead6-441b-a7fc-eeed149ccf1e'].geometry}
         material={commonColor}
-        // material={nodes['693666d9-ead6-441b-a7fc-eeed149ccf1e'].material}
         position={[93.487, -109.156, 437.517]}
         rotation={[-3.045, 0.024, -0.138]}
         scale={2.246}
