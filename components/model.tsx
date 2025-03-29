@@ -23,6 +23,7 @@ export function Model(props: JSX.IntrinsicElements["group"]) {
     roughness: 0.3, // More reflective surface
     metalness: 0.1, // Metallic appearance
   });
+
   return (
     // formular for calculating pi in code is:
 
@@ -30,28 +31,18 @@ export function Model(props: JSX.IntrinsicElements["group"]) {
     <group
       {...props}
       dispose={null}
-      scale={0.002}
     >
       <mesh
         geometry={nodes["0309e78c-2629-4355-a846-1ae0fa7398ce"].geometry}
         material={commonColor}
         position={[37.231, 45.131, -273.383]}
         rotation={[0, 0.104, 0]}
-        scale={2.246}
       />
       <mesh
         geometry={nodes["bba32a21-ebb4-473c-84be-2c3413e60b2e"].geometry}
         material={commonColor}
         position={[37.231, 45.131, -273.383]}
         rotation={[-0.06, 0.104, 0.006]}
-        scale={2.246}
-      />
-      <mesh
-        geometry={nodes["693666d9-ead6-441b-a7fc-eeed149ccf1e"].geometry}
-        material={commonColor}
-        position={[93.487, -109.156, 437.517]}
-        rotation={[-3.045, 0.024, -0.138]}
-        scale={2.246}
       />
     </group>
   );
