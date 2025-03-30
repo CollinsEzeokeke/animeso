@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Model } from "./model";
 import { PerspectiveCamera } from "@react-three/drei";
 import { motion } from "framer-motion-3d";
-
+// import { PerspectiveCamera } from "@react-three/drei";
 export default function AmieLogo() {
   return (
     <div className="bg-red-500 h-screen w-screen flex justify-center items-center">
