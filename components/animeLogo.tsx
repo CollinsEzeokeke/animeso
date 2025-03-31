@@ -91,15 +91,46 @@ function Scene({
   const positionY = 0;
   const positionZ = 0;
   
+  // Spring physics values
+  const springRef = useRef({
+    // Velocities
+    vRotX: 0,
+    vRotY: 0,
+    vRotZ: 0,
+    vPosX: 0,
+    vPosY: 0,
+    vPosZ: 0,
+    // Previous targets for smooth transition
+    prevTargetRotX: baseRotationX,
+    prevTargetRotY: baseRotationY,
+    prevTargetRotZ: baseRotationZ,
+    prevTargetPosX: positionX,
+    prevTargetPosY: positionY,
+    prevTargetPosZ: positionZ
+  });
+  
   // Simple LERP function for smooth transitions
   const lerp = (start: number, end: number, t: number): number => {
     return start * (1 - t) + end * t;
   };
 
-  // For debugging
-  // useEffect(() => {
-  //   console.log("Scene received hover state change:", isHover);
-  // }, [isHover]);
+  // Spring function for smoother, bouncy motion
+  const spring = (
+    current: number,
+    target: number,
+    velocity: number,
+    stiffness: number,
+    damping: number
+  ): { position: number; velocity: number } => {
+    // Calculate spring force
+    const force = (target - current) * stiffness;
+    // Apply damping to velocity
+    const newVelocity = (velocity + force) * damping;
+    // Calculate new position
+    const newPosition = current + newVelocity;
+    
+    return { position: newPosition, velocity: newVelocity };
+  };
 
   useFrame(() => {
     if (!groupRef.current) return;
@@ -107,33 +138,151 @@ function Scene({
     const x = mouseX.get();
     const y = mouseY.get();
     
+    // Spring physics constants
+    const stiffness = isHover ? 0.08 : 0.06;      // Spring strength
+    const damping = isHover ? 0.85 : 0.8;         // Damping factor (lower = more bounce)
+    const smoothing = isHover ? 0.2 : 0.1;        // Target interpolation smoothing
+    
     if (!isHover) {
-      // When not hovering, smoothly return to base values
-      groupRef.current.rotation.x = lerp(groupRef.current.rotation.x, baseRotationX, 0.05);
-      groupRef.current.rotation.y = lerp(groupRef.current.rotation.y, baseRotationY, 0.05);
-      groupRef.current.rotation.z = lerp(groupRef.current.rotation.z, baseRotationZ, 0.05);
+      // When not hovering, smoothly transition target back to base values
+      springRef.current.prevTargetRotX = lerp(springRef.current.prevTargetRotX, baseRotationX, smoothing);
+      springRef.current.prevTargetRotY = lerp(springRef.current.prevTargetRotY, baseRotationY, smoothing);
+      springRef.current.prevTargetRotZ = lerp(springRef.current.prevTargetRotZ, baseRotationZ, smoothing);
       
-      groupRef.current.position.x = lerp(groupRef.current.position.x, positionX, 0.05);
-      groupRef.current.position.y = lerp(groupRef.current.position.y, positionY, 0.05);
-      groupRef.current.position.z = lerp(groupRef.current.position.z, positionZ, 0.05);
+      springRef.current.prevTargetPosX = lerp(springRef.current.prevTargetPosX, positionX, smoothing);
+      springRef.current.prevTargetPosY = lerp(springRef.current.prevTargetPosY, positionY, smoothing);
+      springRef.current.prevTargetPosZ = lerp(springRef.current.prevTargetPosZ, positionZ, smoothing);
+
+      // Apply spring physics to rotation
+      const rotX = spring(
+        groupRef.current.rotation.x,
+        springRef.current.prevTargetRotX,
+        springRef.current.vRotX,
+        stiffness,
+        damping
+      );
+      groupRef.current.rotation.x = rotX.position;
+      springRef.current.vRotX = rotX.velocity;
+      
+      const rotY = spring(
+        groupRef.current.rotation.y,
+        springRef.current.prevTargetRotY,
+        springRef.current.vRotY,
+        stiffness,
+        damping
+      );
+      groupRef.current.rotation.y = rotY.position;
+      springRef.current.vRotY = rotY.velocity;
+      
+      const rotZ = spring(
+        groupRef.current.rotation.z,
+        springRef.current.prevTargetRotZ,
+        springRef.current.vRotZ,
+        stiffness,
+        damping
+      );
+      groupRef.current.rotation.z = rotZ.position;
+      springRef.current.vRotZ = rotZ.velocity;
+      
+      // Apply spring physics to position
+      const posX = spring(
+        groupRef.current.position.x,
+        springRef.current.prevTargetPosX,
+        springRef.current.vPosX,
+        stiffness,
+        damping
+      );
+      groupRef.current.position.x = posX.position;
+      springRef.current.vPosX = posX.velocity;
+      
+      const posY = spring(
+        groupRef.current.position.y,
+        springRef.current.prevTargetPosY,
+        springRef.current.vPosY,
+        stiffness,
+        damping
+      );
+      groupRef.current.position.y = posY.position;
+      springRef.current.vPosY = posY.velocity;
+      
+      const posZ = spring(
+        groupRef.current.position.z,
+        springRef.current.prevTargetPosZ,
+        springRef.current.vPosZ,
+        stiffness,
+        damping
+      );
+      groupRef.current.position.z = posZ.position;
+      springRef.current.vPosZ = posZ.velocity;
+      
     } else {
       // Calculate target values based on mouse position with stronger effect
       const targetRotationX = baseRotationX + normalizeValue(-y) * Math.PI * 0.9;
       const targetRotationY = baseRotationY + normalizeValue(-x) * Math.PI * 1.2;
       
-      // Smoothly interpolate current rotation to target rotation (faster)
-      groupRef.current.rotation.x = lerp(groupRef.current.rotation.x, targetRotationX, 0.15);
-      groupRef.current.rotation.y = lerp(groupRef.current.rotation.y, targetRotationY, 0.15);
+      // Smoothly update target values to prevent sudden jumps
+      springRef.current.prevTargetRotX = lerp(springRef.current.prevTargetRotX, targetRotationX, smoothing);
+      springRef.current.prevTargetRotY = lerp(springRef.current.prevTargetRotY, targetRotationY, smoothing);
+      springRef.current.prevTargetRotZ = baseRotationZ;
+      
+      // Apply spring physics to rotation
+      const rotX = spring(
+        groupRef.current.rotation.x,
+        springRef.current.prevTargetRotX,
+        springRef.current.vRotX,
+        stiffness,
+        damping
+      );
+      groupRef.current.rotation.x = rotX.position;
+      springRef.current.vRotX = rotX.velocity;
+      
+      const rotY = spring(
+        groupRef.current.rotation.y,
+        springRef.current.prevTargetRotY,
+        springRef.current.vRotY,
+        stiffness,
+        damping
+      );
+      groupRef.current.rotation.y = rotY.position;
+      springRef.current.vRotY = rotY.velocity;
+      
+      // Hold Z rotation steady
       groupRef.current.rotation.z = baseRotationZ;
+      springRef.current.vRotZ = 0;
       
       // Calculate target positions with larger offset
       const targetPositionX = positionX + normalizeValue(x) * 0.01;
       const targetPositionY = positionY + normalizeValue(y) * 0.01;
       
-      // Smoothly interpolate current position to target position (faster)
-      groupRef.current.position.x = lerp(groupRef.current.position.x, targetPositionX, 0.15);
-      groupRef.current.position.y = lerp(groupRef.current.position.y, targetPositionY, 0.15);
+      // Smoothly update target position
+      springRef.current.prevTargetPosX = lerp(springRef.current.prevTargetPosX, targetPositionX, smoothing);
+      springRef.current.prevTargetPosY = lerp(springRef.current.prevTargetPosY, targetPositionY, smoothing);
+      springRef.current.prevTargetPosZ = positionZ;
+      
+      // Apply spring physics to position
+      const posX = spring(
+        groupRef.current.position.x,
+        springRef.current.prevTargetPosX,
+        springRef.current.vPosX,
+        stiffness,
+        damping
+      );
+      groupRef.current.position.x = posX.position;
+      springRef.current.vPosX = posX.velocity;
+      
+      const posY = spring(
+        groupRef.current.position.y,
+        springRef.current.prevTargetPosY,
+        springRef.current.vPosY,
+        stiffness,
+        damping
+      );
+      groupRef.current.position.y = posY.position;
+      springRef.current.vPosY = posY.velocity;
+      
+      // Keep Z position steady
       groupRef.current.position.z = positionZ;
+      springRef.current.vPosZ = 0;
     }
   });
 
