@@ -93,6 +93,10 @@ function Scene({
   const baseRotationY = Math.PI * 0;
   const baseRotationZ = Math.PI * 0.5;
 
+  const positionX = 0;
+  const positionY = 0;
+  const positionZ = 0;
+
   useFrame(() => {
     if (groupRef.current) {
       const x = mouseX.get();
@@ -105,6 +109,10 @@ function Scene({
       groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
       groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.1;
       groupRef.current.rotation.z = baseRotationZ;
+
+      groupRef.current.position.x += normalizeValue(x) * 0.001;
+      groupRef.current.position.y += normalizeValue(y) * 0.001;
+      groupRef.current.position.z += 0;
     }
   });
 
@@ -154,7 +162,7 @@ function Scene({
       />
       <group
         ref={groupRef}
-        position={[0, 0, 0]}
+        position={[positionX, positionY, positionZ]}
         scale={0.002}
         rotation={[baseRotationX, baseRotationY, baseRotationZ]}
       >
