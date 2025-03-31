@@ -139,7 +139,7 @@ function Scene({
     const y = mouseY.get();
     
     // Spring physics constants
-    const stiffness = isHover ? 0.08 : 0.06;      // Spring strength
+    const stiffness = isHover ? 0.08 : 0.009;      // Spring strength
     const damping = isHover ? 0.85 : 0.8;         // Damping factor (lower = more bounce)
     const smoothing = isHover ? 0.2 : 0.1;        // Target interpolation smoothing
     
