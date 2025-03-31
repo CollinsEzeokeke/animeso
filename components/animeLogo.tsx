@@ -1,15 +1,28 @@
 import { Canvas } from "@react-three/fiber";
 import { Model } from "./model";
-import { PerspectiveCamera } from "@react-three/drei";
+// import { PerspectiveCamera } from "@react-three/drei";
+import { useMotionValue } from "framer-motion";
 import { motion } from "framer-motion-3d";
+import { Suspense } from "react";
+import Camera from "./camera";
 // import { PerspectiveCamera } from "@react-three/drei";
 export default function AmieLogo() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // const resetMousePosition = () => {
+  //   mouseX.set(0);
+  //   mouseY.set(0);
+  // };
   return (
     <div className="bg-red-500 h-screen w-screen flex justify-center items-center">
       <div className="bg-green-500 w-[calc(100% + 200px)]">
-        <Canvas>
-          <Scene />
-        </Canvas>
+        <Suspense fallback={null}>
+          <Canvas>
+            <Camera mouseX={mouseX} mouseY={mouseY} />
+            <Scene />
+          </Canvas>
+        </Suspense>
       </div>
     </div>
   );
@@ -25,14 +38,15 @@ function Scene() {
         /> */}
       <gridHelper args={[10, 20]} />
       <axesHelper args={[5]} />
-      <PerspectiveCamera
+      {/* <PerspectiveCamera
         makeDefault
         fov={45}
         position={[0, 20, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
         near={0.1}
         far={1000}
-      />
+      /> */}
+      {/* <motion.perspectiveCamera position={[0, 0, 0]}/> */}
       <directionalLight
         intensity={5}
         position={[200, 150, 100]}

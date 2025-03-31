@@ -1,15 +1,28 @@
+
+// hooks/useSmoothTransform.ts
 import { MotionValue, useSpring, useTransform } from "framer-motion";
 
-export function useSmoothTransform<T = number>(
-  value: MotionValue<T>,
-  springOptions: {
-    stiffness: number;
-    damping: number;
-  },
-  transformer: (value: T) => number
-) {
+export function useSmoothTransform(
+  value: MotionValue<number>,  // Remove generic type parameter
+  springOptions: { stiffness: number; damping: number },
+  transformer: (value: number) => number
+): MotionValue<number> {  // Explicit return type
   return useSpring(useTransform(value, transformer), springOptions);
 }
+
+
+// import { MotionValue, useSpring, useTransform } from "framer-motion";
+
+// export function useSmoothTransform<T = number>(
+//   value: MotionValue<T>,
+//   springOptions: {
+//     stiffness: number;
+//     damping: number;
+//   },
+//   transformer: (value: T) => number
+// ) {
+//   return useSpring(useTransform(value, transformer), springOptions);
+// }
 
 
 // import { useSpring, useTransform } from "framer-motion";
