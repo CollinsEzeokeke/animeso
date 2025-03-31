@@ -1,52 +1,88 @@
 import { Canvas } from "@react-three/fiber";
 import { Model } from "./model";
-// import { PerspectiveCamera } from "@react-three/drei";
-import { useMotionValue } from "framer-motion";
+import { MotionValue, useMotionValue } from "framer-motion";
 import { motion } from "framer-motion-3d";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Camera from "./camera";
-// import { PerspectiveCamera } from "@react-three/drei";
+import useMeasure from "react-use-measure";
 export default function AmieLogo() {
+  const [isHover, setIsHover] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [ref, bounds] = useMeasure({ scroll: false });
 
-  // const resetMousePosition = () => {
-  //   mouseX.set(0);
-  //   mouseY.set(0);
-  // };
+  const resetMousePosition = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   return (
     <div className="bg-red-500 h-screen w-screen flex justify-center items-center">
-      <div className="bg-green-500 w-[calc(100% + 200px)]">
+      <motion.div
+        className="bg-green-500 h-screen w-screen"
+        // @ts-expect-error - ref type mismatch but works at runtime
+        ref={ref}
+        onHoverStart={() => {
+          resetMousePosition();
+          setIsHover(true);
+        }}
+        onHoverEnd={() => {
+          resetMousePosition();
+          setIsHover(false);
+        }}
+        onPointerMove={(e) => {
+          mouseX.set(e.clientX - bounds.x - bounds.width / 2);
+          mouseY.set(e.clientY - bounds.y - bounds.height / 2);
+
+          // send mouseX and mouseY to the server
+          fetch("/api/mouseX", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ mouseX: mouseX.get() }),
+          });
+          // send mouseY to the server
+          fetch("/api/mouseY", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ mouseY: mouseY.get() }),
+          });
+        }}
+        initial={false}
+        animate={isHover ? "hover" : "rest"}
+        variants={{
+          hover: {
+            // rotateX: mouseX.get() / 10,
+            rotateY: mouseX.get() / 10,
+            scale: 1.5,
+          },
+        }}
+      >
         <Suspense fallback={null}>
           <Canvas>
             <Camera mouseX={mouseX} mouseY={mouseY} />
-            <Scene />
+            <Scene mouseX={mouseX} mouseY={mouseY} />
           </Canvas>
         </Suspense>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
-function Scene() {
+function Scene({
+  mouseX,
+  mouseY,
+}: {
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}) {
   return (
     <group>
-      {/* <OrbitControls /> */}
-      {/* <OrbitControls
-          target={[0, 0, 0]} // Orbit around model origin
-          maxPolarAngle={Math.PI / 2} // Limit vertical rotation
-        /> */}
       <gridHelper args={[10, 20]} />
       <axesHelper args={[5]} />
-      {/* <PerspectiveCamera
-        makeDefault
-        fov={45}
-        position={[0, 20, 0]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        near={0.1}
-        far={1000}
-      /> */}
-      {/* <motion.perspectiveCamera position={[0, 0, 0]}/> */}
       <directionalLight
         intensity={5}
         position={[200, 150, 100]}
@@ -81,25 +117,23 @@ function Scene() {
       />
       <motion.group
         initial={{
-          y: 0,
-          x: 0,
-          z: 0,
           // rotation: [0, 0, 0],
-          rotateX: Math.PI * 0.1,
-          rotateY: Math.PI * 0.5,
+          rotateX: Math.PI * 0.4,
+          rotateY: Math.PI * 0,
           rotateZ: Math.PI * 0.5,
         }}
-        // animate={{ y: 1, x: -3, z: 3 }}
+        // // animate={{ y: 1, x: -3, z: 3 }}
         animate={{
-          // y: 1,
+          // y: mouseY,
           // x: -3,
           // z: 3,
-          rotateX: Math.PI * 0.1,
-          rotateY: Math.PI * 0.2,
-          rotateZ: Math.PI * 0.5,
+          // rotateX: Math.PI * 0.1,
+          // rotateY: Math.PI * 0.2,
+          // rotateZ: Math.PI * 0.5,
         }}
-        transition={{ duration: 3, ease: "easeInOut" }}
-        scale={0.05}
+        // transition={{ duration: 3, ease: "easeInOut" }}
+        position={[0, 0, 0]}
+        scale={0.002}
       >
         <Model />
       </motion.group>
