@@ -1,10 +1,18 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Model } from "./model";
 import { MotionValue, useMotionValue } from "framer-motion";
 import { motion } from "framer-motion-3d";
-import { Suspense, useState } from "react";
-import Camera from "./camera";
+import { Suspense, useState, useRef } from "react";
+// import { PerspectiveCamera } from "@react-three/drei";
+// import Camera from "./camera";
 import useMeasure from "react-use-measure";
+import * as THREE from "three";
+
+// Normalize value between -1 and 1
+function normalizeValue(value: number, max: number = 1000): number {
+  return Math.max(-1, Math.min(1, value / max));
+}
+
 export default function AmieLogo() {
   const [isHover, setIsHover] = useState(false);
   const mouseX = useMotionValue(0);
@@ -31,31 +39,32 @@ export default function AmieLogo() {
           setIsHover(false);
         }}
         onPointerMove={(e) => {
-          mouseX.set(e.clientX - bounds.x - bounds.width / 2);
-          mouseY.set(e.clientY - bounds.y - bounds.height / 2);
+          const x = e.clientX - bounds.x - bounds.width / 2;
+          const y = e.clientY - bounds.y - bounds.height / 2;          
+          mouseX.set(x);
+          mouseY.set(y);
 
-          // send mouseX and mouseY to the server
-          fetch("/api/mouseX", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mouseX: mouseX.get() }),
-          });
-          // send mouseY to the server
-          fetch("/api/mouseY", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mouseY: mouseY.get() }),
-          });
+          // // send mouseX and mouseY to the server
+          // fetch("/api/mouseX", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify({ mouseX: x }),
+          // });
+          // // send mouseY to the server
+          // fetch("/api/mouseY", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify({ mouseY: y }),
+          // });
         }}
         initial={false}
         animate={isHover ? "hover" : "rest"}
         variants={{
           hover: {
-            // rotateX: mouseX.get() / 10,
             rotateY: mouseX.get() / 10,
             scale: 1.5,
           },
@@ -63,7 +72,7 @@ export default function AmieLogo() {
       >
         <Suspense fallback={null}>
           <Canvas>
-            <Camera mouseX={mouseX} mouseY={mouseY} />
+            {/* <Camera mouseX={mouseX} mouseY={mouseY} /> */}
             <Scene mouseX={mouseX} mouseY={mouseY} />
           </Canvas>
         </Suspense>
@@ -79,9 +88,37 @@ function Scene({
   mouseX: MotionValue<number>;
   mouseY: MotionValue<number>;
 }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const baseRotationX = Math.PI * 0.4;
+  const baseRotationY = Math.PI * 0;
+  const baseRotationZ = Math.PI * 0.5;
+
+  useFrame(() => {
+    if (groupRef.current) {
+      const x = mouseX.get();
+      const y = mouseY.get();
+      
+      const targetRotationX = baseRotationX + normalizeValue(-y) * Math.PI * 0.3;
+      const targetRotationY = baseRotationY + normalizeValue(-x) * Math.PI * 0.99;
+      
+      // Smooth interpolation
+      groupRef.current.rotation.x += (targetRotationX - groupRef.current.rotation.x) * 0.1;
+      groupRef.current.rotation.y += (targetRotationY - groupRef.current.rotation.y) * 0.1;
+      groupRef.current.rotation.z = baseRotationZ;
+    }
+  });
+
   return (
     <group>
       <gridHelper args={[10, 20]} />
+        {/* <PerspectiveCamera
+        // makeDefault
+        fov={45}
+        position={[-0.5, 0.6, 3]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        near={0.1}
+        far={1000}
+      /> */}
       <axesHelper args={[5]} />
       <directionalLight
         intensity={5}
@@ -115,28 +152,14 @@ function Scene({
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
-      <motion.group
-        initial={{
-          // rotation: [0, 0, 0],
-          rotateX: Math.PI * 0.4,
-          rotateY: Math.PI * 0,
-          rotateZ: Math.PI * 0.5,
-        }}
-        // // animate={{ y: 1, x: -3, z: 3 }}
-        animate={{
-          // y: mouseY,
-          // x: -3,
-          // z: 3,
-          // rotateX: Math.PI * 0.1,
-          // rotateY: Math.PI * 0.2,
-          // rotateZ: Math.PI * 0.5,
-        }}
-        // transition={{ duration: 3, ease: "easeInOut" }}
+      <group
+        ref={groupRef}
         position={[0, 0, 0]}
         scale={0.002}
+        rotation={[baseRotationX, baseRotationY, baseRotationZ]}
       >
         <Model />
-      </motion.group>
+      </group>
       <ambientLight intensity={4} color="#ffffff" />
     </group>
   );

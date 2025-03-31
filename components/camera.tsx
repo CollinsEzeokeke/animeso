@@ -18,6 +18,8 @@ export default function Camera({ mouseX, mouseY, ...props }: CameraProps) {
   const cameraX = useSmoothTransform(mouseX, spring, (x: number) => x / 350) as unknown as MotionValue<number>;
   const cameraY = useSmoothTransform(mouseY, spring, (y: number) => (-1 * y) / 350)as unknown as MotionValue<number>;
 
+  console.log(cameraX.get(), cameraY.get());
+
   const set = useThree(({ set }) => set);
   const camera = useThree(({ camera }) => camera);
   const size = useThree(({ size }) => size);
