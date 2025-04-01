@@ -83,12 +83,12 @@ function Scene({
   isHover: boolean;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  const baseRotationX = Math.PI * 0.4;
-  const baseRotationY = Math.PI * 0;
+  const baseRotationX = Math.PI * 0.55;
+  const baseRotationY = Math.PI * 0.5;
   const baseRotationZ = Math.PI * 0.5;
 
-  const positionX = 0;
-  const positionY = 0;
+  const positionX = 0.5;
+  const positionY = 0.5;
   const positionZ = 0;
   
   // Spring physics values
@@ -141,7 +141,7 @@ function Scene({
     // Spring physics constants
     const stiffness = isHover ? 0.08 : 0.009;      // Spring strength
     const damping = isHover ? 0.85 : 0.8;         // Damping factor (lower = more bounce)
-    const smoothing = isHover ? 0.2 : 0.1;        // Target interpolation smoothing
+    const smoothing = isHover ? 1.3 : 0.1;        // Target interpolation smoothing
     
     if (!isHover) {
       // When not hovering, smoothly transition target back to base values
@@ -251,8 +251,8 @@ function Scene({
       springRef.current.vRotZ = 0;
       
       // Calculate target positions with larger offset
-      const targetPositionX = positionX + normalizeValue(x) * 0.01;
-      const targetPositionY = positionY + normalizeValue(y) * 0.01;
+      const targetPositionX = positionX + normalizeValue(x) * 5;
+      const targetPositionY = positionY + normalizeValue(y) * -3;
       
       // Smoothly update target position
       springRef.current.prevTargetPosX = lerp(springRef.current.prevTargetPosX, targetPositionX, smoothing);
