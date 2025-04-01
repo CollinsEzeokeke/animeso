@@ -131,6 +131,7 @@ function Scene({
     
     return { position: newPosition, velocity: newVelocity };
   };
+  
 
   useFrame(() => {
     if (!groupRef.current) return;
