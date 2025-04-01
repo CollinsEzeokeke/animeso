@@ -1,15 +1,3 @@
-// // test for the 3D - object to be placed strategically on the website
-// "use client";
-// import AmieLogo from "@/components/animeLogo";
-
-// export default function Page() {
-//   return(
-//     <AmieLogo />
-//   )
-// }
-
-
-
 "use client";
 import DirectionAwareScrollComponent from "@/components/Header";
 import Hero from "@/components/hero";
