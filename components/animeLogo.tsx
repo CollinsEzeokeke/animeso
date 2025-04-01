@@ -217,8 +217,8 @@ function Scene({
       
     } else {
       // Calculate target values based on mouse position with stronger effect
-      const targetRotationX = baseRotationX + normalizeValue(-y) * Math.PI * 0.9;
-      const targetRotationY = baseRotationY + normalizeValue(-x) * Math.PI * 1.2;
+      const targetRotationX = baseRotationX + normalizeValue(-y) * Math.PI * 5;
+      const targetRotationY = baseRotationY + normalizeValue(-x) * Math.PI * 4;
       
       // Smoothly update target values to prevent sudden jumps
       springRef.current.prevTargetRotX = lerp(springRef.current.prevTargetRotX, targetRotationX, smoothing);
@@ -251,8 +251,8 @@ function Scene({
       springRef.current.vRotZ = 0;
       
       // Calculate target positions with larger offset
-      const targetPositionX = positionX + normalizeValue(x) * 5;
-      const targetPositionY = positionY + normalizeValue(y) * -3;
+      const targetPositionX = positionX + normalizeValue(x) * 10;
+      const targetPositionY = positionY + normalizeValue(-y) * 10;
       
       // Smoothly update target position
       springRef.current.prevTargetPosX = lerp(springRef.current.prevTargetPosX, targetPositionX, smoothing);
