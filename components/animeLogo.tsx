@@ -1,8 +1,10 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Model } from "./model";
-import { MotionValue, useMotionValue, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { MotionValue, useMotionValue } from "framer-motion";
 import { motion } from "framer-motion-3d";
 import { Suspense, useState, useRef } from "react";
+// import { PerspectiveCamera } from "@react-three/drei";
+// import Camera from "./camera";
 import useMeasure from "react-use-measure";
 import * as THREE from "three";
 
@@ -15,46 +17,26 @@ export default function AmieLogo() {
   const [isHover, setIsHover] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const [ref, bounds] = useMeasure({ scroll: false });
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollRotationX, setScrollRotationX] = useState(0)
-  const [scrollRotationY, setScrollRotationY] = useState(0)
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const RotationX = useTransform(scrollYProgress, [0, 1], [0, Math.PI * 2]);
-  const RotationY = useTransform(scrollYProgress, [0, 1], [0, Math.PI * 4]);
-
-
-  useMotionValueEvent(RotationX, "change", (latest) => {
-    setScrollRotationX(latest)
-  })
-  useMotionValueEvent(RotationY, "change", (latest) => {
-    setScrollRotationY(latest)
-  })
-
+  const [ref, bounds] = useMeasure({ scroll: false });
 
   const resetMousePosition = () => {
     mouseX.set(0);
     mouseY.set(0);
   };
 
+
   // Add debug effect to monitor hover state
   // useEffect(() => {
   //   console.log("Hover state changed:", isHover);
   // }, [isHover]);
-  console.log(scrollRotationX, scrollRotationY)
 
   return (
-    <div
-      className="bg-red-500 h-[200vh] w-screen justify-center flex"
-      ref={containerRef}
+    <div className="bg-red-500 h-[200vh] w-screen flex justify-center"
+    ref={containerRef}
     >
       <motion.div
-        className="bg-green-500 h-[29vh] w-[25vw] cursor-pointer flex items bg-center"
+        className="bg-green-500 h-[29vh] w-[25vw] cursor-pointer"
         // @ts-expect-error - ref type mismatch but works at runtime
         ref={ref}
         onMouseEnter={() => {
@@ -87,13 +69,7 @@ export default function AmieLogo() {
         <Suspense fallback={null}>
           <Canvas>
             {/* <Camera mouseX={mouseX} mouseY={mouseY} /> */}
-            <Scene
-              mouseX={mouseX}
-              mouseY={mouseY}
-              isHover={isHover}
-              // scrollRotationX={scrollRotationX}
-              // scrollRotationY={scrollRotationY}
-            />
+            <Scene mouseX={mouseX} mouseY={mouseY} isHover={isHover} />
           </Canvas>
         </Suspense>
       </motion.div>
@@ -105,14 +81,10 @@ function Scene({
   mouseX,
   mouseY,
   isHover,
-  // scrollRotationX,
-  // scrollRotationY,
 }: {
   mouseX: MotionValue<number>;
   mouseY: MotionValue<number>;
   isHover: boolean;
-  // scrollRotationX: number;
-  // scrollRotationY: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const baseRotationX = Math.PI * 0.55;
@@ -146,11 +118,6 @@ function Scene({
     return start * (1 - t) + end * t;
   };
 
-  // reverse Lerp function that works when the user is scrolling as while scrolling doens't need to be hovering
-  const reverseLerp = (start: number, end: number, value: number): number => {
-    return (value - start) / (end - start);
-  };
-
   // Spring function for smoother, bouncy motion
   const spring = (
     current: number,
@@ -169,10 +136,9 @@ function Scene({
     return { position: newPosition, velocity: newVelocity };
   };
 
-
   useFrame(() => {
     if (!groupRef.current) return;
-    // mouse controlled motions 
+
     const x = mouseX.get();
     const y = mouseY.get();
 
@@ -183,13 +149,13 @@ function Scene({
 
     if (!isHover) {
       // When not hovering, smoothly transition target back to base values
-      springRef.current.prevTargetRotX = reverseLerp(
+      springRef.current.prevTargetRotX = lerp(
         springRef.current.prevTargetRotX,
         baseRotationX,
         smoothing
       );
-      springRef.current.prevTargetRotY = reverseLerp(
-        springRef.current.prevTargetRotY ,
+      springRef.current.prevTargetRotY = lerp(
+        springRef.current.prevTargetRotY,
         baseRotationY,
         smoothing
       );
@@ -361,43 +327,11 @@ function Scene({
       groupRef.current.position.z = positionZ;
       springRef.current.vPosZ = 0;
     }
-
-    // // scroll controlled motions
-    // const scrollRotationXValue = scrollRotationX;
-    // const scrollRotationYValue = scrollRotationY;
-
-//     const targetRotationX = baseRotationX /22 * Math.PI * 10;
-//     const targetRotationY = baseRotationY * Math.PI * 9;
-// // spring takes in a current position, a target positon, velocity of swing, an amount to swiftness, and a damping value focused on the bounce and non-bounce effects 
-//     // Apply spring physics to rotation
-//     const rotX = spring(
-//       groupRef.current.rotation.x,
-//       targetRotationX,
-//       springRef.current.vRotX,
-//       stiffness,
-//       damping
-//     );
-//     groupRef.current.rotation.x = rotX.position;
-//     springRef.current.vRotX = rotX.velocity;
-
-//     const rotY = spring(
-//       groupRef.current.rotation.y,
-//       targetRotationY,
-//       springRef.current.vRotY,
-//       stiffness,
-//       damping
-//     );
-//     groupRef.current.rotation.y = rotY.position;
-//     springRef.current.vRotY = rotY.velocity;
-
-//     // Hold Z rotation steady
-//     groupRef.current.rotation.z = baseRotationZ;
-//     springRef.current.vRotZ = 0;
   });
 
   return (
     <group>
-      {/* <gridHelper args={[10, 20]} /> */}
+      <gridHelper args={[10, 20]} />
       {/* <PerspectiveCamera
         // makeDefault
         fov={45}
@@ -406,7 +340,7 @@ function Scene({
         near={0.1}
         far={1000}
       /> */}
-      {/* <axesHelper args={[5]} /> */}
+      <axesHelper args={[5]} />
       <directionalLight
         intensity={5}
         position={[200, 150, 100]}
@@ -442,7 +376,7 @@ function Scene({
       <group
         ref={groupRef}
         position={[positionX, positionY, positionZ]}
-        scale={0.009}
+        scale={0.005}
         rotation={[baseRotationX, baseRotationY, baseRotationZ]}
       >
         <Model />
