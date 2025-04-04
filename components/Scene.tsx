@@ -1,11 +1,13 @@
 // --- Scene Component ---
-import { useCallback, useState } from "react";
+import {
+  //  useCallback,
+   useState } from "react";
 import {
   MotionValue,
   useTransform,
   useSpring,
   useMotionValue,
-  useMotionValueEvent,
+  // useMotionValueEvent,
 } from "framer-motion";
 import { ThreeEvent } from "@react-three/fiber";
 import { motion } from "framer-motion-3d";
@@ -30,24 +32,24 @@ export default function Scene({
   };
 
   // --- API Callbacks (Keep as is) ---
-  const handleMouseTrackX = useCallback((latest: number) => {
-    fetch("/api/mouseX", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mouseX: latest }),
-    });
-  }, []);
+  // const handleMouseTrackX = useCallback((latest: number) => {
+  //   fetch("/api/mouseX", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ mouseX: latest }),
+  //   });
+  // }, []);
 
-  const handleMouseTrackY = useCallback((latest: number) => {
-    fetch("/api/mouseY", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mouseY: latest }),
-    });
-  }, []);
+  // const handleMouseTrackY = useCallback((latest: number) => {
+  //   fetch("/api/mouseY", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ mouseY: latest }),
+  //   });
+  // }, []);
 
-  useMotionValueEvent(mouseX, "change", handleMouseTrackX);
-  useMotionValueEvent(mouseY, "change", handleMouseTrackY);
+  // useMotionValueEvent(mouseX, "change", handleMouseTrackX);
+  // useMotionValueEvent(mouseY, "change", handleMouseTrackY);
   // ---
 
   // --- Base Settings ---
@@ -59,10 +61,26 @@ export default function Scene({
   const basePositionZ = 0;
 
   // --- Scroll Transformations ---
-  const scrollRotateX = useTransform(scrollYProgress, [0, 1], [baseRotationX, baseRotationX + Math.PI / 1]);
-  const scrollRotateZ = useTransform(scrollYProgress, [0, 1], [baseRotationZ, baseRotationZ + Math.PI / 1]);
-  const scrollRotateY = useTransform(scrollYProgress, [0, 1], [baseRotationY, baseRotationY - Math.PI / 2]);
-  const scrollPosX = useTransform(scrollYProgress, [0, 1], [basePositionX, basePositionX - 3.0]);
+  const scrollRotateX = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [baseRotationX, baseRotationX + Math.PI / 1]
+  );
+  const scrollRotateZ = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [baseRotationZ, baseRotationZ + Math.PI / 1]
+  );
+  const scrollRotateY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [baseRotationY, baseRotationY - Math.PI / 2]
+  );
+  const scrollPosX = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [basePositionX, basePositionX - 3.0]
+  );
 
   // *** MODIFIED: Increase the target Y value significantly for upward movement ***
   // As scrollYProgress goes from 0 to 1 (scrolling down), Y goes from basePositionY (0) to 15 (upwards in 3D space)
@@ -73,20 +91,40 @@ export default function Scene({
   );
 
   // --- Console Logs (Keep for debugging) ---
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("scrollYprogress", latest);
-  });
-  useMotionValueEvent(scrollPosY, "change", (latest) => {
-    console.log("scrollPosY (raw transform output)", latest);
-  });
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   console.log("scrollYprogress", latest);
+  // });
+  // useMotionValueEvent(scrollPosY, "change", (latest) => {
+  //   console.log("scrollPosY (raw transform output)", latest);
+  // });
   // ---
 
   // --- Hover Transformations (Keep as is) ---
-  const hoverRotY_from_MouseX = useTransform(mouseX, [-canvasBounds.width / 2, canvasBounds.width / 2], [-Math.PI / 6, Math.PI / 6]);
-  const hoverRotX_from_MouseY = useTransform(mouseY, [-canvasBounds.height / 2, canvasBounds.height / 2], [Math.PI / 6, -Math.PI / 6]); // Inverted Y is common
-  const hoverPosX_from_MouseX = useTransform(mouseX, [-canvasBounds.width / 2, canvasBounds.width / 2], [-0.3, 0.3]);
-  const hoverPosY_from_MouseY = useTransform(mouseY, [-canvasBounds.height / 2, canvasBounds.height / 2], [0.3, -0.3]); // Inverted Y is common
-  const hoverRotZ_from_MouseX = useTransform(mouseX, [-canvasBounds.width / 2, canvasBounds.width / 2], [-Math.PI / 12, Math.PI / 12]);
+  const hoverRotY_from_MouseX = useTransform(
+    mouseX,
+    [-canvasBounds.width / 2, canvasBounds.width / 2],
+    [-Math.PI / 6, Math.PI / 6]
+  );
+  const hoverRotX_from_MouseY = useTransform(
+    mouseY,
+    [-canvasBounds.height / 2, canvasBounds.height / 2],
+    [Math.PI / 6, -Math.PI / 6]
+  ); // Inverted Y is common
+  const hoverPosX_from_MouseX = useTransform(
+    mouseX,
+    [-canvasBounds.width / 2, canvasBounds.width / 2],
+    [-0.3, 0.3]
+  );
+  const hoverPosY_from_MouseY = useTransform(
+    mouseY,
+    [-canvasBounds.height / 2, canvasBounds.height / 2],
+    [0.3, -0.3]
+  ); // Inverted Y is common
+  const hoverRotZ_from_MouseX = useTransform(
+    mouseX,
+    [-canvasBounds.width / 2, canvasBounds.width / 2],
+    [-Math.PI / 12, Math.PI / 12]
+  );
   // ---
 
   // --- Calculating Target Values (CORRECTED LOGIC) ---
@@ -140,16 +178,16 @@ export default function Scene({
     restDelta: 0.001,
   };
   //   // --- Applying Spring Physics (ADJUSTED FOR FREER FEEL) ---
-//   // Lower stiffness makes the spring softer and take longer to reach the target.
-//   // Lower damping allows for more oscillation/overshoot (bounciness).
-//   // Mass influences inertia; slightly higher mass can make it feel less "snappy" and more "weighty".
-//   // **EXPERIMENT WITH THESE VALUES!**
-//   const springConfig = {
-//     stiffness: 60, // Lowered from 90 (Softer, slower response)
-//     damping: 12, // Lowered from 18 (More bouncy / overshoot)
-//     mass: 1, // Slightly increased from 0.8 (More inertia)
-//     restDelta: 0.001, // Keep or adjust if needed
-//   };
+  //   // Lower stiffness makes the spring softer and take longer to reach the target.
+  //   // Lower damping allows for more oscillation/overshoot (bounciness).
+  //   // Mass influences inertia; slightly higher mass can make it feel less "snappy" and more "weighty".
+  //   // **EXPERIMENT WITH THESE VALUES!**
+  //   const springConfig = {
+  //     stiffness: 60, // Lowered from 90 (Softer, slower response)
+  //     damping: 12, // Lowered from 18 (More bouncy / overshoot)
+  //     mass: 1, // Slightly increased from 0.8 (More inertia)
+  //     restDelta: 0.001, // Keep or adjust if needed
+  //   };
 
   const smoothRotateX = useSpring(targetRotateX, springConfig);
   const smoothRotateY = useSpring(targetRotateY, springConfig);
@@ -159,7 +197,7 @@ export default function Scene({
   const smoothPositionZ = useSpring(targetPositionZ, springConfig);
 
   // --- Pointer Handling (Keep as is) ---
-   const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+  const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     // Using intersection point coordinates relative to the object's local origin
     const point = e.point;
@@ -172,8 +210,17 @@ export default function Scene({
   return (
     <>
       {/* Helpers (Keep as is) */}
-      <gridHelper args={[50, 50]} position={[0, 0, -10]} rotation={[Math.PI / 2, 0, 0]} userData={{ helper: true }} />
-      <axesHelper args={[30]} position={[0, 0, -10]} userData={{ helper: true }} />
+      <gridHelper
+        args={[50, 50]}
+        position={[0, 0, -10]}
+        rotation={[Math.PI / 2, 0, 0]}
+        userData={{ helper: true }}
+      />
+      <axesHelper
+        args={[30]}
+        position={[0, 0, -10]}
+        userData={{ helper: true }}
+      />
 
       <motion.group
         // Scale significantly affects visual movement distance
@@ -188,7 +235,11 @@ export default function Scene({
         {/* Lighting (Keep as is) */}
         <ambientLight intensity={1.2} />
         <directionalLight position={[8, 10, 5]} intensity={2.5} castShadow />
-        <directionalLight position={[-8, -5, -3]} intensity={1.0} color="#cadbed" />
+        <directionalLight
+          position={[-8, -5, -3]}
+          intensity={1.0}
+          color="#cadbed"
+        />
         {/* Model and Pointer Events (Keep as is) */}
         <Model
           onPointerEnter={(e) => {
@@ -206,15 +257,6 @@ export default function Scene({
     </>
   );
 }
-
-
-
-
-
-
-
-
-
 
 // // --- Scene Component ---
 // import { useCallback, useState } from "react";
