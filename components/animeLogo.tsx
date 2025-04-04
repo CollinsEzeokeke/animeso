@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Model } from "./model";
 import {
   MotionValue,
-  // time,
+  // time, // Not using time directly in this approach for now
   useMotionValue,
   useScroll,
   useSpring,
@@ -24,13 +24,18 @@ export default function AmieLogo() {
     mouseY.set(0);
   };
 
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll({
+    // If the scroll container isn't the window, specify it:
+    // target: containerRef,
+    // offset: ["start end", "end start"] // Adjust offset if needed
+  });
 
   return (
     <div
       ref={containerRef}
+      // Ensure the parent div allows scrolling if it's not the window default
       className="bg-red-500 h-[200vh] w-screen flex flex-col justify-start items-center pt-20"
-      style={{ overflowY: 'auto' }}
+      style={{ overflowY: "auto" }} // Make sure this element scrolls
     >
       <div className="h-[50vh] text-white text-center">Scroll Down...</div>
 
@@ -40,17 +45,20 @@ export default function AmieLogo() {
         ref={ref}
         onPointerEnter={() => setIsHover(true)}
         onPointerMove={(e) => {
-          const x = e.clientX - bounds.x - bounds.width / 2;
-          const y = e.clientY - bounds.y - bounds.height / 2;
-          mouseX.set(x);
-          mouseY.set(y);
+          // Ensure bounds are valid before calculating relative position
+          if (bounds.width > 0 && bounds.height > 0) {
+            const x = e.clientX - bounds.x - bounds.width / 2;
+            const y = e.clientY - bounds.y - bounds.height / 2;
+            mouseX.set(x);
+            mouseY.set(y);
+          }
         }}
         onPointerLeave={() => {
           resetMousePosition();
           setIsHover(false);
         }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        whileHover={{ scale: 1.1 }} // Slightly increased hover scale
+        transition={{ type: "spring", stiffness: 300, damping: 20 }} // Keep container spring snappy
       >
         <Suspense fallback={null}>
           <Canvas>
@@ -85,8 +93,7 @@ function Scene({
   scrollYProgress: MotionValue<number>;
   isHover: boolean;
 }) {
-
-  // --- Base Settings ---
+  // --- Base Settings (Keep as is) ---
   const baseRotationX = Math.PI * 0.55;
   const baseRotationY = Math.PI * 1;
   const baseRotationZ = Math.PI * -0.7;
@@ -94,120 +101,348 @@ function Scene({
   const basePositionY = 0;
   const basePositionZ = 0;
 
-  // --- Scroll Transformations ---
-  // Map scroll progress to base rotation adjustments
-  const scrollRotateX = useTransform(scrollYProgress, [0, 1], [baseRotationX, baseRotationX + Math.PI / 2.5]);
-  const scrollRotateY = useTransform(scrollYProgress, [0, 1], [baseRotationY, baseRotationY - Math.PI / 5]);
-  // const scrollPosY = useTransform(scrollYProgress, [0, 1], [basePositionY, basePositionY - 0.5]); // Optional scroll position
+  // --- Scroll Transformations (WIDER RANGE) ---
+  // Increase the difference between start and end values for more rotation during scroll
+  const scrollRotateX = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [baseRotationX, baseRotationX + Math.PI / 1.5]
+  ); // Increased from PI/2.5
+  const scrollRotateY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [baseRotationY, baseRotationY - Math.PI / 2]
+  ); // Increased from PI/5
+  const scrollPosY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [basePositionY, basePositionY - 1.0]
+  ); // Optional: Increase scroll position change if desired
+  const scrollPosX = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [basePositionX, basePositionX - 1.0]
+  ); // Optional: Increase scroll position change if desired
 
+  // --- Hover Transformations (Offsets - WIDER RANGE / MORE SENSITIVITY) ---
+  // Increase the output range (e.g., -Math.PI/6 to Math.PI/6) to make hover rotation more pronounced.
+  // Increase position offsets (e.g., -0.3 to 0.3) for wider movement on hover.
+  const hoverRotY_from_MouseX = useTransform(
+    mouseX,
+    [-bounds.width / 2, bounds.width / 2],
+    [-Math.PI / 6, Math.PI / 6]
+  ); // Increased from PI/10
+  const hoverRotX_from_MouseY = useTransform(
+    mouseY,
+    [-bounds.height / 2, bounds.height / 2],
+    [Math.PI / 6, -Math.PI / 6]
+  ); // Increased from PI/10 (inverted Y still)
+  const hoverPosX_from_MouseX = useTransform(
+    mouseX,
+    [-bounds.width / 2, bounds.width / 2],
+    [-0.3, 0.3]
+  ); // Increased from 0.18
+  const hoverPosY_from_MouseY = useTransform(
+    mouseY,
+    [-bounds.height / 2, bounds.height / 2],
+    [0.3, -0.3]
+  ); // Increased from 0.18 (inverted Y still)
+  // ADDED: Hover effect for Z rotation
+  const hoverRotZ_from_MouseX = useTransform(
+    mouseX,
+    [-bounds.width / 2, bounds.width / 2],
+    [-Math.PI / 12, Math.PI / 12]
+  ); // Subtle Z rotation on hover
 
-  // --- Hover Transformations (Offsets) ---
-  // Define how much mouse movement affects rotation/position offsets.
-  // Renamed for clarity: Mouse X affects Y-axis rotation, Mouse Y affects X-axis rotation.
-  const hoverRotY_from_MouseX = useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI / 10, Math.PI / 10]); // Slightly increased sensitivity
-  const hoverRotX_from_MouseY = useTransform(mouseY, [-bounds.height / 2, bounds.height / 2], [Math.PI / 10, -Math.PI / 10]); // Inverted Y mouse -> X rotation
-  const hoverPosX_from_MouseX = useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-0.18, 0.18]); // Slightly increased sensitivity
-  const hoverPosY_from_MouseY = useTransform(mouseY, [-bounds.height / 2, bounds.height / 2], [0.18, -0.18]); // Inverted Y mouse -> Y position
-
-
-  // --- Combining Targets with Idle Motion ---
-  // These MotionValues calculate the *desired instantaneous state*
-  // including base, scroll, idle, and conditional hover effects.
+  // --- Calculating Target Values ---
+  // Combine base, scroll, and hover effects to determine the instantaneous target state.
+  // No explicit idle motion added here yet, the "freer" feel comes from the spring and wider ranges.
 
   const targetRotateX = useTransform(() => {
-    // const time = clock.elapsedTime;
-    // Math.sin(time * 0.6) * 0.02;
-    const idleOffset = 2; // Subtle idle sway on X
     const hoverOffset = isHover ? hoverRotX_from_MouseY.get() : 0;
-    return scrollRotateX.get() + idleOffset + hoverOffset;
+    return scrollRotateX.get() + hoverOffset;
   });
 
   const targetRotateY = useTransform(() => {
-    // const time = clock.elapsedTime;
-    // Math.cos(time * 0.5) * 0.025;
-    const idleOffset = 2 // Subtle idle sway on Y (different speed/amplitude)
     const hoverOffset = isHover ? hoverRotY_from_MouseX.get() : 0;
-    return scrollRotateY.get() + idleOffset + hoverOffset;
+    return scrollRotateY.get() + hoverOffset;
   });
 
-  // Keep Z rotation simpler for now, just the base
-  const targetRotateZ = useMotionValue(baseRotationZ);
-  // If you wanted idle/hover on Z:
-  // const targetRotateZ = useTransform(() => {
-  //   const time = clock.elapsedTime;
-  //   const idleOffset = Math.sin(time * 0.4) * 0.015;
-  //   const hoverOffset = isHover ? useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI/16, Math.PI/16]).get() : 0;
-  //   return baseRotationZ + idleOffset + hoverOffset;
-  // });
-
+  // Apply hover effect to Z rotation as well
+  const targetRotateZ = useTransform(() => {
+    const hoverOffset = isHover ? hoverRotZ_from_MouseX.get() : 0;
+    return baseRotationZ + hoverOffset;
+  });
+  // Previous simpler version:
+  // const targetRotateZ = useMotionValue(baseRotationZ);
 
   const targetPositionX = useTransform(() => {
-    // const currentScrollPosX = scrollPosX ? scrollPosX.get() : basePositionX;
-    const hoverOffset = isHover ? hoverPosX_from_MouseX.get() : 0;
-    return basePositionX + hoverOffset; // No idle position offset added here, but could be
+    const currentScrollPosX = scrollPosX ? scrollPosX.get() : basePositionX; // If using scroll position
+    const hoverOffset = isHover
+      ? hoverPosX_from_MouseX.get() + currentScrollPosX
+      : 0;
+    return basePositionX + hoverOffset;
   });
 
   const targetPositionY = useTransform(() => {
-    // const currentScrollPosY = scrollPosY ? scrollPosY.get() : basePositionY;
-    const hoverOffset = isHover ? hoverPosY_from_MouseY.get() : 0;
-    // Add subtle Y idle bob?
-    // const time = clock.elapsedTime;
-    // const idleBob = Math.sin(time * 0.8) * 0.03;
-    // return currentScrollPosY + idleBob + hoverOffset;
+    const currentScrollPosY = scrollPosY ? scrollPosY.get() : basePositionY; // If using scroll position
+    const hoverOffset = isHover
+      ? hoverPosY_from_MouseY.get() + currentScrollPosY
+      : 0;
     return basePositionY + hoverOffset;
   });
 
   const targetPositionZ = useMotionValue(basePositionZ);
 
-
-  // --- Applying Spring Physics ---
-  // Use spring to smoothly animate towards the calculated targets.
-  // **Tuning Point:** Adjust these values to change the animation 'feel'.
+  // --- Applying Spring Physics (ADJUSTED FOR FREER FEEL) ---
+  // Lower stiffness makes the spring softer and take longer to reach the target.
+  // Lower damping allows for more oscillation/overshoot (bounciness).
+  // Mass influences inertia; slightly higher mass can make it feel less "snappy" and more "weighty".
+  // **EXPERIMENT WITH THESE VALUES!**
   const springConfig = {
-      stiffness: 90,    // Lower = softer/slower spring. Higher = stiffer/faster.
-      damping: 18,      // Lower = more bouncy. Higher = more dampened/less overshoot. (Usually 15-30)
-      mass: 0.8,        // Higher = more inertia, feels 'heavier'. (Usually 0.5-1.5)
-      // restDelta: 0.001 // Threshold for stopping the animation - lower for higher precision
+    stiffness: 60, // Lowered from 90 (Softer, slower response)
+    damping: 12, // Lowered from 18 (More bouncy / overshoot)
+    mass: 1, // Slightly increased from 0.8 (More inertia)
+    // restDelta: 0.001 // Keep or adjust if needed
   };
 
   const smoothRotateX = useSpring(targetRotateX, springConfig);
   const smoothRotateY = useSpring(targetRotateY, springConfig);
-  const smoothRotateZ = useSpring(targetRotateZ, springConfig); // Spring applied even to static targets
+  const smoothRotateZ = useSpring(targetRotateZ, springConfig); // Apply spring to Z too
   const smoothPositionX = useSpring(targetPositionX, springConfig);
   const smoothPositionY = useSpring(targetPositionY, springConfig);
-  const smoothPositionZ = useSpring(targetPositionZ, springConfig);
-
-
-  // useFrame can still be used for non-motion-property related things if needed
-  // useFrame((state, delta) => {
-  //   // e.g., custom shader uniform updates
-  // });
+  const smoothPositionZ = useSpring(targetPositionZ, springConfig); // Apply spring even if target is static
 
   return (
     <motion.group
-        // No ref needed here as Framer Motion controls it via props
-        scale={0.009} // Base scale
-        // Bind the sprung values to the group's properties
-        rotation-x={smoothRotateX}
-        rotation-y={smoothRotateY}
-        rotation-z={smoothRotateZ}
-        position-x={smoothPositionX}
-        position-y={smoothPositionY}
-        position-z={smoothPositionZ}
+      scale={0.009} // Base scale
+      // Bind the sprung values to the group's properties
+      rotation-x={smoothRotateX}
+      rotation-y={smoothRotateY}
+      rotation-z={smoothRotateZ} // Added Z rotation
+      position-x={smoothPositionX}
+      position-y={smoothPositionY}
+      position-z={smoothPositionZ}
     >
-      {/* Lighting - Adjust as needed */}
+      {/* --- Lighting (Adjust intensity/position if needed with wider movement) --- */}
       <ambientLight intensity={1.2} />
       <directionalLight position={[8, 10, 5]} intensity={2.5} castShadow />
-      <directionalLight position={[-8, -5, -3]} intensity={0.8} color="#cadbed" /> {/* Cooler fill light */}
-
+      <directionalLight
+        position={[-8, -5, -3]}
+        intensity={1.0}
+        color="#cadbed"
+      />{" "}
+      {/* Slightly increased fill intensity */}
       <Model />
-
+      {/* Optional Helpers */}
+      <axesHelper args={[5]} />
+      <gridHelper args={[10, 20]} />
     </motion.group>
   );
 }
 
+// import { Canvas } from "@react-three/fiber";
+// import { Model } from "./model";
+// import {
+//   MotionValue,
+//   // time,
+//   useMotionValue,
+//   useScroll,
+//   useSpring,
+//   useTransform,
+// } from "framer-motion";
+// import { motion } from "framer-motion-3d";
+// import { Suspense, useRef, useState } from "react";
+// import useMeasure from "react-use-measure";
 
+// export default function AmieLogo() {
+//   const [isHover, setIsHover] = useState(false);
+//   const mouseX = useMotionValue(0);
+//   const mouseY = useMotionValue(0);
+//   const containerRef = useRef<HTMLDivElement>(null);
+//   const [ref, bounds] = useMeasure({ scroll: false });
 
+//   const resetMousePosition = () => {
+//     mouseX.set(0);
+//     mouseY.set(0);
+//   };
+
+//   const { scrollYProgress } = useScroll();
+
+//   return (
+//     <div
+//       ref={containerRef}
+//       className="bg-red-500 h-[200vh] w-screen flex flex-col justify-start items-center pt-20"
+//       style={{ overflowY: 'auto' }}
+//     >
+//       <div className="h-[50vh] text-white text-center">Scroll Down...</div>
+
+//       <motion.div
+//         className="bg-green-500 h-[29vh] w-[25vw] cursor-pointer sticky top-1/4"
+//         // @ts-expect-error ref type mismatch but works at runtime
+//         ref={ref}
+//         onPointerEnter={() => setIsHover(true)}
+//         onPointerMove={(e) => {
+//           const x = e.clientX - bounds.x - bounds.width / 2;
+//           const y = e.clientY - bounds.y - bounds.height / 2;
+//           mouseX.set(x);
+//           mouseY.set(y);
+//         }}
+//         onPointerLeave={() => {
+//           resetMousePosition();
+//           setIsHover(false);
+//         }}
+//         whileHover={{ scale: 1.05 }}
+//         transition={{ type: "spring", stiffness: 300, damping: 20 }}
+//       >
+//         <Suspense fallback={null}>
+//           <Canvas>
+//             <Scene
+//               mouseX={mouseX}
+//               mouseY={mouseY}
+//               bounds={bounds}
+//               scrollYProgress={scrollYProgress}
+//               isHover={isHover}
+//             />
+//           </Canvas>
+//         </Suspense>
+//       </motion.div>
+
+//       <div className="h-[100vh] text-white text-center">Keep Scrolling...</div>
+//     </div>
+//   );
+// }
+
+// // --- Scene Component ---
+
+// function Scene({
+//   mouseX,
+//   mouseY,
+//   bounds,
+//   scrollYProgress,
+//   isHover,
+// }: {
+//   mouseX: MotionValue<number>;
+//   mouseY: MotionValue<number>;
+//   bounds: { width: number; height: number };
+//   scrollYProgress: MotionValue<number>;
+//   isHover: boolean;
+// }) {
+
+//   // --- Base Settings ---
+//   const baseRotationX = Math.PI * 0.55;
+//   const baseRotationY = Math.PI * 1;
+//   const baseRotationZ = Math.PI * -0.7;
+//   const basePositionX = 0;
+//   const basePositionY = 0;
+//   const basePositionZ = 0;
+
+//   // --- Scroll Transformations ---
+//   // Map scroll progress to base rotation adjustments
+//   const scrollRotateX = useTransform(scrollYProgress, [0, 1], [baseRotationX, baseRotationX + Math.PI / 2.5]);
+//   const scrollRotateY = useTransform(scrollYProgress, [0, 1], [baseRotationY, baseRotationY - Math.PI / 5]);
+//   // const scrollPosY = useTransform(scrollYProgress, [0, 1], [basePositionY, basePositionY - 0.5]); // Optional scroll position
+
+//   // --- Hover Transformations (Offsets) ---
+//   // Define how much mouse movement affects rotation/position offsets.
+//   // Renamed for clarity: Mouse X affects Y-axis rotation, Mouse Y affects X-axis rotation.
+//   const hoverRotY_from_MouseX = useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI / 10, Math.PI / 10]); // Slightly increased sensitivity
+//   const hoverRotX_from_MouseY = useTransform(mouseY, [-bounds.height / 2, bounds.height / 2], [Math.PI / 10, -Math.PI / 10]); // Inverted Y mouse -> X rotation
+//   const hoverPosX_from_MouseX = useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-0.18, 0.18]); // Slightly increased sensitivity
+//   const hoverPosY_from_MouseY = useTransform(mouseY, [-bounds.height / 2, bounds.height / 2], [0.18, -0.18]); // Inverted Y mouse -> Y position
+
+//   // --- Combining Targets with Idle Motion ---
+//   // These MotionValues calculate the *desired instantaneous state*
+//   // including base, scroll, idle, and conditional hover effects.
+
+//   const targetRotateX = useTransform(() => {
+//     // const time = clock.elapsedTime;
+//     // Math.sin(time * 0.6) * 0.02;
+//     const idleOffset = 2; // Subtle idle sway on X
+//     const hoverOffset = isHover ? hoverRotX_from_MouseY.get() : 0;
+//     return scrollRotateX.get() + idleOffset + hoverOffset;
+//   });
+
+//   const targetRotateY = useTransform(() => {
+//     // const time = clock.elapsedTime;
+//     // Math.cos(time * 0.5) * 0.025;
+//     const idleOffset = 2 // Subtle idle sway on Y (different speed/amplitude)
+//     const hoverOffset = isHover ? hoverRotY_from_MouseX.get() : 0;
+//     return scrollRotateY.get() + idleOffset + hoverOffset;
+//   });
+
+//   // Keep Z rotation simpler for now, just the base
+//   const targetRotateZ = useMotionValue(baseRotationZ);
+//   // If you wanted idle/hover on Z:
+//   // const targetRotateZ = useTransform(() => {
+//   //   const time = clock.elapsedTime;
+//   //   const idleOffset = Math.sin(time * 0.4) * 0.015;
+//   //   const hoverOffset = isHover ? useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI/16, Math.PI/16]).get() : 0;
+//   //   return baseRotationZ + idleOffset + hoverOffset;
+//   // });
+
+//   const targetPositionX = useTransform(() => {
+//     // const currentScrollPosX = scrollPosX ? scrollPosX.get() : basePositionX;
+//     const hoverOffset = isHover ? hoverPosX_from_MouseX.get() : 0;
+//     return basePositionX + hoverOffset; // No idle position offset added here, but could be
+//   });
+
+//   const targetPositionY = useTransform(() => {
+//     // const currentScrollPosY = scrollPosY ? scrollPosY.get() : basePositionY;
+//     const hoverOffset = isHover ? hoverPosY_from_MouseY.get() : 0;
+//     // Add subtle Y idle bob?
+//     // const time = clock.elapsedTime;
+//     // const idleBob = Math.sin(time * 0.8) * 0.03;
+//     // return currentScrollPosY + idleBob + hoverOffset;
+//     return basePositionY + hoverOffset;
+//   });
+
+//   const targetPositionZ = useMotionValue(basePositionZ);
+
+//   // --- Applying Spring Physics ---
+//   // Use spring to smoothly animate towards the calculated targets.
+//   // **Tuning Point:** Adjust these values to change the animation 'feel'.
+//   const springConfig = {
+//       stiffness: 90,    // Lower = softer/slower spring. Higher = stiffer/faster.
+//       damping: 18,      // Lower = more bouncy. Higher = more dampened/less overshoot. (Usually 15-30)
+//       mass: 0.8,        // Higher = more inertia, feels 'heavier'. (Usually 0.5-1.5)
+//       // restDelta: 0.001 // Threshold for stopping the animation - lower for higher precision
+//   };
+
+//   const smoothRotateX = useSpring(targetRotateX, springConfig);
+//   const smoothRotateY = useSpring(targetRotateY, springConfig);
+//   const smoothRotateZ = useSpring(targetRotateZ, springConfig); // Spring applied even to static targets
+//   const smoothPositionX = useSpring(targetPositionX, springConfig);
+//   const smoothPositionY = useSpring(targetPositionY, springConfig);
+//   const smoothPositionZ = useSpring(targetPositionZ, springConfig);
+
+//   // useFrame can still be used for non-motion-property related things if needed
+//   // useFrame((state, delta) => {
+//   //   // e.g., custom shader uniform updates
+//   // });
+
+//   return (
+//     <motion.group
+//         // No ref needed here as Framer Motion controls it via props
+//         scale={0.009} // Base scale
+//         // Bind the sprung values to the group's properties
+//         rotation-x={smoothRotateX}
+//         rotation-y={smoothRotateY}
+//         rotation-z={smoothRotateZ}
+//         position-x={smoothPositionX}
+//         position-y={smoothPositionY}
+//         position-z={smoothPositionZ}
+//     >
+//       {/* Lighting - Adjust as needed */}
+//       <ambientLight intensity={1.2} />
+//       <directionalLight position={[8, 10, 5]} intensity={2.5} castShadow />
+//       <directionalLight position={[-8, -5, -3]} intensity={0.8} color="#cadbed" /> {/* Cooler fill light */}
+
+//       <Model />
+
+//     </motion.group>
+//   );
+// }
 
 // import { Canvas } from "@react-three/fiber";
 // import { Model } from "./model";
@@ -324,7 +559,6 @@ function Scene({
 //    // Optional: Add subtle scroll-based position change if desired
 //    // const scrollPosY = useTransform(scrollYProgress, [0, 1], [basePositionY, basePositionY - 0.5]);
 
-
 //   // --- Hover Transformations (Offsets) ---
 //   // Map raw mouse values directly to target offsets. The spring will smooth the transition.
 //   // We scale the hover effect down slightly compared to previous attempts for subtlety.
@@ -352,7 +586,6 @@ function Scene({
 //   // Example adding hover Z:
 //   // const targetRotateZ = useTransform(() => baseRotationZ + (isHover ? useTransform(mouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI/16, Math.PI/16]).get() : 0));
 
-
 //   // TARGET POSITION X: Base position + hover offset (if active)
 //   const targetPositionX = useTransform(() => {
 //     // const currentScrollPosX = scrollPosX ? scrollPosX.get() : basePositionX; // Example if adding scroll position
@@ -367,7 +600,6 @@ function Scene({
 
 //   // TARGET POSITION Z: Base Z position
 //   const targetPositionZ = useMotionValue(basePositionZ);
-
 
 //   // --- Applying Spring Physics ---
 //   // Apply useSpring to the combined TARGET motion values.
@@ -385,7 +617,6 @@ function Scene({
 //   const smoothPositionX = useSpring(targetPositionX, springConfig);
 //   const smoothPositionY = useSpring(targetPositionY, springConfig);
 //   const smoothPositionZ = useSpring(targetPositionZ, springConfig);
-
 
 //   // No complex useFrame needed - Framer Motion handles the animation loop
 //   // useFrame(() => {
@@ -414,9 +645,6 @@ function Scene({
 //     </motion.group>
 //   );
 // }
-
-
-
 
 // import { Canvas, useFrame, useThree } from "@react-three/fiber";
 // import { Model } from "./model";
@@ -562,7 +790,6 @@ function Scene({
 //   // Add subtle Z rotation on hover based on horizontal mouse movement
 //   const targetHoverRotateZOffset = useTransform(smoothMouseX, [-bounds.width / 2, bounds.width / 2], [-Math.PI / 16, Math.PI / 16]);
 
-
 //   // --- Physics State (Velocity) ---
 //   const physicsState = useRef({
 //     vRotX: 0, vRotY: 0, vRotZ: 0,
@@ -636,7 +863,6 @@ function Scene({
 //       {/* Add a subtle backlight maybe? */}
 //       <spotLight position={[0, 0, -10]} intensity={2} angle={0.3} penumbra={0.5} color="lightblue" />
 
-
 //       <Model />
 
 //       {/* Optional Helpers */}
@@ -645,7 +871,6 @@ function Scene({
 //     </group>
 //   );
 // }
-
 
 // import { Canvas, useFrame } from "@react-three/fiber";
 // import { Model } from "./model"; // Assuming ./model contains your <Model /> component
@@ -774,7 +999,6 @@ function Scene({
 //     [baseRotationY, baseRotationY - Math.PI / 4] // Example: slight turn left
 //   );
 
-
 //   // --- Hover Animation ---
 //   // Smooth the raw mouse values using spring physics
 //   const smoothMouseX = useSpring(mouseX, {
@@ -815,7 +1039,6 @@ function Scene({
 //     [0.3, -0.3] // Output range: position offset (inverted - adjust intensity)
 //   );
 
-
 //   // --- Combine Animations in useFrame ---
 //   useFrame(() => {
 //     if (!groupRef.current) return;
@@ -850,7 +1073,6 @@ function Scene({
 //       <directionalLight position={[5, 5, 5]} intensity={3} />
 //        <directionalLight position={[-5, -5, -2]} intensity={1} color="#ffcccc" />
 
-
 //       {/* Place the Model inside the group that gets animated */}
 //       <Model />
 
@@ -860,14 +1082,6 @@ function Scene({
 //     </group>
 //   );
 // }
-
-
-
-
-
-
-
-
 
 // import { Canvas, useFrame } from "@react-three/fiber";
 // import { Model } from "./model";
@@ -895,7 +1109,6 @@ function Scene({
 //     mouseX.set(0);
 //     mouseY.set(0);
 //   };
-
 
 //   // Add debug effect to monitor hover state
 //   // useEffect(() => {
