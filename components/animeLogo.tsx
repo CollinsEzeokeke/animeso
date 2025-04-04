@@ -40,7 +40,7 @@ export default function AmieLogo() {
       <div className="h-[50vh] text-white text-center">Scroll Down...</div>
 
       <motion.div
-        className="bg-green-500 h-[29vh] w-[25vw] cursor-pointer sticky top-1/4"
+        className="bg-green-500 h-[40vh] w-[30vw] cursor-pointer sticky top-1/4"
         // @ts-expect-error ref type mismatch but works at runtime
         ref={ref}
         onPointerEnter={() => setIsHover(true)}
