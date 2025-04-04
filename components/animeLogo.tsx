@@ -94,11 +94,11 @@ function Scene({
   isHover: boolean;
 }) {
   // --- Base Settings (Keep as is) ---
-  const baseRotationX = Math.PI * 0.55;
-  const baseRotationY = Math.PI * 1;
+  const baseRotationX = Math.PI * 0.4;
+  const baseRotationY = Math.PI * 1.5;
   const baseRotationZ = Math.PI * -0.7;
-  const basePositionX = 0;
-  const basePositionY = 0;
+  const basePositionX = 0.5;
+  const basePositionY = 1;
   const basePositionZ = 0;
 
   // --- Scroll Transformations (WIDER RANGE) ---
@@ -132,9 +132,11 @@ function Scene({
     [-bounds.width / 2, bounds.width / 2],
     [-Math.PI / 6, Math.PI / 6]
   ); // Increased from PI/10
+  // console.log(bounds.height)
+  // console.log(Math.PI /6, -Math.PI / 6)
   const hoverRotX_from_MouseY = useTransform(
     mouseY,
-    [-bounds.height / 2, bounds.height / 2],
+    [-bounds.height / 2, bounds.height],
     [Math.PI / 6, -Math.PI / 6]
   ); // Increased from PI/10 (inverted Y still)
   const hoverPosX_from_MouseX = useTransform(
@@ -178,7 +180,7 @@ function Scene({
 
   const targetPositionX = useTransform(() => {
     const currentScrollPosX = scrollPosX ? scrollPosX.get() : basePositionX; // If using scroll position
-    const hoverOffset = isHover
+    const hoverOffset = !isHover
       ? hoverPosX_from_MouseX.get() + currentScrollPosX
       : 0;
     return basePositionX + hoverOffset;
@@ -203,7 +205,7 @@ function Scene({
     stiffness: 60, // Lowered from 90 (Softer, slower response)
     damping: 12, // Lowered from 18 (More bouncy / overshoot)
     mass: 1, // Slightly increased from 0.8 (More inertia)
-    // restDelta: 0.001 // Keep or adjust if needed
+    restDelta: 0.001 // Keep or adjust if needed
   };
 
   const smoothRotateX = useSpring(targetRotateX, springConfig);
@@ -214,29 +216,41 @@ function Scene({
   const smoothPositionZ = useSpring(targetPositionZ, springConfig); // Apply spring even if target is static
 
   return (
-    <motion.group
-      scale={0.009} // Base scale
-      // Bind the sprung values to the group's properties
-      rotation-x={smoothRotateX}
-      rotation-y={smoothRotateY}
-      rotation-z={smoothRotateZ} // Added Z rotation
-      position-x={smoothPositionX}
-      position-y={smoothPositionY}
-      position-z={smoothPositionZ}
-    >
-      {/* --- Lighting (Adjust intensity/position if needed with wider movement) --- */}
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[8, 10, 5]} intensity={2.5} castShadow />
-      <directionalLight
-        position={[-8, -5, -3]}
-        intensity={1.0}
-        color="#cadbed"
-      />{" "}
-      {/* Slightly increased fill intensity */}
-      <Model />
-      {/* Optional Helpers */}
-      <axesHelper args={[5]} />
-      <gridHelper args={[10, 20]} />
-    </motion.group>
+    <>
+      {/* Add helpers outside the scaled group for better visibility */}
+      <gridHelper 
+        args={[50, 50]} 
+        position={[0, 0, -10]} 
+        rotation={[Math.PI/2, 0, 0]}
+        userData={{ helper: true }}
+      />
+      <axesHelper 
+        args={[30]} 
+        position={[0, 0, -10]}
+        userData={{ helper: true }}
+      />
+    
+      <motion.group
+        scale={0.009} // Base scale
+        // Bind the sprung values to the group's properties
+        rotation-x={smoothRotateX}
+        rotation-y={smoothRotateY}
+        rotation-z={smoothRotateZ} // Added Z rotation
+        position-x={smoothPositionX}
+        position-y={smoothPositionY}
+        position-z={smoothPositionZ}
+      >
+        {/* --- Lighting (Adjust intensity/position if needed with wider movement) --- */}
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[8, 10, 5]} intensity={2.5} castShadow />
+        <directionalLight
+          position={[-8, -5, -3]}
+          intensity={1.0}
+          color="#cadbed"
+        />{" "}
+        {/* Slightly increased fill intensity */}
+        <Model />
+      </motion.group>
+    </>
   );
 }
