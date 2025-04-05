@@ -86,8 +86,8 @@ export default function Scene({
   // As scrollYProgress goes from 0 to 1 (scrolling down), Y goes from basePositionY (0) to 15 (upwards in 3D space)
   const scrollPosY = useTransform(
     scrollYProgress,
-    [0, 1],
-    [basePositionY, 9] // <--- INCREASED THIS VALUE (adjust 15 as needed)
+    [0, 1.5],
+    [basePositionY, 8] // <--- INCREASED THIS VALUE (adjust 15 as needed)
   );
 
   // --- Console Logs (Keep for debugging) ---
