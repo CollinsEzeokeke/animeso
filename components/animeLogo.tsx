@@ -31,7 +31,7 @@ export default function AmieLogo() {
       <div className="h-[50vh] text-white text-center">Scroll Down...</div>
 
       <div 
-        className="bg-green-500 h-[40vh] w-[30vw] cursor-pointer sticky top-1/4"
+        className="bg-green-500 h-[150vh] w-[30vw] cursor-pointer sticky top-1/4"
         // ref={canvasRef}
       >
         <Suspense fallback={null}>

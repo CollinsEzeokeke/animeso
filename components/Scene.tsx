@@ -64,31 +64,30 @@ export default function Scene({
   // --- Scroll Transformations ---
   const scrollRotateX = useTransform(
     scrollYProgress,
-    [0, 1],
-    [baseRotationX, baseRotationX + Math.PI / 1]
+    [0, 0.2, 0.8, 1],  // Add intermediate points for smoother interpolation
+    [baseRotationX, baseRotationX + Math.PI / 4, baseRotationX + Math.PI / 2, baseRotationX + Math.PI / 1]
   );
   const scrollRotateZ = useTransform(
     scrollYProgress,
-    [0, 1],
-    [baseRotationZ, baseRotationZ + Math.PI / 1]
+    [0, 0.3, 0.7, 1],  // Add intermediate points for smoother interpolation
+    [baseRotationZ, baseRotationZ + Math.PI / 4, baseRotationZ + Math.PI / 2, baseRotationZ + Math.PI / 1]
   );
   const scrollRotateY = useTransform(
     scrollYProgress,
-    [0, 1],
-    [baseRotationY, baseRotationY - Math.PI / 2]
+    [0, 0.25, 0.75, 1],  // Add intermediate points for smoother interpolation
+    [baseRotationY, baseRotationY - Math.PI / 6, baseRotationY - Math.PI / 3, baseRotationY - Math.PI / 2]
   );
   const scrollPosX = useTransform(
     scrollYProgress,
-    [0, 1],
-    [basePositionX, basePositionX - 3.0]
+    [0, 0.4, 1],  // Add intermediate point for smoother interpolation
+    [basePositionX, basePositionX - 1.0, basePositionX - 3.0]
   );
 
-  // *** MODIFIED: Increase the target Y value significantly for upward movement ***
-  // As scrollYProgress goes from 0 to 1 (scrolling down), Y goes from basePositionY (0) to 15 (upwards in 3D space)
+  // *** MODIFIED: Create smoother Y position animation during scroll ***
   const scrollPosY = useTransform(
     scrollYProgress,
-    [0, 1.5],
-    [basePositionY, 8] // <--- INCREASED THIS VALUE (adjust 15 as needed)
+    [0, 0.3, 0.6, 1.5],  // More granular steps for smoother interpolation
+    [basePositionY, basePositionY + 3, basePositionY + 6, 8]  // More gradual progression
   );
 
   // --- Console Logs (Keep for debugging) ---
@@ -171,25 +170,25 @@ export default function Scene({
   // Z Position doesn't currently change with scroll or hover in your transforms
   const targetPositionZ = useMotionValue(basePositionZ); // Keep as is unless you want Z movement
 
-  // --- Applying Spring Physics (Keep as is, or tweak for feel) ---
-  const springConfig = {
-    stiffness: 50,
-    damping: 15,
-    mass: 1.5,
-    restDelta: 0.001,
+  // --- Applying Spring Physics - Separate configs for scrolling and hover ---
+  // Slow, relaxed springs for scroll-based animation
+  const scrollSpringConfig = {
+    stiffness: 25,     // Very low stiffness for slower movement
+    damping: 20,       // Higher damping for less bounce
+    mass: 2.5,         // Higher mass for more inertia 
+    restDelta: 0.0005  // More precise resting point
   };
 
-  //   // --- Applying Spring Physics (ADJUSTED FOR FREER FEEL) ---
-  //   // Lower stiffness makes the spring softer and take longer to reach the target.
-  //   // Lower damping allows for more oscillation/overshoot (bounciness).
-  //   // Mass influences inertia; slightly higher mass can make it feel less "snappy" and more "weighty".
-  //   // **EXPERIMENT WITH THESE VALUES!**
-  //   const springConfig = {
-  //     stiffness: 60, // Lowered from 90 (Softer, slower response)
-  //     damping: 12, // Lowered from 18 (More bouncy / overshoot)
-  //     mass: 1, // Slightly increased from 0.8 (More inertia)
-  //     restDelta: 0.001, // Keep or adjust if needed
-  //   };
+  // More responsive springs for hover interactions
+  const hoverSpringConfig = {
+    stiffness: 80,     // Higher stiffness for responsive movement
+    damping: 12,       // Lower damping for slight bounce
+    mass: 1.0,         // Lower mass for quicker response
+    restDelta: 0.001   // Standard precision
+  };
+
+  // Choose config based on interaction state
+  const springConfig = isHover ? hoverSpringConfig : scrollSpringConfig;
 
   const smoothRotateX = useSpring(targetRotateX, springConfig);
   const smoothRotateY = useSpring(targetRotateY, springConfig);
@@ -226,7 +225,7 @@ export default function Scene({
 
       <motion.group
         // Scale significantly affects visual movement distance
-        scale={0.009} // Keep or adjust if overall size/movement needs tuning
+        scale={0.003} // Keep or adjust if overall size/movement needs tuning
         rotation-x={smoothRotateX}
         rotation-y={smoothRotateY}
         rotation-z={smoothRotateZ}
